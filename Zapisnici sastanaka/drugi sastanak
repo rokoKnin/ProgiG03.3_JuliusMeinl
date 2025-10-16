@@ -1,0 +1,54 @@
+Drugi sastanak
+16/10/2025
+
+prisutni: Roko, Gracija, Andrija, Luka, Nino
+Zapisnicar: Roko
+
+---
+Razvojno okruzenje koje cemo koristiti: React (Frontend) + SpringBoot (Backend) + PostgreSQL
+
+za pracenje TODOeva: GitHub projects (probacemo pa cemo vidjeti kako ce ici), potencijalno Notion (dobar jer se synca na kalendar automatski)
+
+Podijela (zasada, vidit jel se svima svida i kako ce ici ova podijela)
+  -Frontend: Gracija i Andrija
+  -Backend: Nino i Luka
+  -Baze: Leni
+  -QA (quality assurance - tester koji ce provjeravati funkcionira li sve i koji ce traziti greske u svemu): Leona
+  -DevOps: Roko
+
+---
+FUNKCIJSKI ZAHTJEVI:
+
+prvo raspis korisnika:
+  vanjski korisnik (obicni gost)
+  recepcionist
+  upravitelj hotela
+  ostalo osoblje (npr spremacice koje ce vidjeti koje sobe treba ocistiti) - nekako smo dogovorili da je ovo vjeroatno nepotrebno kompliciranje sustava
+
+gost:
+  FZ-2: Login i upravljanje racunom
+  FZ-3: odabir vrste sobe
+  FZ-4: rezervacija dodatnog sadrzaja
+  FZ-5: online placanje
+  FZ-6: pocetna stranica (sa slikama, google maps i svime sta bude na pocetnoj stranici)
+  FZ-7: Korisnicka podrska (neki chat box ili nesto slicno, takoder pomoc ako je potrebno otkazati rezervaciju)
+
+recepcionist:
+  FZ-8: pregled i rezervacija soba i dodatnog sadrzaja
+
+upravitelj:
+  FZ-9: pregled statistike
+  FZ-10: izvoz podataka i statistike u obliku pdf-a
+  FZ-11: upravljanje nad dostupnoscu i cijenama soba i dodatnog sadrzaja
+
+*napomene:
+    FZ-8 i FZ-10 mozda ujediniti u 1 funkcijski zahtjev
+
+NEFUNKCIJSKI ZAHTJEVI:
+  NF-2: automatska optimizacija raspodjele soba
+  NF-3: autentifikacija pomocu OAuth2 autentifikatora
+  NF-4: ogranicenje usluga i funkcija ovisno o dostupnosti
+  NF-5: prikazuje dostupnost u stvarnom vremenu
+  NF-6: nesmetani rad vise korisnika
+  NF-7: odrzavanje servera 90% vremena
+  NF-8: pordrzavanje fiskalizacije
