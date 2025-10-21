@@ -1,0 +1,41 @@
+treci sastanak
+21/10/2025
+
+prisutni: Leni, Andrija, Nino, Gracija, Leona, Roko
+zapisnikar: Roko
+
+---------
+Ovaj cetvrtak je Labos u 13 u A210
+    - leni mozda nece moci doci, treba poslati poruku asistentu
+
+komentiranje dosad napravljene dokumentacije:
+    - 1. i 2. su okej, treba pravopis popraviti na drugoj
+    - 3. komentari:
+        - UC7 preduvjet treba promijeniti (treba biti samo login, moze se rezervirati i bez sobe)
+        - UC14 - promijeniti preduvjet (treba biti samo login, nije potrebna rezervacija sobe)
+        - UC11 i UC15 - treba dodati preduvjet da je ulogiran
+        - treba maknuti exclude strelicu za upravljanje sobama i sadrzajem kod recepcionista
+
+GitHub projects: dodao sam taskove za sve, tu pratimo sta sve treba raditi
+Sheets tablica: tu zapisujte kad radite na necemu koliko ste sati radili i sta
+Google docs: mjesto sa dosta kul informacija, checkirajte
+
+Preraspodijela zaduzenja:
+    - Frontend: Andrija i Gracia
+    - Backend: Luka i Nino
+    - Dokumentacija: Leni i Leona
+    - ja: vodim kult, pratim da se sve radi i zapisuje, pomazem ako treba negdje uskociti, vjv cu raditi i testiranje
+
+Poslovi za raditi do sljedeceg tjedna i generalno do MIa:
+    - Frontend tim:
+        - napraviti direktorije za React i sve potrebno da se moze krenuti programirati frontend
+        - nacrtati izglede stranica ili na papiru ili u figmi ili negdje
+        - krenuti s radom na Login i home pageu
+    - Backend tim:
+        - napraviti direktorije za SpringBoot i sve potrebno da se moze krenuti s Backendom
+        - dizajnirati cijelu Bazu podataka
+        - razraditi strukturu svih klasa
+    - Dokumentacija
+        - treba napraviti 4. stranicu wikia
+        - 5. stranicu zapoceti koliko stignete, idealno isto zavrsiti do sljed tjedna
+        - pomoci u dokumentiranju baze podataka
