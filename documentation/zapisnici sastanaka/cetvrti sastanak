@@ -1,0 +1,29 @@
+Četvrti sastanak
+27/10/2025
+Prisutni: svi
+Zapisnikar: Gracija
+
+Teme: baza podataka, izgled stranice
+
+Napravljeno do sada:
+	Frontend – kreiran direktorij za react, prikaz glavne stranice
+	Backend – postavljen springboot, baza podataka
+	Dokumentacija – dodana tablica na kraju 3. i popravljane greske, dio 4. napisan
+
+Komentari:
+Razgovor o UML dijagramima (Leona)
+Sekvencijski dijagrami
+-	UC6 polovičan
+-	Potreban dijagram za recepcionista
+Leni je započeo 4. stranicu wiki sve do opisa baze podataka
+
+Baza podataka
+-	Zaposlenik ne treba imati poveznicu sa sobom i dodatnim sadržajem
+-	Zaposlenik i korisnik odvojeni
+-	Pitanje posebne rezervacije za dodatni sadržaj
+-	Sign up prvo login onda sljedeće informacije potrebne za statistiku
+-
+Zadatci:
+	Dokumentacija – krenuti 5. i 7. wiki stranicu, 4. kada se napravi baza i 3. popraviti
+   	Frontend – glavna stranica, proučit login i ako može krenuti
+	Backend – baza podataka, potpora za OAUTH2, krenuti raditi sa klasama kako će sve bit struktuirano u Springbootu
