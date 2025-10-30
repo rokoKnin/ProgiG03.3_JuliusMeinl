@@ -22,6 +22,7 @@ CREATE TABLE Korisnik
     prezimeKorisnik VARCHAR(50) NOT NULL,
     emailKorisnik VARCHAR(50) NOT NULL,
     telefonKorisnik VARCHAR(20) NOT NULL,
+    ovlastKorisnik VARCHAR(20) NOT NULL,
     postBr INT NOT NULL,
     PRIMARY KEY (korisnik_id),
     FOREIGN KEY (postBr) REFERENCES Mjesto(postBr),
@@ -69,29 +70,16 @@ CREATE TABLE DodatniSadržaj
     PRIMARY KEY (dodatniSadrzaj_id)
 );
 
-CREATE TABLE Zaposlenik
-(
-    zaposlenik_id VARCHAR(10) NOT NULL,
-    imeZaposlenik VARCHAR(50) NOT NULL,
-    prezimeZaposlenik VARCHAR(50) NOT NULL,
-    emailZaposlenik VARCHAR(50) NOT NULL,
-    telefonZaposlenik VARCHAR(20) NOT NULL,
-    pozicijaZaposlenik VARCHAR(20) NOT NULL,
-    PRIMARY KEY (zaposlenik_id),
-    UNIQUE (emailZaposlenik),
-    UNIQUE (telefonZaposlenik)
-);
-
 CREATE TABLE Upit
 (
     upit_id VARCHAR(10) NOT NULL,
     datumUpit DATE NOT NULL,
     porukaUpit VARCHAR(500) NOT NULL,
     korisnik_id INT NOT NULL,
-    zaposlenik_id INT NOT NULL,
+    zaposlenik_id VARCHAR(10) NOT NULL,
     PRIMARY KEY (upit_id),
     FOREIGN KEY (korisnik_id) REFERENCES Korisnik(korisnik_id),
-    FOREIGN KEY (zaposlenik_id) REFERENCES Zaposlenik(zaposlenik_id)
+    FOREIGN KEY (zaposlenik_id) REFERENCES Korisnik(korisnik_id)
 );
 
 CREATE TABLE Recenzija
