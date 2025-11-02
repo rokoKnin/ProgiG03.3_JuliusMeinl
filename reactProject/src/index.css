@@ -11,3 +11,16 @@
     width:100%;
     
 }
+.dodaj_goste{
+    margin-top:20px;
+    padding:10px;
+    background-color:#1976d2;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    display:flex;
+    flex-direction: row;
+    gap:10px;
+    align-items: center;
+}

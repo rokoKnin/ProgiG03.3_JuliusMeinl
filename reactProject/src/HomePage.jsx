@@ -1,18 +1,18 @@
 
 import * as React from 'react';
 import './index.css';
-import CustomMap from "./CustomMap";
-import { APIProvider } from "@vis.gl/react-google-maps";
+
+import { Link } from 'react-router-dom';
 
 function HomePage() {
+  
+
   return (
     <main style={{ padding: 16 }}>
       <h2>Dobrodošli u Blue sun hotel</h2>
-      <div className="mapa">
-      <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-        <CustomMap />
-      </APIProvider>
-    </div>
+    <Link to="/reservation" style={{ textDecoration: 'none' }}>
+    <div>Rezervirajte odmah!</div>
+</Link>
     </main>
     
   );

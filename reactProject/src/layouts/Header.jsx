@@ -59,6 +59,9 @@ function Header() {
             <MenuItem onClick={handleClose} component={Link} to="/about">
               About
             </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/reservation">
+              Reservation
+            </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/contact">
               Contact
             </MenuItem>
