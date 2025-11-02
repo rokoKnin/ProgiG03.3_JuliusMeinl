@@ -17,6 +17,20 @@ import './index.css';
 
 function Home() {
   return(<div className='desno'><h1>Home Page</h1></div> );
+import { HashRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./HomePage.jsx"
+import LogIn from "./LogIn.jsx"
+
+function App() {
+
+  return (
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<HomePage/>}/>
+        <Route path="/logIn" element={<LogIn/>}/>
+      </Routes>
+    </HashRouter>
+  )
 }
 
 function About() {
