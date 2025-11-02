@@ -1,0 +1,1043 @@
+{
+  "diagramType": 2,
+  "data": {
+    "nodes": [
+      {
+        "id": "88e698d3-6720-4ab0-b189-383d0e533833",
+        "type": "Table",
+        "position": {
+          "x": -54.58634119242143,
+          "y": -103.68284764257598
+        },
+        "data": {
+          "label": "Korisnik",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "402ce5d9-959a-40d1-b006-d1987557649e",
+              "name": "korisnik_id",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "10",
+              "position": 0
+            },
+            {
+              "id": "72b48add-feda-40b1-82bf-df136b1e79f3",
+              "name": "imeKorisnik",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "50",
+              "position": 1
+            },
+            {
+              "id": "1fbddeac-8469-4631-9141-e7c5a5595140",
+              "name": "prezimeKorisnik",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "50",
+              "position": 2
+            },
+            {
+              "id": "4100759d-92c4-4e07-af6a-e03df55d31d8",
+              "name": "emailKorisnik",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": true,
+              "size": "50",
+              "position": 3
+            },
+            {
+              "id": "a9bf3717-5942-4dc7-98e2-085c11496275",
+              "name": "telefonKorisnik",
+              "type": "VARCHAR(n)",
+              "position": 4,
+              "size": "20",
+              "isUnique": true
+            },
+            {
+              "id": "fk_2f2eabb0-1f3c-4ba1-9b84-cc7bc892ee42",
+              "name": "fk_Mjeto",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "7e5e58d5-791f-4b9c-97f6-6595af15b475",
+                "sourceTableId": "33c377ee-30a2-4abb-94e3-10dd79e493dd",
+                "columns": [
+                  {
+                    "id": "fk_6e22d85b-0b33-472f-805d-2218b6b9111d",
+                    "name": "postBr",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isUnique": false,
+              "position": 6
+            },
+            {
+              "id": "034c9e7f-b317-44cd-84c6-f3bdf80a2456",
+              "name": "ovlastKorisnik",
+              "type": "VARCHAR(n)",
+              "position": 6,
+              "size": "20",
+              "isUnique": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 202
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "34badc37-1ef5-4a95-876b-f46f1a5cfca8",
+        "type": "Table",
+        "position": {
+          "x": 1070.941988952513,
+          "y": 236.10950955736655
+        },
+        "data": {
+          "label": "Soba",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "d6cd92bc-46e1-49af-b9e3-fc3adf186c32",
+              "name": "broj_sobe",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "isUnique": true,
+              "size": "5"
+            },
+            {
+              "id": "a3c16068-f0ba-4f57-b311-e0ee4b30e528",
+              "name": "vrsta",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "20"
+            },
+            {
+              "id": "e707a41e-6adc-4d64-bb51-010ae224c3f3",
+              "name": "cijena",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false
+            },
+            {
+              "id": "97fa4ee6-b9a7-43d2-aadc-efea9a41b4c4",
+              "name": "status",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "20"
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 126
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "c9361080-36c5-421a-8c93-30f6467558ec",
+        "type": "Table",
+        "position": {
+          "x": 359.4570267683745,
+          "y": -177.97078810607695
+        },
+        "data": {
+          "label": "Rezervacija",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "2e67426e-d1a0-49a5-ba93-a3f789d42156",
+              "name": "rezervacija_id",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "10"
+            },
+            {
+              "id": "6e0e4699-0663-43c3-99f7-a2261fd5a701",
+              "name": "datumRezerviranja",
+              "type": "DATE",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false
+            },
+            {
+              "id": "066c30a8-1e6e-4cb5-af2a-d863d68ade29",
+              "name": "placeno?",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "20"
+            },
+            {
+              "id": "064736c4-bd28-4ea4-b78a-351a81f659ca",
+              "name": "id",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "25c1ce60-e8b7-4dce-908d-efea4f97871d",
+                "sourceTableId": "88e698d3-6720-4ab0-b189-383d0e533833",
+                "columns": [
+                  {
+                    "id": "fk_402ce5d9-959a-40d1-b006-d1987557649e",
+                    "name": "korisnik_id",
+                    "type": "INT"
+                  }
+                ]
+              }
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 127
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "f06695fe-8e31-40fc-81da-414dee207917",
+        "type": "Table",
+        "position": {
+          "x": 770.1909948390252,
+          "y": -254.0453367704331
+        },
+        "data": {
+          "label": "Placanje",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "72fbafe5-72b9-4092-bb0b-82d19e913d6c",
+              "name": "placanje_id",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "10"
+            },
+            {
+              "id": "afc15eff-f074-4c83-88cb-810b46d02260",
+              "name": "datumPlacanja",
+              "type": "DATE",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false
+            },
+            {
+              "id": "2cc6f1a5-65d4-4260-877a-0e9934b7693e",
+              "name": "nacinPlacanja",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "20"
+            },
+            {
+              "id": "78d73893-e6e6-4929-9688-1fdece85a62d",
+              "name": "id",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "8b09ea19-6c93-4242-8dea-987c733b9c8e",
+                "sourceTableId": "c9361080-36c5-421a-8c93-30f6467558ec",
+                "columns": [
+                  {
+                    "id": "fk_2e67426e-d1a0-49a5-ba93-a3f789d42156",
+                    "name": "rezervacija_id",
+                    "type": "INT"
+                  }
+                ]
+              }
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 127
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "3f459d1b-ad16-4a67-bede-f26d6d74b0a4",
+        "type": "Table",
+        "position": {
+          "x": 1071.9590613806956,
+          "y": -15.15705877945112
+        },
+        "data": {
+          "label": "DodatniSadrzaj",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "441131a7-b217-4c3a-bfef-8d79d9355be4",
+              "name": "dodatniSadrzaj_id",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "10",
+              "position": 0
+            },
+            {
+              "id": "5f051e4a-75bc-4809-a283-a4e2805f4257",
+              "name": "vrstaDodatniSadrzaj",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "20",
+              "position": 1
+            },
+            {
+              "id": "0271b83d-5572-40af-b524-73f76ae2b749",
+              "name": "cijenaDodatniSadrzaj",
+              "type": "INT",
+              "position": 2
+            },
+            {
+              "id": "0d0165a4-1322-4a9f-9375-36f2c6313475",
+              "name": "statusDodatniSadrzaj",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "20",
+              "position": 3
+            },
+            {
+              "id": "e3f09ac6-06d5-44e1-851a-23eaf0c98de7",
+              "name": "kapacitetDodatniSadrzaj",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "position": 4
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 167
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "d906d900-51f5-4305-9dce-7b4ad3bdec4f",
+        "type": "Table",
+        "position": {
+          "x": -417.4269936173977,
+          "y": -178.86200996379614
+        },
+        "data": {
+          "label": "Upit",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "fd4ffd57-b450-4b4a-8dba-cf20ee7d513b",
+              "name": "upit_id",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "10"
+            },
+            {
+              "id": "1d2ae11e-6087-4f71-9569-9b24eed89b83",
+              "name": "datumUpit",
+              "type": "DATE",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false
+            },
+            {
+              "id": "8b564706-68ed-4e53-9ab5-3688090a4508",
+              "name": "porukaUpit",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "500"
+            },
+            {
+              "id": "5b9dc7ad-fa37-42ba-88d6-05b0707e60b3",
+              "name": "id",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "34a14bbc-9999-4f98-833b-24475d1abc5d",
+                "sourceTableId": "88e698d3-6720-4ab0-b189-383d0e533833",
+                "columns": [
+                  {
+                    "id": "fk_402ce5d9-959a-40d1-b006-d1987557649e",
+                    "name": "korisnik_id",
+                    "type": "INT"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "fk_b662c2d2-26ce-46ce-b503-68087808b0ea",
+              "name": "fk_Korisnik",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "a2abd14a-9618-4735-9fc9-90b4872cd74f",
+                "sourceTableId": "88e698d3-6720-4ab0-b189-383d0e533833",
+                "columns": [
+                  {
+                    "id": "fk_402ce5d9-959a-40d1-b006-d1987557649e",
+                    "name": "zaposlenik_id",
+                    "type": "VARCHAR(n)",
+                    "size": "10"
+                  }
+                ]
+              },
+              "isOptional": true
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 152
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "243e6a43-8856-43f9-b4b1-20d85d29f7cd",
+        "type": "Table",
+        "position": {
+          "x": 252.98929052392702,
+          "y": 148.21291534764984
+        },
+        "data": {
+          "label": "Recenzija",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "1d183430-5c75-45e5-954c-de02f80cd763",
+              "name": "recenzija_id",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "10"
+            },
+            {
+              "id": "15b6d3b3-4784-47eb-bd03-21bf19373d4d",
+              "name": "ocjenaRecenzija",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false
+            },
+            {
+              "id": "420a4492-23fe-4a64-b910-0db0c730bd18",
+              "name": "komentarRecenzija",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "500"
+            },
+            {
+              "id": "fcce1a90-3233-4bc9-bc9b-0f5448867ead",
+              "name": "datumRecenzija",
+              "type": "DATE",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false
+            },
+            {
+              "id": "15c8a8dd-f8ed-461c-bd6c-d1143b42127f",
+              "name": "id",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isOptional": false,
+              "isUnique": false,
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "5ff4a4f0-4522-4c34-a62c-a90c1925a4ff",
+                "sourceTableId": "88e698d3-6720-4ab0-b189-383d0e533833",
+                "columns": [
+                  {
+                    "id": "fk_402ce5d9-959a-40d1-b006-d1987557649e",
+                    "name": "korisnik_id",
+                    "type": "INT"
+                  }
+                ]
+              }
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 152
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "33c377ee-30a2-4abb-94e3-10dd79e493dd",
+        "type": "Table",
+        "position": {
+          "x": -358.154572172009,
+          "y": 246.05582221324465
+        },
+        "data": {
+          "label": "Mjesto",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "6e22d85b-0b33-472f-805d-2218b6b9111d",
+              "name": "postBr",
+              "type": "VARCHAR(n)",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "isUnique": false,
+              "size": "20"
+            },
+            {
+              "id": "4aac54fb-7fa7-485b-a274-585c9bd08754",
+              "name": "nazMjesto",
+              "type": "VARCHAR(n)",
+              "position": 0,
+              "isPrimaryKey": false,
+              "isUnique": false,
+              "size": "50"
+            },
+            {
+              "id": "fk_386831b2-b5da-490b-b697-4ce22871e25f",
+              "name": "fk_Drzava",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "2eafb28a-f1cb-42a8-bf69-b3aa2dac3cf6",
+                "sourceTableId": "a2865613-52e3-4546-b3fe-85ca969dfd49",
+                "columns": [
+                  {
+                    "id": "fk_7c377464-e946-4e13-8405-9fd2f74729b7",
+                    "name": "drzava_id",
+                    "type": "INT"
+                  }
+                ]
+              }
+            }
+          ],
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 102
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "a2865613-52e3-4546-b3fe-85ca969dfd49",
+        "type": "Table",
+        "position": {
+          "x": -703.479712413645,
+          "y": 295.5843658696121
+        },
+        "data": {
+          "label": "Drzava",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "7c377464-e946-4e13-8405-9fd2f74729b7",
+              "name": "drzava_id",
+              "type": "VARCHAR(n)",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "size": "10",
+              "isUnique": false
+            },
+            {
+              "id": "3211c2aa-03d7-4882-9ae6-45c161618d43",
+              "name": "nazivDrzave",
+              "type": "VARCHAR(n)",
+              "position": 0,
+              "isPrimaryKey": false,
+              "size": "50",
+              "isUnique": true
+            }
+          ],
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 76
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "1236ef08-46c3-44db-aece-0ef34386a267",
+        "type": "Table",
+        "position": {
+          "x": 667.0402276168082,
+          "y": -39.2719778748002
+        },
+        "data": {
+          "label": "RezervirajSadrzaj",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "5f015ef8-7f92-4374-ac1b-ce8290917d0d",
+              "name": "datumOdSadrzaj",
+              "type": "DATE",
+              "position": 0,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "517a6048-12e8-46b6-9fe1-4f45ee8b96e7",
+              "name": "datumDoSadrzaj",
+              "type": "DATE",
+              "position": 0,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "fk_9c95b4af-3cf2-4d01-a319-1bf53fcddb7d",
+              "name": "fk_Rezervacija",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "9c12a507-48da-4698-b7c7-0490fe348062",
+                "sourceTableId": "c9361080-36c5-421a-8c93-30f6467558ec",
+                "columns": [
+                  {
+                    "id": "fk_2e67426e-d1a0-49a5-ba93-a3f789d42156",
+                    "name": "rezervacija_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "fk_6c275380-4aa0-4c3f-973e-e592c35265ab",
+              "name": "fk_DodatniSadržaj",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "9b97759b-71d4-4a21-80ef-f6b4c1be497f",
+                "sourceTableId": "3f459d1b-ad16-4a67-bede-f26d6d74b0a4",
+                "columns": [
+                  {
+                    "id": "fk_441131a7-b217-4c3a-bfef-8d79d9355be4",
+                    "name": "dodatniSadrzaj_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isPrimaryKey": true,
+              "isOptional": false
+            }
+          ],
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 127
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "a629cf69-e744-4059-a4f9-6f34cae63cae",
+        "type": "Table",
+        "position": {
+          "x": 669.1510661548933,
+          "y": 212.93278079760827
+        },
+        "data": {
+          "label": "RezervirajSobu",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "fk_d4de51d7-ebea-423e-a02d-73321f194885",
+              "name": "fk_Rezervacija",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "dd85ddeb-493f-45a2-8969-1e6c65783d82",
+                "sourceTableId": "c9361080-36c5-421a-8c93-30f6467558ec",
+                "columns": [
+                  {
+                    "id": "fk_2e67426e-d1a0-49a5-ba93-a3f789d42156",
+                    "name": "rezervacija_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isPrimaryKey": true,
+              "isOptional": false,
+              "position": 0
+            },
+            {
+              "id": "0c35fae2-ffe4-4b76-a703-f12dce3ad3c2",
+              "name": "datumOdSoba",
+              "type": "DATE",
+              "position": 2,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "08b66ff4-9512-438a-8d59-8cafd32bfc75",
+              "name": "datumDoSoba",
+              "type": "DATE",
+              "position": 3,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "fk_5d570e04-47aa-445b-85c4-a0287ee22a06",
+              "name": "fk_Soba",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "95b3215f-e3a0-4c3b-a64f-06e8cee3f1fa",
+                "sourceTableId": "34badc37-1ef5-4a95-876b-f46f1a5cfca8",
+                "columns": [
+                  {
+                    "id": "fk_d6cd92bc-46e1-49af-b9e3-fc3adf186c32",
+                    "name": "broj_sobe",
+                    "type": "VARCHAR(n)",
+                    "size": "5"
+                  }
+                ]
+              },
+              "isPrimaryKey": true,
+              "isOptional": false
+            }
+          ],
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 127
+        },
+        "selected": false,
+        "dragging": false
+      }
+    ],
+    "edges": [
+      {
+        "id": "62e77226-01f4-45d3-86cd-9d0b4e177a5b",
+        "type": "Relational",
+        "source": "88e698d3-6720-4ab0-b189-383d0e533833",
+        "targetHandle": "foreign-key-handle-25c1ce60-e8b7-4dce-908d-efea4f97871d",
+        "target": "c9361080-36c5-421a-8c93-30f6467558ec",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "25c1ce60-e8b7-4dce-908d-efea4f97871d",
+            "sourceTableId": "88e698d3-6720-4ab0-b189-383d0e533833",
+            "columns": [
+              {
+                "id": "fk_402ce5d9-959a-40d1-b006-d1987557649e",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "617b1242-9b92-4342-a7b8-86b0f07d7c0a",
+        "type": "Relational",
+        "source": "c9361080-36c5-421a-8c93-30f6467558ec",
+        "targetHandle": "foreign-key-handle-8b09ea19-6c93-4242-8dea-987c733b9c8e",
+        "target": "f06695fe-8e31-40fc-81da-414dee207917",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "8b09ea19-6c93-4242-8dea-987c733b9c8e",
+            "sourceTableId": "c9361080-36c5-421a-8c93-30f6467558ec",
+            "columns": [
+              {
+                "id": "fk_2e67426e-d1a0-49a5-ba93-a3f789d42156",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "11eef1b0-1288-46af-9266-3f4a80f29863",
+        "type": "Relational",
+        "source": "88e698d3-6720-4ab0-b189-383d0e533833",
+        "targetHandle": "foreign-key-handle-34a14bbc-9999-4f98-833b-24475d1abc5d",
+        "target": "d906d900-51f5-4305-9dce-7b4ad3bdec4f",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "34a14bbc-9999-4f98-833b-24475d1abc5d",
+            "sourceTableId": "88e698d3-6720-4ab0-b189-383d0e533833",
+            "columns": [
+              {
+                "id": "fk_402ce5d9-959a-40d1-b006-d1987557649e",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "7ecab296-678b-4e5d-8a4f-ced3c3647662",
+        "type": "Relational",
+        "source": "88e698d3-6720-4ab0-b189-383d0e533833",
+        "targetHandle": "foreign-key-handle-5ff4a4f0-4522-4c34-a62c-a90c1925a4ff",
+        "target": "243e6a43-8856-43f9-b4b1-20d85d29f7cd",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "5ff4a4f0-4522-4c34-a62c-a90c1925a4ff",
+            "sourceTableId": "88e698d3-6720-4ab0-b189-383d0e533833",
+            "columns": [
+              {
+                "id": "fk_402ce5d9-959a-40d1-b006-d1987557649e",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "33c377ee-30a2-4abb-94e3-10dd79e493dd->88e698d3-6720-4ab0-b189-383d0e533833_7e5e58d5-791f-4b9c-97f6-6595af15b475",
+        "type": "Relational",
+        "source": "33c377ee-30a2-4abb-94e3-10dd79e493dd",
+        "targetHandle": "foreign-key-handle-7e5e58d5-791f-4b9c-97f6-6595af15b475",
+        "target": "88e698d3-6720-4ab0-b189-383d0e533833",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "7e5e58d5-791f-4b9c-97f6-6595af15b475",
+            "sourceTableId": "33c377ee-30a2-4abb-94e3-10dd79e493dd",
+            "columns": [
+              {
+                "id": "fk_6e22d85b-0b33-472f-805d-2218b6b9111d",
+                "name": "postBr",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "a2865613-52e3-4546-b3fe-85ca969dfd49->33c377ee-30a2-4abb-94e3-10dd79e493dd_2eafb28a-f1cb-42a8-bf69-b3aa2dac3cf6",
+        "type": "Relational",
+        "source": "a2865613-52e3-4546-b3fe-85ca969dfd49",
+        "targetHandle": "foreign-key-handle-2eafb28a-f1cb-42a8-bf69-b3aa2dac3cf6",
+        "target": "33c377ee-30a2-4abb-94e3-10dd79e493dd",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "2eafb28a-f1cb-42a8-bf69-b3aa2dac3cf6",
+            "sourceTableId": "a2865613-52e3-4546-b3fe-85ca969dfd49",
+            "columns": [
+              {
+                "id": "fk_7c377464-e946-4e13-8405-9fd2f74729b7",
+                "name": "drzava_id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "c9361080-36c5-421a-8c93-30f6467558ec->1236ef08-46c3-44db-aece-0ef34386a267_9c12a507-48da-4698-b7c7-0490fe348062",
+        "type": "Relational",
+        "source": "c9361080-36c5-421a-8c93-30f6467558ec",
+        "targetHandle": "foreign-key-handle-9c12a507-48da-4698-b7c7-0490fe348062",
+        "target": "1236ef08-46c3-44db-aece-0ef34386a267",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "9c12a507-48da-4698-b7c7-0490fe348062",
+            "sourceTableId": "c9361080-36c5-421a-8c93-30f6467558ec",
+            "columns": [
+              {
+                "id": "fk_2e67426e-d1a0-49a5-ba93-a3f789d42156",
+                "name": "rezervacija_id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "3f459d1b-ad16-4a67-bede-f26d6d74b0a4->1236ef08-46c3-44db-aece-0ef34386a267_9b97759b-71d4-4a21-80ef-f6b4c1be497f",
+        "type": "Relational",
+        "source": "3f459d1b-ad16-4a67-bede-f26d6d74b0a4",
+        "targetHandle": "foreign-key-handle-9b97759b-71d4-4a21-80ef-f6b4c1be497f",
+        "target": "1236ef08-46c3-44db-aece-0ef34386a267",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "9b97759b-71d4-4a21-80ef-f6b4c1be497f",
+            "sourceTableId": "3f459d1b-ad16-4a67-bede-f26d6d74b0a4",
+            "columns": [
+              {
+                "id": "fk_441131a7-b217-4c3a-bfef-8d79d9355be4",
+                "name": "dodatniSadrzaj_id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "c9361080-36c5-421a-8c93-30f6467558ec->a629cf69-e744-4059-a4f9-6f34cae63cae_dd85ddeb-493f-45a2-8969-1e6c65783d82",
+        "type": "Relational",
+        "source": "c9361080-36c5-421a-8c93-30f6467558ec",
+        "targetHandle": "foreign-key-handle-dd85ddeb-493f-45a2-8969-1e6c65783d82",
+        "target": "a629cf69-e744-4059-a4f9-6f34cae63cae",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "dd85ddeb-493f-45a2-8969-1e6c65783d82",
+            "sourceTableId": "c9361080-36c5-421a-8c93-30f6467558ec",
+            "columns": [
+              {
+                "id": "fk_2e67426e-d1a0-49a5-ba93-a3f789d42156",
+                "name": "rezervacija_id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "88e698d3-6720-4ab0-b189-383d0e533833->d906d900-51f5-4305-9dce-7b4ad3bdec4f_a2abd14a-9618-4735-9fc9-90b4872cd74f",
+        "type": "Relational",
+        "source": "88e698d3-6720-4ab0-b189-383d0e533833",
+        "targetHandle": "foreign-key-handle-a2abd14a-9618-4735-9fc9-90b4872cd74f",
+        "target": "d906d900-51f5-4305-9dce-7b4ad3bdec4f",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "a2abd14a-9618-4735-9fc9-90b4872cd74f",
+            "sourceTableId": "88e698d3-6720-4ab0-b189-383d0e533833",
+            "columns": [
+              {
+                "id": "fk_402ce5d9-959a-40d1-b006-d1987557649e",
+                "name": "korisnik_id",
+                "type": "VARCHAR(n)",
+                "size": "10"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "34badc37-1ef5-4a95-876b-f46f1a5cfca8->a629cf69-e744-4059-a4f9-6f34cae63cae_95b3215f-e3a0-4c3b-a64f-06e8cee3f1fa",
+        "type": "Relational",
+        "source": "34badc37-1ef5-4a95-876b-f46f1a5cfca8",
+        "targetHandle": "foreign-key-handle-95b3215f-e3a0-4c3b-a64f-06e8cee3f1fa",
+        "target": "a629cf69-e744-4059-a4f9-6f34cae63cae",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "95b3215f-e3a0-4c3b-a64f-06e8cee3f1fa",
+            "sourceTableId": "34badc37-1ef5-4a95-876b-f46f1a5cfca8",
+            "columns": [
+              {
+                "id": "fk_d6cd92bc-46e1-49af-b9e3-fc3adf186c32",
+                "name": "broj_sobe",
+                "type": "VARCHAR(n)",
+                "size": "5"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "viewport": {
+      "x": 468.3660430578079,
+      "y": 236.7934089054717,
+      "zoom": 0.5344029956055044
+    }
+  },
+  "name": "relacijskiModelProgiBaze_1.0.2",
+  "folder": {
+    "name": "Diagrams",
+    "folderType": 1,
+    "depth": 0,
+    "id": 118189
+  },
+  "id": 136665,
+  "updatedAtTimestamp": 1762116476
+}
