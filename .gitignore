@@ -1,2 +1,6 @@
 # macOS datoteke
 .DS_Store
+
+# intelij
+
+.idea
