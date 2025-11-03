@@ -54,13 +54,19 @@ function Header() {
             }}
           >
             <MenuItem onClick={handleClose} component={Link} to="/">
-              Home
+              Početna stranica
             </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/about">
-              About
+              O nama
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/reservation">
+              Rezervacija soba
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/reservation">
+              Rezervacija dodatnog sadržaja
             </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/contact">
-              Contact
+              Kontakt
             </MenuItem>
           </Menu>
           <Typography variant="h6" className="logo" component={Link} to="/" sx={{
@@ -69,7 +75,7 @@ function Header() {
                             color: 'white', 
                             cursor: 'pointer'
                         }}>
-            Blue sun hotel
+            Modrila
           </Typography>
           <Button color="inherit" component={Link} to="/logIn">
             Login
