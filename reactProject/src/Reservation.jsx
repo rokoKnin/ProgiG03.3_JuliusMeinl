@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { createElement, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -10,6 +10,11 @@ import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_Numb
 import { styled } from '@mui/system';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+
 
 const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
   return (
@@ -34,7 +39,9 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
     />
   );
 });
-
+const handleSave = () => {
+document.getElementsByClassName("dodaj_goste")[0].innerText =`Gosti: ${document.getElementById("brojOdrasli").value} Odrasli, ${document.getElementById("brojDjeca").value} Djeca`;
+};
 
 function Modal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
@@ -57,14 +64,15 @@ function Modal({ isOpen, onClose, children }) {
         borderRadius: '8px'
       }}>
         {children}
-        <button style={{marginTop: '12px'}} onClick={onClose}>Odustani</button>
-        <button style={{marginTop: '12px', marginLeft: '8px'}} onClick={onClose}>Spremi</button>
+         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="outlined" onClick={onClose}>Odustani</Button>
+         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="contained" onClick={()=>{handleSave();onClose();}}>Spremi</Button>
       </div>
     </div>,
     document.body
   );
 }
 export default function Reservation() {
+  
       const [value, setValue] = React.useState(dayjs('2022-04-17'));
        const [isOpen, setIsOpen] = useState(false);
        
@@ -83,8 +91,8 @@ export default function Reservation() {
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <h2>Dodaj goste</h2>
-  <div>Odrasli</div><NumberInput aria-label="Quantity Input" min={1} max={99} defaultValue={1} />
-    <div>Djeca</div><NumberInput aria-label="Quantity Input" min={0} max={99} defaultValue={0} />
+  <div>Odrasli</div><NumberInput aria-label="Quantity Input" min={1} max={99} defaultValue={1} id="brojOdrasli" />
+    <div>Djeca</div><NumberInput aria-label="Quantity Input" min={0} max={99} defaultValue={0} id="brojDjeca" />
       </Modal>
     </div>);
     }

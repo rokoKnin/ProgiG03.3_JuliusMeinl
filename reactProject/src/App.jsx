@@ -5,8 +5,8 @@ import HomePage from "./HomePage.jsx";
 import LogIn from "./LogIn.jsx";
 import About from "./About.jsx";
 import Contact from "./Contact.jsx";
-import Reservation from "./Reservation.jsx";
 import Header from './layouts/Header.jsx';
+import ReservationSlider from './ReservationSlider.jsx';
 
 export default function App() {
 
@@ -18,7 +18,7 @@ export default function App() {
         <Route path="/logIn" element={<LogIn/>} />
         <Route path="/about" element={<About/>} />
         <Route path="/contact" element={<Contact/>} />
-        <Route path="/reservation" element={<Reservation/>} />
+        <Route path="/reservation" element={<ReservationSlider />} />
       </Routes>
     </HashRouter>
   );
