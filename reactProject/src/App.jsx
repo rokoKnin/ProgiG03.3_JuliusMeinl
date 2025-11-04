@@ -1,4 +1,5 @@
 
+import React, { useState } from "react";
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import HomePage from "./HomePage.jsx";
@@ -11,9 +12,14 @@ import InformationInput from './InformationInput.jsx';
 
 export default function App() {
 
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  const handleOpenLogin = () => setIsLoginOpen(true);
+  const handleCloseLogin = () => setIsLoginOpen(false);
+
   return (
     <HashRouter>
-      <Header />
+      <Header onOpenPopup={handleOpenLogin} />
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/logIn" element={<LogIn/>} />
@@ -22,6 +28,7 @@ export default function App() {
         <Route path="/reservation" element={<ReservationSlider/>} />
         <Route path="/info-input" element = {<InformationInput/>} />
       </Routes>
+      <LogIn open={isLoginOpen} onClose={handleCloseLogin} />
     </HashRouter>
   );
 }

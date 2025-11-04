@@ -5,19 +5,56 @@ function LogIn({open, onClose}) {
     const navigate = useNavigate()
 
     if (!open) return null
-    return(
-        <div>
-            <h1>Log in page</h1>
 
-            <GoogleLogin 
-                onSuccess={(credentialResponse) => {
-                    console.log(credentialResponse)
-                    navigate("/InformationInput")
-                    onClose
-                }} 
-                onError={() => {
-                        console.log("Login failed") 
-                        onClose}}/>
+    const handleSuccess = (credentialResponse) => {
+    console.log("Login successful:", credentialResponse);
+    onClose()
+    navigate("/InformationInput")
+    }
+
+    const handleError = () => {
+    console.log("Login failed")
+    onClose()
+    }
+    return(
+        <div
+            style={{
+                position: "fixed",
+                inset: 0,
+                backgroundColor: "rgba(0,0,0,0.5)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 1300,
+            }}
+        >
+            <div
+                style={{
+                background: "white",
+                padding: "2rem",
+                borderRadius: "8px",
+                textAlign: "center",
+                width: "320px",
+                }}
+            >
+                <h2>Log in</h2>
+                <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+
+                <button
+                onClick={onClose}
+                style={{
+                    marginTop: "1.5rem",
+                    background: "#1976d2",
+                    color: "white",
+                    border: "none",
+                    padding: "0.6rem 1rem",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                }}
+                >
+                Close
+                </button>
+            </div>
         </div>
     )
 }
