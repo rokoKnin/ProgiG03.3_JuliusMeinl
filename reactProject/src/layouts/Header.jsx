@@ -12,6 +12,7 @@ import {
 
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
+import LogIn from '../LogIn';
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -22,6 +23,7 @@ function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [isOpen, setIsOpen] = React.useState(false)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -77,9 +79,12 @@ function Header() {
                         }}>
             Modrila
           </Typography>
-          <Button color="inherit" component={Link} to="/logIn">
+          <Button color="inherit" onClick={() => setIsOpen(true)}>
             Login
           </Button>
+          <LogIn open = {isOpen} onClose={() => setIsOpen(false)}>
+
+          </LogIn>
          
         </Toolbar>
       </AppBar>
