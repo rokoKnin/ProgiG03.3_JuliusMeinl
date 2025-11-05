@@ -1,4 +1,6 @@
-
+import * as React from 'react';
+import './index.css';
+import { Link } from 'react-router-dom';
 
 function InformationInput() {
 
@@ -14,11 +16,11 @@ function InformationInput() {
                 <input placeholder='+000'></input>
                 <input placeholder='00-000-000'></input>
             </div>
-            <Button color="inherit" component={Link} to="/HomePage">
+            <Button>
             Confirm
             </Button>
         </div>
-    );
+    )
 }
 
 export default InformationInput

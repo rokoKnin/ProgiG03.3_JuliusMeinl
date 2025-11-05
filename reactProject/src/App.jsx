@@ -26,7 +26,7 @@ export default function App() {
         <Route path="/about" element={<About/>} />
         <Route path="/contact" element={<Contact/>} />
         <Route path="/reservation" element={<ReservationSlider/>} />
-        <Route path="/info-input" element = {<InformationInput/>} />
+        <Route path="/InformationInput" element={<InformationInput/>} />
       </Routes>
       <LogIn open={isLoginOpen} onClose={handleCloseLogin} />
     </HashRouter>
