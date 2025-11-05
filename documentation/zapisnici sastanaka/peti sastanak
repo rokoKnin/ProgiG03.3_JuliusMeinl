@@ -1,0 +1,31 @@
+Peti sastanak
+3/11/2025
+Prisutni: svi
+Zapisničar: Leni
+
+Teme: Ponuda hotela, rasprava o bazi podataka, izgled stranice hotela
+
+Ponuda hotela:
+Soba:
+-	4. kata
+-	35 soba po katu, osim na 4. katu gdje ima 12 soba
+-	4. kat sve sobe su penthousevi
+-	atributi sobe: balkon, pogled na more
+-	broj osoba po sobi: 2 (king i twin opcije kreveta), 3
+
+Dodatni sadržaj:
+-	bazen, restoran, gym
+
+Napravljeno do sada:
+-	Frontend – prikaz svih dijelova stranice započet, ali čeka se veza sa bazom podataka kako bi bilo funkcionalno
+-	Backend – log in funkcionalnost, spojen s bazom, modeli u završnoj fazi
+-	Baza podataka - napravljena
+-	Dokumentacija – popravljane greske na 2. i 3. stranici, napisan opis baze podataka na 4. stranici i započeta 7. stranica
+-	Uspostavljena veza između backenda i frontenda
+
+
+Zadatci:
+-	Rad na drugoj funkcionalnosti - za sad plan da to bude upravljanje sobe (admin)
+-	Pronalazak izvora slika za stranicu
+-	hardkodirati superadmina stranice
+-	izgled stranice za admina
