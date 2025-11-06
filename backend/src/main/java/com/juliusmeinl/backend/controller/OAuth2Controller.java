@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OAuth2Controller {
 
-    @GetMapping("/")
+    @GetMapping("/api/auth")
     public String greet(){
         return "Dobro dosli u hotel!";
     }

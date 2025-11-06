@@ -11,6 +11,9 @@ function LogIn({open, onClose}) {
     onClose()
     navigate("/InformationInput")
     }
+    const googleLogin = () => {
+        window.location.href= 'http://localhost:8080/oauth2/authorization/google'
+    }
 
     const handleError = () => {
     console.log("Login failed")
@@ -38,8 +41,8 @@ function LogIn({open, onClose}) {
                 }}
             >
                 <h2>Log in</h2>
-                <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
 
+                <button onClick={googleLogin}> Login with Google </button>
                 <button
                 onClick={onClose}
                 style={{

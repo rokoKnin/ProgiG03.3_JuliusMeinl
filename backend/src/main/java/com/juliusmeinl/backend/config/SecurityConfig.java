@@ -15,11 +15,17 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-    http.oauth2Login(Customizer.withDefaults());
+        http
+                .csrf(csrf -> csrf.disable()) // ako koristiš REST API + React
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth", "/user-info").permitAll() // ove rute su javne
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 ->
+                        oauth2.defaultSuccessUrl("http://localhost:5173/#/dashboard", true)
+                );
 
         return http.build();
     }
-
 }
