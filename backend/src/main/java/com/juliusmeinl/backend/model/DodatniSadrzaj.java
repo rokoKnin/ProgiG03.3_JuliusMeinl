@@ -4,21 +4,21 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "dodatnisadržaj")
+@Table(name = "dodatnisadrzaj")
 public class DodatniSadrzaj {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dodatniSadrzaj_id")
+    @Column(name = "dodatnisadrzaj_id")
     private Integer id;
 
-    @Column(name = "vrstaDodatniSadrzaj", nullable = false, length = 20)
+    @Column(name = "vrstadodatnisadrzaj", nullable = false, length = 20)
     private String vrsta;
 
-    @Column(name = "statusDodatniSadrzaj", nullable = false, length = 20)
+    @Column(name = "statusdodatnisadrzaj", nullable = false, length = 20)
     private String status;
 
-    @Column(name = "kapacitetDodatniSadrzaj", nullable = false)
+    @Column(name = "kapacitetdodatnisadrzaj", nullable = false)
     private Integer kapacitet;
 
     @OneToMany(mappedBy = "dodatniSadrzaj")

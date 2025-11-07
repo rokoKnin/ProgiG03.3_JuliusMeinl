@@ -14,7 +14,7 @@ public class Rezervacija {
     @Column(name = "rezervacija_id")
     private Integer id;
 
-    @Column(name = "datumRezerviranja", nullable = false)
+    @Column(name = "datumrezerviranja", nullable = false)
     private LocalDate datumRezerviranja = LocalDate.now();
 
     @Column(name = "placeno", nullable = false)

@@ -1,18 +1,27 @@
 package com.juliusmeinl.backend.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
+import com.juliusmeinl.backend.model.Korisnik;
+import com.juliusmeinl.backend.service.KorisnikService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/users")
 public class KorisnikController {
-    @GetMapping("/user-info")
-    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-        return principal.getAttributes();
+
+    private final KorisnikService korisnikService;
+
+    public KorisnikController(KorisnikService korisnikService) {
+        this.korisnikService = korisnikService;
+    }
+
+    @PostMapping
+    public Korisnik kreirajKorisnika(@RequestBody Korisnik korisnik) {
+        return korisnikService.spremiKorisnika(korisnik);
     }
 }
+
+

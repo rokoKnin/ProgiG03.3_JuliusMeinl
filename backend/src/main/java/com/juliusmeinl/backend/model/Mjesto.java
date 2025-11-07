@@ -7,12 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "mjesto")
 public class Mjesto {
-    @Id
-    @Column(name = "postBr", length = 20)
-    private String postBr;
 
-    @Column(name = "nazMjesto", nullable = false, length = 50)
-    private String nazMjesto;
+    @EmbeddedId
+    private MjestoId id;
 
     @ManyToOne
     @JoinColumn(name = "drzava_id", nullable = false)
@@ -21,27 +18,26 @@ public class Mjesto {
     @OneToMany(mappedBy = "mjesto")
     private List<Korisnik> korisnici;
 
-    public String getPostBr() {
-        return postBr;
+    public MjestoId getId() {
+        return id;
     }
-    public void setPostBr(String postBr) {
-        this.postBr = postBr;
+
+    public void setId(MjestoId id) {
+        this.id = id;
     }
-    public String getNazMjesto() {
-        return nazMjesto;
-    }
-    public void setNazMjesto(String nazMjesto) {
-        this.nazMjesto = nazMjesto;
-    }
+
     public Drzava getDrzava() {
         return drzava;
     }
+
     public void setDrzava(Drzava drzava) {
         this.drzava = drzava;
     }
+
     public List<Korisnik> getKorisnici() {
         return korisnici;
     }
+
     public void setKorisnici(List<Korisnik> korisnici) {
         this.korisnici = korisnici;
     }

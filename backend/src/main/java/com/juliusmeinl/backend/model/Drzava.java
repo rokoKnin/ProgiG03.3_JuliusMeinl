@@ -12,7 +12,7 @@ public class Drzava {
     @Column(name = "drzava_id")
     private Integer id;
 
-    @Column(name = "nazivDrzave", nullable = false, unique = true, length = 50)
+    @Column(name = "nazivdrzave", nullable = false, unique = true, length = 50)
     private String nazivDrzave;
 
     @OneToMany(mappedBy = "drzava")

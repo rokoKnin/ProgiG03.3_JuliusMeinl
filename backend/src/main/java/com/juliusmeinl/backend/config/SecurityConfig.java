@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // ako koristiš REST API + React
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth", "/user-info").permitAll() // ove rute su javne
+                        .requestMatchers("/api/auth", "/user-info", "/api/users").permitAll() // ove rute su javne
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 ->

@@ -12,10 +12,10 @@ public class Upit {
     @Column(name = "upit_id")
     private Integer id;
 
-    @Column(name = "datumUpit", nullable = false)
+    @Column(name = "datumupit", nullable = false)
     private LocalDateTime datumUpit;
 
-    @Column(name = "porukaUpit", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "porukaupit", nullable = false, columnDefinition = "TEXT")
     private String poruka;
 
     @ManyToOne

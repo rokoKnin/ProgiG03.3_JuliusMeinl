@@ -13,24 +13,27 @@ public class Korisnik {
     @Column(name = "korisnik_id")
     private Integer id;
 
-    @Column(name = "imeKorisnik", nullable = false, length = 50)
+    @Column(name = "imekorisnik", nullable = false, length = 50)
     private String ime;
 
-    @Column(name = "prezimeKorisnik", nullable = false, length = 50)
+    @Column(name = "prezimekorisnik", nullable = false, length = 50)
     private String prezime;
 
-    @Column(name = "emailKorisnik", nullable = false, unique = true, length = 50)
+    @Column(name = "emailkorisnik", nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(name = "telefonKorisnik", nullable = false, unique = true, length = 20)
+    @Column(name = "telefonkorisnik", nullable = false, unique = true, length = 20)
     private String telefon;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ovlastKorisnik", nullable = false)
+    @Column(name = "ovlastkorisnik", nullable = false)
     private UlogaKorisnika ovlast;
 
     @ManyToOne
-    @JoinColumn(name = "postBr", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "postbr", referencedColumnName = "postbr", nullable = false),
+            @JoinColumn(name = "nazmjesto", referencedColumnName = "nazmjesto", nullable = false)
+    })
     private Mjesto mjesto;
 
     @OneToMany(mappedBy = "korisnik")
@@ -84,10 +87,11 @@ public class Korisnik {
     public void setMjesto(Mjesto mjesto) {
         this.mjesto = mjesto;
     }
+
+
     public List<Rezervacija> getRezervacije() {
         return rezervacije;
     }
-
     public void setRezervacije(List<Rezervacija> rezervacije) {
         this.rezervacije = rezervacije;
     }
