@@ -9,9 +9,9 @@ CREATE TABLE drzava
 CREATE TABLE mjesto
 (
     postBr VARCHAR(20),
-    nazMjesto VARCHAR(50) NOT NULL,
+    nazMjesto VARCHAR(50),
     drzava_id INT NOT NULL,
-    PRIMARY KEY (postBr),
+    PRIMARY KEY (postBr, nazMjesto),
     FOREIGN KEY (drzava_id) REFERENCES drzava(drzava_id)
 );
 
@@ -22,12 +22,13 @@ CREATE TABLE korisnik
     prezimeKorisnik VARCHAR(50) NOT NULL,
     emailKorisnik VARCHAR(50) NOT NULL,
     telefonKorisnik VARCHAR(20) NOT NULL,
-    ovlastKorisnik uloga_korisnika NOT NULL,
+    ovlastKorisnik VARCHAR(10),
     postBr VARCHAR(20) NOT NULL,
+    nazMjesto varchar(50) NOT NULL,
     PRIMARY KEY (korisnik_id),
     UNIQUE (emailKorisnik),
     UNIQUE (telefonKorisnik),
-    FOREIGN KEY (postBr) REFERENCES mjesto(postBr)
+    FOREIGN KEY (postBr, nazMjesto) REFERENCES mjesto(postBr, nazMjesto)
 );
 
 CREATE TABLE rezervacija
@@ -115,4 +116,4 @@ CREATE TABLE rezervirajSobu
 CREATE TYPE status_sobe AS ENUM ('DOSTUPNA', 'NEDOSTUPNA');
 
 -- Ovlasti korisnika
-CREATE TYPE uloga_korisnika AS ENUM ('GOST', 'ZAPOSLENIK', 'VLASNIK');
+--CREATE TYPE uloga_korisnika AS ENUM ('GOST', 'ZAPOSLENIK', 'VLASNIK');

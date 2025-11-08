@@ -29,10 +29,10 @@ const Dashboard = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/users', userData)
-            console.log('Success: ', response.data)
+            const response = await axios.post('http://localhost:8080/api/users', userData,  {withCredentials: true} )
+            console.log('Success: Poslalo se sve', response.data)
         } catch (error) {
-            console.error('Error:', error)
+            console.error('Error: nije se poslao post zbog necega', error.response?.data)
         }
     }
 
@@ -66,3 +66,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

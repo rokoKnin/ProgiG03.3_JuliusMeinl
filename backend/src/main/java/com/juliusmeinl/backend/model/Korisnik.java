@@ -25,9 +25,9 @@ public class Korisnik {
     @Column(name = "telefonkorisnik", nullable = false, unique = true, length = 20)
     private String telefon;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ovlastkorisnik", nullable = false)
-    private UlogaKorisnika ovlast;
+    @Column(name = "ovlastkorisnik", nullable = false, length = 10)
+    private String ovlast;
+
 
     @ManyToOne
     @JoinColumns({
@@ -75,10 +75,10 @@ public class Korisnik {
     public void setTelefon(String telefon) {
         this.telefon = telefon;
     }
-    public UlogaKorisnika getOvlast() {
+    public String getOvlast() {
         return ovlast;
     }
-    public void setOvlast(UlogaKorisnika ovlast) {
+    public void setOvlast(String ovlast) {
         this.ovlast = ovlast;
     }
     public Mjesto getMjesto() {
@@ -87,6 +87,8 @@ public class Korisnik {
     public void setMjesto(Mjesto mjesto) {
         this.mjesto = mjesto;
     }
+
+
 
 
     public List<Rezervacija> getRezervacije() {

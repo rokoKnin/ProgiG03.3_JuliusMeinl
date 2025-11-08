@@ -9,7 +9,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface MjestoRepository extends JpaRepository<Mjesto, String> {
+public interface MjestoRepository extends JpaRepository<Mjesto, MjestoId> {
     //Optional<Mjesto> findByPostBrAndNazMjesto(String postBr, String nazMjesto);
 }
 
