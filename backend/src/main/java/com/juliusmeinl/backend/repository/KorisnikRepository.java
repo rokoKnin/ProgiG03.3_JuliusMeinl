@@ -6,6 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
-    Optional<Korisnik> findByEmail(String email);  //moram preko email provjerit jel postoji korisnik u bazi
+public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
+    Optional<Korisnik> findByEmail(String email);// traži korisnika po emailu
+
+    boolean existsByEmail(String email);         // provjera postoji li korisnik po emailu
+
+    Optional<Korisnik> findByEmailAndOvlast(String email, String ovlast);
+
 }
