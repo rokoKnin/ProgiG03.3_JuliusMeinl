@@ -38,6 +38,10 @@ public class KorisnikController {
 
         return korisnikService.spremiKorisnika(korisnik, mjestoId);
     }
+    @GetMapping("/check-vlasnik")
+    public boolean provjeriVlasnika(@RequestParam String email) {
+        return korisnikService.korisnikJeVlasnik(email);
+    }
 }
 
 

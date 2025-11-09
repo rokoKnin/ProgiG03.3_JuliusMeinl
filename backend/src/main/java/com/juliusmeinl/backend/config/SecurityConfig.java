@@ -19,20 +19,22 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   CustomOAuth2SuccessHandler successHandler) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // ako koristiš REST API + React
+                .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth","/user-info").permitAll() // ove rute su javne
+                        .requestMatchers("/api/auth","/user-info").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 ->
-                        oauth2.defaultSuccessUrl("http://localhost:5173/#/dashboard", true)
+                        oauth2.successHandler(successHandler)
                 );
 
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

@@ -35,5 +35,25 @@ public class KorisnikService {
 
         return korisnikRepository.save(korisnik);
     }
+
+    // Provjerava postojili li korisnik prema mailu
+    public boolean existsByEmail(String email) {
+        return korisnikRepository.existsByEmail(email);
+    }
+
+    // Dohvat korisnika po emailu
+    public Optional<Korisnik> findByEmail(String email) {
+        return korisnikRepository.findByEmail(email);
+    }
+
+    //Provjerava je li korisnik vlasnik
+    public boolean korisnikJeVlasnik(String email) {
+        Optional<Korisnik> korisnik = korisnikRepository.findByEmailAndOvlast(email, "VLASNIK");
+        return korisnik.isPresent();
+    }
+
+
+
+
 }
 
