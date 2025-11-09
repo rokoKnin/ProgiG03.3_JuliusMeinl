@@ -16,6 +16,7 @@ const Dashboard = () => {
         const prezime = document.getElementById("lastname_id").value
         const email = document.getElementById("email_id").value
         const telefon = document.getElementById("phone_id").value
+        const nazDrzava = document.getElementById("country_id").value
         const nazMjesto = document.getElementById("place_id").value
         const postBr = document.getElementById("zipcode_id").value
 
@@ -24,6 +25,7 @@ const Dashboard = () => {
             prezime,
             email,
             telefon,
+            nazDrzava,
             nazMjesto,
             postBr
         }
@@ -50,6 +52,7 @@ const Dashboard = () => {
                     <input type="text" placeholder="example@gmail.com" value={user.email} id="email_id"></input>
                     <input type="text" placeholder="Phone number" id="phone_id"></input>
                     <div>
+                        <input type="text" placeholder="Drzava" id="country_id"></input>
                         <input type="text" placeholder="Mjesto" id="place_id"></input>
                         <input type="text" placeholder="Poštanski broj" id="zipcode_id"></input>
                     </div>
