@@ -1,0 +1,35 @@
+Prvo je potrebno stvoriti bazu, najjednostavnije u DataGrip ili pgAdmin unutar postgres@localhoast kao na bazama.
+Samo pokrenite sql koji se nalazi u folderu bazaPodataka na githubu.
+
+na pathu backend/src/main/resources postoji application.properties.
+Pronađite dio koda 
+## baza
+##spring.datasource.url=jdbc:postgresql://localhost:5432/juliusmeinl
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+${} ova oznaka je za environment variables (ENV). Ja sam kreirao DB_URL, DB_USERNAME i DB_PASSWORD.
+Te varijable nam se lokalno mogu razlikovati, pa su zato unutar ${}. 
+
+Da bi saznali vaše vrijednosti, u DataGripu ili pgAdminu desnim klikom na postgres@localhoast imate opciju properties.
+Tu piše URL, user i password (vjerojatno neće pisati eksplicitno koja vam je loinka nego će pisati <hidden>).
+ 
+User će vam vjerojatno pisati postgres, lozinka mislim da je isto postgres, a ako ju ne znate možete ju pormijeniti sql upitom.
+ALTER USER postgres WITH PASSWORD 'postgres';
+
+Postavljanje ENV se radi tako da u gornjem dijelu intellij gdje vam piše dev ili BackendApplication kliknete na to.
+U prozoru koji se otvori kliknite na edit configurations. Ne znam je li isto na VSC, ali bitno je da odete na edit configurations.
+
+Kada kliknete to otvori se run/debug configurations, odabirite BackendApplication koji je unutar SpringBoot s lijeve strane prozora.
+
+Trebali bi vidjeti prozor Environment variables, ali ako se ne prikazuje klikom na modify options u istom prozoru možete ga dodati.
+
+u taj prozor dodajete vaše vrijednosti od gore environemnt varijablama na sljedeći način.
+
+DB_URL=jdbc:postgresql://localhost:5433/juliusmeinl;DB_USERNAME=postgres;DB_PASSWORD=postgres
+
+ovo je primjer mojih postavki, meni je port 5433 vama vjerojatno 5432. vrijednosti se odvajaju s ;
+
+
+
