@@ -21,7 +21,6 @@ public class KorisnikController {
 
     @PostMapping
     public Korisnik kreirajKorisnika(@RequestBody Map<String, String> userMap) {
-        System.out.println("📥 JSON koji je stigao: " + userMap);
 
         Korisnik korisnik = new Korisnik();
         korisnik.setIme(userMap.get("ime"));
@@ -33,10 +32,12 @@ public class KorisnikController {
         String postBr = userMap.get("postBr");
         String nazMjesto = userMap.get("nazMjesto");
 
-        // Kreiramo MjestoId i prosljeđujemo u servis
         MjestoId mjestoId = new MjestoId(postBr, nazMjesto);
+        mjestoId.setNazMjesto(mjestoId.getNazMjesto().toLowerCase().replaceAll(" ", "")); //prilagodba input imena mjesta za bazu
 
-        return korisnikService.spremiKorisnika(korisnik, mjestoId);
+        String nazDrzava = userMap.get("nazDrzava");
+
+        return korisnikService.spremiKorisnika(korisnik, mjestoId, nazDrzava);
     }
     @GetMapping("/check-vlasnik")
     public boolean provjeriVlasnika(@RequestParam String email) {
