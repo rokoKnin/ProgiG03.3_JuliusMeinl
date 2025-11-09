@@ -17,8 +17,21 @@ public class Soba {
     @Column(name = "broj_sobe", nullable = false, unique = true, length = 5)
     private String brojSobe;
 
-    @Column(name = "vrsta", nullable = false, length = 20)
-    private String vrsta;
+    @Column(name = "kat", nullable = false)
+    private Integer kat;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "vrsta", nullable = false)
+    private VrstaSobe vrsta;
+
+    @Column(name = "kapacitet", nullable = false)
+    private Integer kapacitet;
+
+    @Column(name = "balkon", nullable = false)
+    private Boolean balkon;
+
+    @Column(name = "pogled_na_more", nullable = false)
+    private Boolean pogledNaMore = false;
 
     @Column(name = "cijena", nullable = false)
     private BigDecimal cijena;
@@ -36,24 +49,36 @@ public class Soba {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getBrojSobe() {
         return brojSobe;
     }
     public void setBrojSobe(String brojSobe) {
         this.brojSobe = brojSobe;
     }
-    public String getVrsta() {
-        return vrsta;
-    }
-    public void setVrsta(String vrsta) {
-        this.vrsta = vrsta;
-    }
+
+    public Integer getKat() {return kat;}
+    public void setKat(Integer kat) {this.kat = kat;}
+
+    public VrstaSobe getVrsta() {return vrsta;}
+    public void setVrsta(VrstaSobe vrsta) {this.vrsta = vrsta;}
+
+    public Integer getKapacitet() {return kapacitet;}
+    public void setKapacitet(Integer kapacitet) {this.kapacitet = kapacitet;}
+
+    public Boolean getBalkon() { return balkon; }
+    public void setBalkon(Boolean balkon) {this.balkon = balkon;}
+
+    public Boolean getPogledNaMore() {return pogledNaMore;}
+    public void setPogledNaMore(Boolean pogledNaMore) { this.pogledNaMore = pogledNaMore; }
+
     public BigDecimal getCijena() {
         return cijena;
     }
     public void setCijena(BigDecimal cijena) {
         this.cijena = cijena;
     }
+
     public StatusSobe getStatus() {
         return status;
     }
@@ -61,10 +86,10 @@ public class Soba {
         this.status = status;
     }
 
+
     public List<RezervirajSobu> getRezervacijeSoba() {
         return rezervacijeSoba;
     }
-
     public void setRezervacijeSoba(List<RezervirajSobu> rezervacijeSoba) {
         this.rezervacijeSoba = rezervacijeSoba;
     }
