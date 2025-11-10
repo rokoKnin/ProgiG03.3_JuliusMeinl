@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, {useEffect, useState} from "react"
+import axios from "axios";
 import {
   AppBar,
   Button,
@@ -22,7 +23,14 @@ function Header({ onOpenPopup }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [user, setUser] = useState(null);
 
+    useEffect(() => {
+        axios.get('http://localhost:8080/user-info', {withCredentials: true}).then(response =>
+        { setUser(response.data);
+        })
+            .catch(error => console.error('Error ocurred', error))
+    }, []);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -77,12 +85,37 @@ function Header({ onOpenPopup }) {
                         }}>
             Modrila
           </Typography>
-          <Button color="inherit" component={Link} to="/adminInfo">
+          
+          {user && (
+  <div>
+
+    {user.email === "atos.cyber@gmail.com" && (
+      <Button color="inherit" component={Link} to="/adminInfo">
             Admin
           </Button>
-          <Button color="inherit" onClick={onOpenPopup}>
+    )}
+  </div>
+        )}{user && (
+  <div>
+
+    {user.email && (
+      <Button color="inherit" component={Link} to="/profil">
+            profil
+          </Button>
+    )}
+  </div>
+        )} {!user && (
+  
+  <div>
+
+    
+      <Button color="inherit" onClick={onOpenPopup}>
             Login
           </Button>
+    
+  </div>
+        )}               
+          
         </Toolbar>
       </AppBar>
     </Box>

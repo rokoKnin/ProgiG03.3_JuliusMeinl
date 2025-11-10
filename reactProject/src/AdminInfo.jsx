@@ -11,21 +11,20 @@ export default function AdminInfo() {
   const [isOpen, setIsOpen] = useState(false);
   const [brojSobe, setBrojSobe] = useState(1);
   const [brojKreveta, setBrojKreveta] = useState(2);
-  const [bazen, setBazen] = useState(false);
+  const [balkon, setbalkon] = useState(false);
   const [pogledMore, setPogledMore] = useState(false);
+  const [cijenaSobe, setCijenaSobe] = useState(0);
   const [sobe, setSobe] = useState([]);
 
   const handleSubmit = () => {
-    if (!bazen && !pogledMore) {
-      alert("Morate odabrati barem jedan atribut sobe!");
-      return;
-    }
+  
 
     const novaSoba = {
       brojSobe,
       brojKreveta,
-      bazen,
+      balkon,
       pogledMore,
+      cijenaSobe,
     };
 
     setSobe((prev) => [...prev, novaSoba]);
@@ -48,38 +47,37 @@ export default function AdminInfo() {
         {sobe.map((soba) => (
           <div className="soba_info_box" style={{ marginTop: 10,color: "gray", border: "1px solid gray", padding: "10px", borderRadius: "8px" }}>
             <div>Soba broj: {soba.brojSobe}</div>
-            <div>Broj kreveta: {soba.brojKreveta}</div>
-            <div>Dodatni atributi:</div>
-            <ul style={{marginTop:"0px"}}>
-              {soba.bazen && <li>Bazen</li>}
-              {soba.pogledMore && <li>Pogled na more</li>}
-            </ul>
+            <div>Broj kreveta: {soba.brojKreveta}</div>            
+              {(soba.balkon||soba.pogledMore) && <div>Dodatni atributi:</div>}
+              {soba.balkon && <div>balkon</div>}
+              {soba.pogledMore && <div>Pogled na more</div>}
+            <div>Cijena sobe po noćenju: {soba.cijenaSobe} eur</div>
           </div>
         ))}
       </div>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} onSubmit={handleSubmit}>
-        <div>Broj sobe:</div>
+        <div>Broj sobe:
         <NumberInput
           value={brojSobe}
           onChange={(e, val) => setBrojSobe(val)}
           min={1}
           max={999}
-        />
+        /></div>
 
-        <div>Broj kreveta u sobi:</div>
+        <div>Broj kreveta u sobi:
         <NumberInput
           value={brojKreveta}
           onChange={(e, val) => setBrojKreveta(val)}
           min={2}
           max={3}
-        />
+        /></div>
 
         <h2 style={{ color: blue[600] }}>Dodatni atributi:</h2>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox checked={bazen} onChange={(e) => setBazen(e.target.checked)} />}
-            label="Bazen"
+            control={<Checkbox checked={balkon} onChange={(e) => setbalkon(e.target.checked)} />}
+            label="Balkon"
           />
           <FormControlLabel
             control={
@@ -88,6 +86,12 @@ export default function AdminInfo() {
             label="Pogled na more"
           />
         </FormGroup>
+        <div> Cijena sobe po noćenju: 
+        <NumberInput
+          value={cijenaSobe}
+          onChange={(e, val) => setBrojKreveta(val)}
+          min={0}
+        /></div>      
       </Modal>
     </div>
   );
