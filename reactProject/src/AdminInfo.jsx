@@ -42,15 +42,20 @@ export default function AdminInfo() {
         };
 
         setSobe((prev) => [...prev, novaSoba]);
-        console.log(novaSoba);
+        
         if (brojKreveta === 2) {
-        if (vrsta !== "DVOKREVETNA_TWIN" && vrsta !== "DVOKREVETNA_KING") {
+        if (vrsta !== "DVOKREVETNA_TWIN" && vrsta !== "DVOKREVETNA_KING"&& vrsta !== "PENTAHOUSE") {
+            alert("Molimo odaberite tip kreveta!"); 
+            return;
+        }
+    } if (brojKreveta === 3) {
+        if (vrsta !== "TROKREVETNA" && vrsta !== "PENTAHOUSE") {
             alert("Molimo odaberite tip kreveta!"); 
             return;
         }
     }
     try {
-            const response = await axios.post('http://localhost:8080/', novaSoba,  {withCredentials: true} )
+            const response = await axios.post('http://localhost:8080/sobe', novaSoba,  {withCredentials: true} )
             console.log('Success: Poslalo se sve', response.data)
             
         } catch (error) {
@@ -107,6 +112,19 @@ export default function AdminInfo() {
     >
       <FormControlLabel value="DVOKREVETNA_TWIN" control={<Radio />} label="2 odvojena kreveta" />
       <FormControlLabel value="DVOKREVETNA_KING" control={<Radio />} label="Bračni krevet" />
+      <FormControlLabel value="PENTAHOUSE" control={<Radio />} label="Penthouse" />
+    </RadioGroup>
+  </div>
+)}{brojKreveta === 3 && (
+  <div style={{ marginTop: "10px" }}>
+    <FormLabel>Odaberi tip kreveta:</FormLabel>
+    <RadioGroup
+      row
+      value={vrsta}
+      onChange={(e) => setVrsta(e.target.value) } required
+    >
+      <FormControlLabel value="TROKREVETNA" control={<Radio />} label="Trokrevetna" />
+      <FormControlLabel value="PENTAHOUSE" control={<Radio />} label="Penthouse" />
     </RadioGroup>
   </div>
 )}
@@ -126,11 +144,11 @@ export default function AdminInfo() {
                 
 
             </Modal>
-
+                  
             
             {rendersoba && rendersoba.map((soba) => (
                 <div key={soba.id} style={{ border: "1px solid gray", padding: "8px", marginBottom: "5px" }}>
-                    <div>Soba broj: {soba.broj_sobe}</div>
+                    <div>Soba broj: {soba.brojSobe}</div>
                     <div>Kat: {soba.kat}</div>
                     <div>Naziv sobe: {soba.vrsta}</div>
                     {soba.balkon && <div>Balkon</div>}
