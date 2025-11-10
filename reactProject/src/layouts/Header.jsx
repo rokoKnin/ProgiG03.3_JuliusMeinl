@@ -77,6 +77,9 @@ function Header({ onOpenPopup }) {
                         }}>
             Modrila
           </Typography>
+          <Button color="inherit" component={Link} to="/adminInfo">
+            Admin
+          </Button>
           <Button color="inherit" onClick={onOpenPopup}>
             Login
           </Button>
