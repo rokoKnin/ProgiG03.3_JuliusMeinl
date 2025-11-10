@@ -89,7 +89,7 @@ function Header({ onOpenPopup }) {
           {user && (
   <div>
 
-    {user.email === "atos.cyber@gmail.com" && (
+    {user.email === "znaluka@gmail.com" && (
       <Button color="inherit" component={Link} to="/adminInfo">
             Admin
           </Button>
