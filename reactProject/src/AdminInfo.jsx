@@ -12,7 +12,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 export default function AdminInfo() {
     const [isOpen, setIsOpen] = useState(false);
-    const [brojSobe, setBrojSobe] = useState(1);
+    const [broj_sobe, setBrojSobe] = useState(1);
     const [brojKreveta, setBrojKreveta] = useState(2);
     const [balkon, setbalkon] = useState(false);
     const [pogledMore, setPogledMore] = useState(false);
@@ -44,7 +44,7 @@ export default function AdminInfo() {
         setSobe((prev) => [...prev, novaSoba]);
         console.log(novaSoba);
         if (brojKreveta === 2) {
-        if (tipKreveta !== "DVOKREVETNA_TWIN" && tipKreveta !== "DVOKREVETNA_KING") {
+        if (vrsta !== "DVOKREVETNA_TWIN" && vrsta !== "DVOKREVETNA_KING") {
             alert("Molimo odaberite tip kreveta!"); 
             return;
         }
@@ -76,14 +76,14 @@ export default function AdminInfo() {
             <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} onSubmit={handleSubmit}>
                 <div>Broj sobe:
                     <NumberInput
-                        value={brojSobe}
+                        value={broj_sobe}
                         onChange={(e, val) => setBrojSobe(val)}
                         min={1}
                         max={999}
                     /></div>
                  <div>Broj kata:
                     <NumberInput
-                        value={brojSobe}
+                        value={kat}
                         onChange={(e, val) => setKat(val)}
                         min={1}
                         max={999}
