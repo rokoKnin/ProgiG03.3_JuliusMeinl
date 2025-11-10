@@ -10,7 +10,7 @@ import Header from './layouts/Header.jsx';
 import ReservationSlider from './ReservationSlider.jsx';
 import InformationInput from './InformationInput.jsx';
 import Dashboard from './Dashboard.jsx';
-
+import AdminInfo from './AdminInfo.jsx';
 export default function App() {
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -29,6 +29,7 @@ export default function App() {
         <Route path="/contact" element={<Contact/>} />
         <Route path="/reservation" element={<ReservationSlider/>} />
         <Route path="/InformationInput" element={<InformationInput/>} />
+        <Route path="/adminInfo" element={<AdminInfo/>} />
       </Routes>
       <LogIn open={isLoginOpen} onClose={handleCloseLogin} />
     </HashRouter>

@@ -1,6 +1,7 @@
 import { GoogleLogin } from "@react-oauth/google"
 import { useNavigate } from "react-router-dom"
 
+import Button from '@mui/material/Button';
 function LogIn({open, onClose}) {
     const navigate = useNavigate()
 
@@ -41,22 +42,10 @@ function LogIn({open, onClose}) {
                 }}
             >
                 <h2>Log in</h2>
-
-                <button onClick={googleLogin}> Login with Google </button>
-                <button
-                onClick={onClose}
-                style={{
-                    marginTop: "1.5rem",
-                    background: "#1976d2",
-                    color: "white",
-                    border: "none",
-                    padding: "0.6rem 1rem",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                }}
-                >
-                Close
-                </button>
+                <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="contained" onClick={googleLogin}>Login with Google</Button>
+                 <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="outlined" onClick={onClose}>Close</Button>
+         
+     
             </div>
         </div>
     )
