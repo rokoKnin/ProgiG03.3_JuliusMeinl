@@ -1,0 +1,22 @@
+Sesti sastanak: 10.11.2025.
+
+prisutni: svi
+Zapisnikar: Roko
+
+Napomene:
+    - Upisite se u tablicu koliko ste sati radili na cemu u sheet (rok do srijede 23:59)
+    - Dokumentacija treba pushat u github sve .md fileove
+
+Dokumentacija:
+    - fali jos samo jedna stvar u 4. stranici koja se mozda ni ne mora
+    - Treba se raspodijeliti za ostale stvari za radit do srijede - dokumentacija tim preuzima dizanje na server (treba to rijesiti sto prije)
+
+Backend-Frontend posao preostao:
+    - treba popraviti da se vraca na homepage nakon logina - rijesilo se, valjda
+    - treba napraviti da se sobe ucitaju kad se ode na admin -
+    - treba napraviti popraviti dodavanje sobe da ima sve atribute kako smo dogovorili (broj_sobe, kat, vrsta_sobe, kapacitet_sobe, dodatni_atributi: balkon, pogledNaMore, cijena?, status?)
+        - na sastanku dogovoreno: broj sobe (checkat treba da vec ne postoji), kat, kapacitet, dodatni atributi -> backend na temelju ovih podataka odlucuje ostale podatke za dodati u sobu (to bi bili cijena i vrsta sobe)
+        - status se automatski zadaje prilikom dodavanja, ali moze se uredivati
+    - treba dodati sposobnost da se ti podatci uređuju nakon sta se upisu i svi ostali koji su od prije ucitani
+    - treba dodati sposobnost brisanja podatka sobe
+    - treba osigurati da se prilikom otvaranja povuku svi podatci iz baze i prikazu te da se dinamicki refreshaju
