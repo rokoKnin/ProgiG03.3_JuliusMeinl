@@ -29,10 +29,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         if (userService.existsByEmail(email)) {
             // korisnik je u bazi → preusmjeri na /home
-            response.sendRedirect("http://localhost:5173/");
+            response.sendRedirect("https://progi-g03-3-julius-meinl.vercel.app/");
         } else {
             // novi korisnik → preusmjeri na dashboard
-            response.sendRedirect("http://localhost:5173/#/dashboard");
+            response.sendRedirect("https://progi-g03-3-julius-meinl.vercel.app/#/dashboard");
         }
     }
 }
