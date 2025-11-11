@@ -10,10 +10,10 @@ public class RezervirajSadrzaj {
     @EmbeddedId
     private RezervirajSadrzajId id;
 
-    @Column(name = "datumOdSadrzaj", nullable = false)
+    @Column(name = "datumodsadrzaj", nullable = false)
     private LocalDate datumOd;
 
-    @Column(name = "datumDoSadrzaj", nullable = false)
+    @Column(name = "datumdosadrzaj", nullable = false)
     private LocalDate datumDo;
 
     @Column(name = "cijena_sadrzaj", nullable = false)
@@ -26,7 +26,7 @@ public class RezervirajSadrzaj {
 
     @ManyToOne
     @MapsId("dodatniSadrzajId")
-    @JoinColumn(name = "dodatniSadrzaj_id")
+    @JoinColumn(name = "dodatnisadrzaj_id")
     private DodatniSadrzaj dodatniSadrzaj;
 
     public RezervirajSadrzajId getId() {

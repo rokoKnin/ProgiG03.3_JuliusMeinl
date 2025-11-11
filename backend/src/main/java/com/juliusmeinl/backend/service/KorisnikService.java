@@ -1,65 +1,72 @@
 package com.juliusmeinl.backend.service;
 
+import com.juliusmeinl.backend.model.Drzava;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.Mjesto;
+import com.juliusmeinl.backend.model.MjestoId;
+import com.juliusmeinl.backend.repository.DrzavaRepository;
 import com.juliusmeinl.backend.repository.KorisnikRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.juliusmeinl.backend.repository.MjestoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class KorisnikService {
 
     private final KorisnikRepository korisnikRepository;
+    private final MjestoRepository mjestoRepository;
+    private final DrzavaRepository drzavaRepository;
 
-    @Autowired
-    public KorisnikService(KorisnikRepository korisnikRepository) {
+    public KorisnikService(KorisnikRepository korisnikRepository, MjestoRepository mjestoRepository, DrzavaRepository drzavaRepository) {
         this.korisnikRepository = korisnikRepository;
+        this.mjestoRepository = mjestoRepository;
+        this.drzavaRepository = drzavaRepository;
     }
 
-    public List<Korisnik> getAllKorisnici() {
-        return korisnikRepository.findAll();
-    }
+    @Transactional
+    public Korisnik spremiKorisnika(Korisnik korisnik, MjestoId mjestoId, String nazDrzava) {
+        // Dobivanje mjesta iz repozitorija
+        Optional<Mjesto> mjestoOptional = mjestoRepository.findById(mjestoId);
 
-    public Optional<Korisnik> getKorisnikById(Integer id) {
-        return korisnikRepository.findById(id);
-    }
+        Mjesto mjesto = new Mjesto();
+        if(!mjestoOptional.isPresent()) {  //ako je novo mjesto koje nemam u bazi
+            Integer drzavaId = drzavaRepository.findIdByNazivDrzave(nazDrzava);
+            Drzava drzava = drzavaRepository.findById(drzavaId).get();
 
-    public Korisnik saveKorisnik(Korisnik korisnik) {
+            mjesto.setId(mjestoId);
+            mjesto.setDrzava(drzava);
+
+            mjestoRepository.save(mjesto);
+        }
+        else {
+            mjesto = mjestoRepository.getReferenceById(mjestoId);
+        }
+
+        korisnik.setMjesto(mjesto);
+
         return korisnikRepository.save(korisnik);
     }
 
-    public Korisnik updateKorisnik(Integer id, Korisnik updatedKorisnik) {
-        return korisnikRepository.findById(id)
-                .map(k -> {
-                    k.setIme(updatedKorisnik.getIme());
-                    k.setPrezime(updatedKorisnik.getPrezime());
-                    k.setEmail(updatedKorisnik.getEmail());
-                    k.setTelefon(updatedKorisnik.getTelefon());
-                    k.setOvlast(updatedKorisnik.getOvlast());
-                    k.setMjesto(updatedKorisnik.getMjesto());
-                    return korisnikRepository.save(k);
-                })
-                .orElseThrow(() -> new RuntimeException("Korisnik not found with id: " + id));
+    // Provjerava postojili li korisnik prema mailu
+    public boolean existsByEmail(String email) {
+        return korisnikRepository.existsByEmail(email);
     }
 
-    public void deleteKorisnik(Integer id) {
-        korisnikRepository.deleteById(id);
-    }
-
+    // Dohvat korisnika po emailu
     public Optional<Korisnik> findByEmail(String email) {
         return korisnikRepository.findByEmail(email);
     }
 
-    public Optional<Korisnik> findByTelefon(String telefon) {
-        return korisnikRepository.findByTelefon(telefon);
+    //Provjerava je li korisnik vlasnik
+    public boolean korisnikJeVlasnik(String email) {
+        Optional<Korisnik> korisnik = korisnikRepository.findByEmailAndOvlast(email, "VLASNIK");
+        return korisnik.isPresent();
     }
-    public Mjesto getDefaultMjesto() {
-        Mjesto mjesto = new Mjesto();
-        mjesto.setPostBr(" ");
-        mjesto.setNazMjesto("");
-        return mjesto;
-    }
+
+
+
+
 }
+

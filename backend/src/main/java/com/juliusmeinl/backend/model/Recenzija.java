@@ -12,13 +12,13 @@ public class Recenzija {
     @Column(name = "recenzija_id")
     private Integer id;
 
-    @Column(name = "ocjenaRecenzija", nullable = false)
+    @Column(name = "ocjenarecenzija", nullable = false)
     private Integer ocjena;
 
-    @Column(name = "komentarRecenzija", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "komentarrecenzija", nullable = false, columnDefinition = "TEXT")
     private String komentar;
 
-    @Column(name = "datumRecenzija", nullable = false)
+    @Column(name = "datumrecenzija", nullable = false)
     private LocalDate datum;
 
     @ManyToOne

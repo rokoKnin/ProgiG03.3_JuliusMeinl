@@ -10,10 +10,10 @@ public class RezervirajSobu {
     @EmbeddedId
     private RezervirajSobuId id;
 
-    @Column(name = "datumOdSoba", nullable = false)
+    @Column(name = "datumodsoba", nullable = false)
     private LocalDate datumOd;
 
-    @Column(name = "datumDoSoba", nullable = false)
+    @Column(name = "datumdosoba", nullable = false)
     private LocalDate datumDo;
 
     @ManyToOne

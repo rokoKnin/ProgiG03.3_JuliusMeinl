@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, {useEffect, useState} from "react"
+import axios from "axios";
 import {
   AppBar,
   Button,
@@ -13,7 +14,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header({ onOpenPopup }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -22,7 +23,14 @@ function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [user, setUser] = useState(null);
 
+    useEffect(() => {
+        axios.get('http://localhost:8080/user-info', {withCredentials: true}).then(response =>
+        { setUser(response.data);
+        })
+            .catch(error => console.error('Error ocurred', error))
+    }, []);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -77,10 +85,37 @@ function Header() {
                         }}>
             Modrila
           </Typography>
-          <Button color="inherit" component={Link} to="/logIn">
+          
+          {user && (
+  <div>
+
+    {user.email === "juliusmeinlt3.3@gmail.com" && (
+      <Button color="inherit" component={Link} to="/adminInfo">
+            Admin
+          </Button>
+    )}
+  </div>
+        )}{user && (
+  <div>
+
+    {user.email && (
+      <Button color="inherit" component={Link} to="/profil">
+            profil
+          </Button>
+    )}
+  </div>
+        )} {!user && (
+  
+  <div>
+
+    
+      <Button color="inherit" onClick={onOpenPopup}>
             Login
           </Button>
-         
+    
+  </div>
+        )}               
+          
         </Toolbar>
       </AppBar>
     </Box>

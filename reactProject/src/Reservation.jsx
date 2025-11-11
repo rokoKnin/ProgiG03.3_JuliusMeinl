@@ -39,6 +39,7 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
     />
   );
 });
+
 const handleSave = () => {
 document.getElementsByClassName("dodaj_goste")[0].innerText =`Gosti: ${document.getElementById("brojOdrasli").value} Odrasli, ${document.getElementById("brojDjeca").value} Djeca`;
 };
