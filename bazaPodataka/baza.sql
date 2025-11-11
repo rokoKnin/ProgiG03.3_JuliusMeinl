@@ -42,22 +42,16 @@
         FOREIGN KEY (korisnik_id) REFERENCES korisnik(korisnik_id)
     );
 
-    -- Vrsta sobe
-    CREATE TYPE vrsta_sobe AS ENUM ('DVOKREVETNA_KING', 'DVOKREVETNA_TWIN','TROKREVETNA','PENTHOUSE');
-
-    -- Status sobe
-    CREATE TYPE status_sobe AS ENUM ('DOSTUPNA', 'NEDOSTUPNA');
-
     CREATE TABLE soba (
         soba_id SERIAL,
         broj_sobe VARCHAR(5) NOT NULL UNIQUE,
         kat INTEGER NOT NULL CHECK (kat BETWEEN 1 AND 4),
-        vrsta vrsta_sobe NOT NULL,
+        vrsta VARCHAR(20) NOT NULL,
         kapacitet INTEGER NOT NULL CHECK (kapacitet BETWEEN 2 AND 3),
         balkon BOOLEAN NOT NULL,
         pogled_na_more BOOLEAN NOT NULL DEFAULT FALSE,
         cijena NUMERIC(10,2) NOT NULL,
-        status status_sobe NOT NULL DEFAULT 'DOSTUPNA',
+        status VARCHAR(20) NOT NULL DEFAULT 'DOSTUPNA',
         PRIMARY KEY (soba_id)
     );
 

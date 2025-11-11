@@ -57,9 +57,9 @@ export default function AdminInfo() {
   async function handleSubmit() {
     const novaSoba = {
         broj_sobe: broj_sobe,
-      kat,
-      vrsta,
-      balkon,
+        kat,
+        vrsta,
+        balkon,
         pogledMore: pogledMore,
     };
 
@@ -130,7 +130,7 @@ export default function AdminInfo() {
             value={kat}
             onChange={(e, val) => setKat(val)}
             min={1}
-            max={20}
+            max={4}
           />
         </div>
         <div>
