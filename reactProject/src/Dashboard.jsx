@@ -8,7 +8,7 @@ const Dashboard = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get('http://localhost:8080/user-info', {withCredentials: true}).then(response =>
+        axios.get('https://juliusmeinl.onrender.com/user-info', {withCredentials: true}).then(response =>
         { setUser(response.data);
         })
             .catch(error => console.error('Error ocurred', error))

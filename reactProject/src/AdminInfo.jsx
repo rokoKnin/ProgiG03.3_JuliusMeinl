@@ -47,7 +47,7 @@ export default function AdminInfo() {
   if (!window.confirm("Jeste li sigurni da želite obrisati ovu sobu?")) return;
 
   try {
-    await axios.delete(`http://localhost:8080/sobe/${id}`, { withCredentials: true });
+    await axios.delete(`https://juliusmeinl.onrender.com/sobe/${id}`, { withCredentials: true });
     setRendersoba((prev) => prev.filter((soba) => soba.id !== id));
     
   } catch (error) {
@@ -66,7 +66,7 @@ export default function AdminInfo() {
     try {
       if (isEditing && editingSoba) {
         const response = await axios.put(
-          `http://localhost:8080/sobe/${editingSoba.id}`,
+          `https://juliusmeinl.onrender.com/sobe/${editingSoba.id}`,
           novaSoba,
           { withCredentials: true }
         );
@@ -75,7 +75,7 @@ export default function AdminInfo() {
         );
       } else {
         const response = await axios.post(
-          "http://localhost:8080/sobe",
+          "https://juliusmeinl.onrender.com/sobe",
           novaSoba,
           { withCredentials: true }
         );

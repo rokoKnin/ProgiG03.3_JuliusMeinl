@@ -26,7 +26,7 @@ function Header({ onOpenPopup }) {
   const [user, setUser] = useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/user-info', {withCredentials: true}).then(response =>
+        axios.get('https://juliusmeinl.onrender.com/', {withCredentials: true}).then(response =>
         { setUser(response.data);
         })
             .catch(error => console.error('Error ocurred', error))
