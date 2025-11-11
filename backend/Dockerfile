@@ -3,12 +3,13 @@ FROM eclipse-temurin:23-jdk AS build
 WORKDIR /app
 
 # Kopiraj Maven wrapper i .mvn folder
-COPY mvnw .
-COPY .mvn .mvn
+# Koristi se 'backend/' putanja jer je Docker kontekst u korijenu repoa
+COPY backend/mvnw .
+COPY backend/.mvn .mvn
 
 # Kopiraj projektne fajlove
-COPY pom.xml .
-COPY src ./src
+COPY backend/pom.xml .
+COPY backend/src ./src
 
 # Daj mvnw prava izvršavanja
 RUN chmod +x mvnw
@@ -22,6 +23,7 @@ FROM eclipse-temurin:23-jdk
 WORKDIR /app
 
 # Kopiraj samo JAR iz build stage-a
+# Ovdje putanja ostaje ista jer se kopira IZ containera 'build', a ne iz diska
 COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 
 # Postavi env varijable
