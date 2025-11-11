@@ -86,6 +86,14 @@ public class Soba {
     }
 
 
+    public boolean imaBalkon() {
+        return this.balkon;
+    }
+
+    public boolean imaPogledNaMore() {
+        return this.pogledNaMore;
+    }
+
     public List<RezervirajSobu> getRezervacijeSoba() {
         return rezervacijeSoba;
     }

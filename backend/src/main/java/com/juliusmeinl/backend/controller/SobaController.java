@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.juliusmeinl.backend.model.VrstaSobe.DVOKREVETNA_KING;
 
@@ -145,4 +146,37 @@ public class SobaController {
             sobaService.obrisiSobu(id);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Soba> azurirajSobu(
+            @PathVariable Integer id,
+            @RequestBody Map<String, String> sobaMap) {
+
+        Optional<Soba> optionalSoba = sobaService.pronadiPoId(id);
+        if (optionalSoba.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Soba soba = optionalSoba.get();
+
+        // Ažuriraj polja
+        soba.setBrojSobe(sobaMap.get("broj_sobe"));
+        soba.setKat(Integer.valueOf(sobaMap.get("kat")));
+        soba.setBalkon(Boolean.valueOf(sobaMap.get("balkon")));
+        soba.setVrsta(VrstaSobe.valueOf(sobaMap.get("vrsta")));
+        soba.setPogledNaMore(Boolean.valueOf(sobaMap.get("pogledMore")));
+
+        // Reizračunaj cijenu (možeš ponoviti istu logiku kao u POST metodi)
+        BigDecimal novaCijena = sobaService.izracunajCijenu(
+                soba.getVrsta(),
+                soba.getKat(),
+                soba.imaBalkon(),
+                soba.imaPogledNaMore()
+        );
+        soba.setCijena(novaCijena);
+
+        // Spremi promjene
+        Soba azurirana = sobaService.spremiSobu(soba);
+        return ResponseEntity.ok(azurirana);
+    }
+
 }

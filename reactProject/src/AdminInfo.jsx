@@ -56,11 +56,11 @@ export default function AdminInfo() {
 };
   async function handleSubmit() {
     const novaSoba = {
-      brojSobe: broj_sobe,
+        broj_sobe: broj_sobe,
       kat,
       vrsta,
       balkon,
-      pogledNaMore: pogledMore,
+        pogledMore: pogledMore,
     };
 
     try {
