@@ -33,7 +33,7 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/rokoKnin/ProgiG03.3_JuliusMeinl/backend:latest
+          tags: ghcr.io/rokoKnin/progig03.3_juliusmeinl/backend:latest
       - name: Trigger Render deploy
         run: curl ${{ env.BACKEND_DEPLOY_HOOK }}
 
@@ -58,6 +58,6 @@ jobs:
         with:
           context: ./reactProject
           push: true
-          tags: ghcr.io/rokoKnin/ProgiG03.3_JuliusMeinl/frontend:latest
+          tags: ghcr.io/rokoKnin/progig03.3_juliusmeinl/frontend:latest
       - name: Trigger Render deploy
         run: curl ${{ env.FRONTEND_DEPLOY_HOOK }}
