@@ -19,7 +19,7 @@ export default function AdminInfo() {
   const [pogledMore, setPogledMore] = useState(false);
   const [vrsta, setVrsta] = useState("DVOKREVETNA_TWIN");
   const [rendersoba, setRendersoba] = useState(null);
-  const [kat, setKat] = useState(0);
+  const [kat, setKat] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
   const [editingSoba, setEditingSoba] = useState(null);
 
@@ -102,7 +102,7 @@ export default function AdminInfo() {
             setIsEditing(false);
             setEditingSoba(null);
             setBrojSobe(1);
-            setKat(0);
+            setKat(1);
             setBrojKreveta(2);
             setVrsta("DVOKREVETNA_TWIN");
             setbalkon(false);
@@ -130,7 +130,7 @@ export default function AdminInfo() {
             value={kat}
             onChange={(e, val) => setKat(val)}
             min={1}
-            max={999}
+            max={20}
           />
         </div>
         <div>

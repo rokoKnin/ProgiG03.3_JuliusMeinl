@@ -19,7 +19,10 @@ public class SobaService {
     }
 
     public List<Soba> getSveSobe() {
-        return sobaRepository.findAll();
+        return sobaRepository.findAll()
+                .stream()
+                .sorted((s1, s2) -> s1.getBrojSobe().compareTo(s2.getBrojSobe()))
+                .toList();
     }
 
     public Soba getSobaById(Integer id) {
