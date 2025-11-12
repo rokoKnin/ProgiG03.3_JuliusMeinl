@@ -25,7 +25,7 @@ export default function AdminInfo() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/sobe", { withCredentials: true })
+      .get("https://juliusmeinl.onrender.com/sobe", { withCredentials: true })
       .then((response) => {
         setRendersoba(response.data);
       })
