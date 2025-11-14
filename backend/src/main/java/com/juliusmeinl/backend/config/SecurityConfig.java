@@ -25,9 +25,9 @@ public class SecurityConfig {
     private String frontendUrl;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity https,
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    CustomOAuth2SuccessHandler successHandler) throws Exception {
-        https
+        http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
@@ -38,7 +38,7 @@ public class SecurityConfig {
                         oauth2.successHandler(successHandler)
                 );
 
-        return https.build();
+        return http.build();
     }
 
 
