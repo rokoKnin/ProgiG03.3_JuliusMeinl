@@ -25,9 +25,11 @@ function Header({ onOpenPopup }) {
   };
   const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        axios.get('https://juliusmeinl.onrender.com/', {withCredentials: true}).then(response =>
+
+  useEffect(() => {
+        axios.get(`${import.meta.env.VITE_API_URL}` + '/user-info', {withCredentials: true}).then(response =>
         { setUser(response.data);
+            console.log(user);
         })
             .catch(error => console.error('Error ocurred', error))
     }, []);
@@ -89,7 +91,7 @@ function Header({ onOpenPopup }) {
           {user && (
   <div>
 
-    {user.email === "datathing0@gmail.com" && (
+    {user.email === "juliusmeinlt3.3@gmail.com" && (
       <Button color="inherit" component={Link} to="/adminInfo">
             Admin
           </Button>

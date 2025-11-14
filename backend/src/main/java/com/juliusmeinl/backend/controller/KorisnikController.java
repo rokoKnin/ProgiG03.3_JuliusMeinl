@@ -1,9 +1,7 @@
 package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.model.Korisnik;
-import com.juliusmeinl.backend.model.Mjesto;
 import com.juliusmeinl.backend.model.MjestoId;
-import com.juliusmeinl.backend.model.UlogaKorisnika;
 import com.juliusmeinl.backend.service.KorisnikService;
 import org.springframework.web.bind.annotation.*;
 

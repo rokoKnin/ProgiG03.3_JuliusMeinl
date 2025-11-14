@@ -13,7 +13,8 @@ function LogIn({open, onClose}) {
     navigate("/InformationInput")
     }
     const googleLogin = () => {
-        window.location.href= 'https://juliusmeinl.onrender.com/oauth2/authorization/google'
+        console.log(`${import.meta.env.VITE_API_URL}` + "/oauth2/authorization/google");
+        window.location.href= `${import.meta.env.VITE_API_URL}` + "/oauth2/authorization/google"
     }
 
     const handleError = () => {

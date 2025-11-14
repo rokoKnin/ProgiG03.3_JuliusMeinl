@@ -25,7 +25,7 @@ export default function AdminInfo() {
 
   useEffect(() => {
     axios
-      .get("https://juliusmeinl.onrender.com/sobe", { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}` + '/sobe', { withCredentials: true })
       .then((response) => {
         setRendersoba(response.data);
       })
@@ -47,7 +47,7 @@ export default function AdminInfo() {
   if (!window.confirm("Jeste li sigurni da želite obrisati ovu sobu?")) return;
 
   try {
-    await axios.delete(`https://juliusmeinl.onrender.com/sobe/${id}`, { withCredentials: true });
+    await axios.delete(`${import.meta.env.VITE_API_URL}` + `/sobe/${id}`, { withCredentials: true });
     setRendersoba((prev) => prev.filter((soba) => soba.id !== id));
     
   } catch (error) {
@@ -66,7 +66,7 @@ export default function AdminInfo() {
     try {
       if (isEditing && editingSoba) {
         const response = await axios.put(
-          `https://juliusmeinl.onrender.com/sobe/${editingSoba.id}`,
+            `${import.meta.env.VITE_API_URL}` + `/sobe/${editingSoba.id}`,
           novaSoba,
           { withCredentials: true }
         );
@@ -75,7 +75,7 @@ export default function AdminInfo() {
         );
       } else {
         const response = await axios.post(
-          "https://juliusmeinl.onrender.com/sobe",
+            `${import.meta.env.VITE_API_URL}` + "/sobe",
           novaSoba,
           { withCredentials: true }
         );

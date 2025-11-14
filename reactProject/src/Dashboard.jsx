@@ -8,7 +8,7 @@ const Dashboard = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get('https://juliusmeinl.onrender.com/user-info', {withCredentials: true}).then(response =>
+        axios.get(`${import.meta.env.VITE_API_URL}` + '/user-info', {withCredentials: true}).then(response =>
         { setUser(response.data);
         })
             .catch(error => console.error('Error ocurred', error))
@@ -34,7 +34,7 @@ const Dashboard = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/users', userData,  {withCredentials: true} )
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/users', userData,  {withCredentials: true} )
             console.log('Success: Poslalo se sve', response.data)
             navigate("/")
         } catch (error) {

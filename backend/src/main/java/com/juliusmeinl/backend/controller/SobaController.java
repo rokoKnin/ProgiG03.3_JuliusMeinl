@@ -1,9 +1,6 @@
 package com.juliusmeinl.backend.controller;
 import com.juliusmeinl.backend.service.SobaService;
-import ch.qos.logback.classic.util.LogbackMDCAdapter;
 import com.juliusmeinl.backend.model.*;
-import com.juliusmeinl.backend.service.SobaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +8,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.juliusmeinl.backend.model.VrstaSobe.DVOKREVETNA_KING;
 
 @RestController
 @RequestMapping("/sobe")

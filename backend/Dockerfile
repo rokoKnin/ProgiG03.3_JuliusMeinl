@@ -1,38 +1,21 @@
-FROM eclipse-temurin:23-jdk AS build
+# ---------- BUILD STAGE ----------
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-# Kopiraj Maven wrapper i .mvn folder
-# Koristi se 'backend/' putanja jer je Docker kontekst u korijenu repoa
-COPY backend/mvnw .
-COPY backend/.mvn .mvn
+COPY pom.xml .
+RUN ./mvnw dependency:go-offline || mvn dependency:go-offline
 
-# Kopiraj projektne fajlove
-COPY backend/pom.xml .
-COPY backend/src ./src
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Daj mvnw prava izvršavanja
-RUN chmod +x mvnw
 
-# Build projekta
-RUN ./mvnw clean package -DskipTests
-
-# Drugi stage za runtime
-FROM eclipse-temurin:23-jdk
+# ---------- RUNTIME STAGE ----------
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-# Kopiraj samo JAR iz build stage-a
-# Ovdje putanja ostaje ista jer se kopira IZ containera 'build', a ne iz diska
 COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
-
-# Postavi env varijable
-ENV DB_URL=${DB_URL}
-ENV DB_USERNAME=${DB_USERNAME}
-ENV DB_PASSWORD=${DB_PASSWORD}
-ENV BACKEND_URL=${BACKEND_URL}
-ENV FRONTEND_URL=${FRONTEND_URL}
-ENV PASSWORD=${PASSWORD}
 
 EXPOSE 8080
 
