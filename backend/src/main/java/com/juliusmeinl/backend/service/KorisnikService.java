@@ -10,6 +10,8 @@ import com.juliusmeinl.backend.repository.MjestoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -23,6 +25,14 @@ public class KorisnikService {
         this.korisnikRepository = korisnikRepository;
         this.mjestoRepository = mjestoRepository;
         this.drzavaRepository = drzavaRepository;
+    }
+
+    public Map<String, Object> getProfileMap(Korisnik korisnik) {
+        Map<String, Object> profile = new HashMap<>();
+        profile.put("email", korisnik.getEmail());
+        //TODO: dodati da vraca ostale stvari osim email da se moze automatski popunit dashboard
+
+        return profile;
     }
 
     @Transactional

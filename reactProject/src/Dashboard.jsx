@@ -8,7 +8,7 @@ const Dashboard = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}` + '/user-info', {withCredentials: true}).then(response =>
+        axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
         { setUser(response.data);
         })
             .catch(error => console.error('Error ocurred', error))
