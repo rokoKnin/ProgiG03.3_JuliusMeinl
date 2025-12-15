@@ -73,6 +73,9 @@ function Header({ onOpenPopup }) {
             <MenuItem onClick={handleClose} component={Link} to="/reservation">
               Rezervacija dodatnog sadržaja
             </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/gallery">
+              Galerija
+            </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/contact">
               Kontakt
             </MenuItem>
@@ -90,7 +93,7 @@ function Header({ onOpenPopup }) {
   <div>
 
     {user.email === "juliusmeinlt3.3@gmail.com" && (
-      <Button color="inherit" component={Link} to="/adminInfo">
+      <Button color="inherit" component={Link} to="/adminStart">
             Admin
           </Button>
     )}

@@ -6,6 +6,8 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Reservation from './Reservation';
+import { colors } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const steps = ['Datum i broj gostiju', 'Odabir dostupne sobe', 'Dodatni sadržaji'];
 
@@ -86,11 +88,11 @@ if (activeStep+1 === 1) {
       {activeStep === steps.length ? (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
+            <div>Uspješno ste napravili rezervaciju. Veselimo se vašem dolasku :)</div>
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Pregled Rezervacije</Button>
+            <Button onClick={handleReset} style={{color: "#e4e8ecff"}} component={Link} to="/profil" >Pregled Rezervacije</Button>
           </Box>
         </React.Fragment>
       ) : (
@@ -98,7 +100,8 @@ if (activeStep+1 === 1) {
           <Typography sx={{ mt: 2, mb: 1 }}>{content}</Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
-              color="inherit"
+              variant="outlined"
+              style={{color: "#070c10ff"}}
               disabled={activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
@@ -107,11 +110,11 @@ if (activeStep+1 === 1) {
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+              <Button style={{color: "#070c10ff"}} onClick={handleSkip} sx={{ mr: 1 }}>
                 Skip
               </Button>
             )}
-            <Button onClick={handleNext}>
+            <Button onClick={handleNext} variant="contained" style={{color: "#e4e8ecff"}}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>

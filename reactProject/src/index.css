@@ -43,3 +43,24 @@
     width: 50%;
     border-radius: 15px;
 }
+.adminStartBody{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+    
+    background-size: cover;
+    gap:20px;
+    background-image: url("../public/back.jpg");
+}
+html{
+    background-size: cover;
+    gap:20px;
+    background-image: url("../public/back.jpg");
+}
+.adminStartButtons{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}

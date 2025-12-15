@@ -12,6 +12,8 @@ import InformationInput from './InformationInput.jsx';
 import Dashboard from './Dashboard.jsx';
 import AdminInfo from './AdminInfo.jsx';
 import Profil from './Profil.jsx';
+import AdminStart from './AdminStart.jsx';
+import Gallery from './Gallery.jsx';
 export default function App() {
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -32,6 +34,8 @@ export default function App() {
         <Route path="/InformationInput" element={<InformationInput/>} />
         <Route path="/adminInfo" element={<AdminInfo/>} />
         <Route path="/profil" element={<Profil/>} />
+        <Route path="/adminStart" element={<AdminStart/>} />
+        <Route path="/gallery" element={<Gallery/>} />
       </Routes>
       <LogIn open={isLoginOpen} onClose={handleCloseLogin} />
     </HashRouter>
