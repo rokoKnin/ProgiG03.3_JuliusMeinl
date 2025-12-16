@@ -25,9 +25,11 @@ function Header({ onOpenPopup }) {
   };
   const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        axios.get('http://localhost:8080/user-info', {withCredentials: true}).then(response =>
+
+  useEffect(() => {
+        axios.get(`${import.meta.env.VITE_API_URL}` + '/user-info', {withCredentials: true}).then(response =>
         { setUser(response.data);
+            console.log(user);
         })
             .catch(error => console.error('Error ocurred', error))
     }, []);

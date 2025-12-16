@@ -25,7 +25,7 @@ export default function AdminInfo() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/sobe", { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}` + '/sobe', { withCredentials: true })
       .then((response) => {
         setRendersoba(response.data);
       })
@@ -47,7 +47,7 @@ export default function AdminInfo() {
   if (!window.confirm("Jeste li sigurni da želite obrisati ovu sobu?")) return;
 
   try {
-    await axios.delete(`http://localhost:8080/sobe/${id}`, { withCredentials: true });
+    await axios.delete(`${import.meta.env.VITE_API_URL}` + `/sobe/${id}`, { withCredentials: true });
     setRendersoba((prev) => prev.filter((soba) => soba.id !== id));
     
   } catch (error) {
@@ -57,16 +57,16 @@ export default function AdminInfo() {
   async function handleSubmit() {
     const novaSoba = {
         broj_sobe: broj_sobe,
-      kat,
-      vrsta,
-      balkon,
+        kat,
+        vrsta,
+        balkon,
         pogledMore: pogledMore,
     };
 
     try {
       if (isEditing && editingSoba) {
         const response = await axios.put(
-          `http://localhost:8080/sobe/${editingSoba.id}`,
+            `${import.meta.env.VITE_API_URL}` + `/sobe/${editingSoba.id}`,
           novaSoba,
           { withCredentials: true }
         );
@@ -75,7 +75,7 @@ export default function AdminInfo() {
         );
       } else {
         const response = await axios.post(
-          "http://localhost:8080/sobe",
+            `${import.meta.env.VITE_API_URL}` + "/sobe",
           novaSoba,
           { withCredentials: true }
         );
@@ -130,7 +130,7 @@ export default function AdminInfo() {
             value={kat}
             onChange={(e, val) => setKat(val)}
             min={1}
-            max={20}
+            max={4}
           />
         </div>
         <div>

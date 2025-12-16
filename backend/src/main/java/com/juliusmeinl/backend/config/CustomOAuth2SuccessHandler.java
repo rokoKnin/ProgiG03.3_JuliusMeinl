@@ -4,6 +4,7 @@ import com.juliusmeinl.backend.service.KorisnikService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -13,6 +14,9 @@ import java.io.IOException;
 
 @Component
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     private final KorisnikService userService;
 
@@ -29,10 +33,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         if (userService.existsByEmail(email)) {
             // korisnik je u bazi → preusmjeri na /home
-            response.sendRedirect("http://localhost:5173/");
+            response.sendRedirect(frontendUrl);
         } else {
             // novi korisnik → preusmjeri na dashboard
-            response.sendRedirect("http://localhost:5173/#/dashboard");
+            response.sendRedirect(  frontendUrl + "/#/dashboard");
         }
     }
 }

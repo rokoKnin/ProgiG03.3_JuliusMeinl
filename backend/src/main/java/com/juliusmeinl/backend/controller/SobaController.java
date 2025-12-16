@@ -1,9 +1,6 @@
 package com.juliusmeinl.backend.controller;
 import com.juliusmeinl.backend.service.SobaService;
-import ch.qos.logback.classic.util.LogbackMDCAdapter;
 import com.juliusmeinl.backend.model.*;
-import com.juliusmeinl.backend.service.SobaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +8,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.juliusmeinl.backend.model.VrstaSobe.DVOKREVETNA_KING;
 
 @RestController
 @RequestMapping("/sobe")
@@ -37,7 +32,7 @@ public class SobaController {
 
     @PostMapping
     public Soba dodajSobu(@RequestBody Map<String, String> sobaMap) {
-       Soba soba = new Soba();
+        Soba soba = new Soba();
         soba.setBrojSobe(sobaMap.get("broj_sobe"));
         soba.setKat(Integer.valueOf(sobaMap.get("kat")));
         soba.setBalkon(Boolean.valueOf(sobaMap.get("balkon")));
@@ -47,10 +42,10 @@ public class SobaController {
 
         BigDecimal cijena = BigDecimal.ZERO;
 
-        VrstaSobe vrsta = VrstaSobe.valueOf(((String) sobaMap.get("vrsta")).toUpperCase());
-        int kat = Integer.parseInt(sobaMap.get("kat").toString());
-        boolean balkon = Boolean.parseBoolean(sobaMap.get("balkon").toString());
-        boolean pogledNaMore = Boolean.parseBoolean(sobaMap.get("pogledMore").toString());
+        VrstaSobe vrsta = soba.getVrsta();
+        int kat = soba.getKat();
+        boolean balkon = soba.getBalkon();
+        boolean pogledNaMore = soba.getPogledNaMore();
 
 // DVOKREVETNA_KING
         if (vrsta == VrstaSobe.DVOKREVETNA_KING) {
@@ -138,6 +133,7 @@ public class SobaController {
         }
 
         soba.setKapacitet(kapacitet);
+        System.out.println(soba.getBrojSobe() + soba.getKat() + soba.getCijena() + soba.getVrsta() + soba.getBalkon());
         return sobaService.spremiSobu(soba);
     }
 
