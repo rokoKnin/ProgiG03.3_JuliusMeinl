@@ -14,6 +14,7 @@ import AdminInfo from './AdminInfo.jsx';
 import Profil from './Profil.jsx';
 import AdminStart from './AdminStart.jsx';
 import Gallery from './Gallery.jsx';
+import Footer from "./layouts/Footer.jsx";
 export default function App() {
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -22,8 +23,10 @@ export default function App() {
   const handleCloseLogin = () => setIsLoginOpen(false);
 
   return (
+    <div className="appContainer">
     <HashRouter>
       <Header onOpenPopup={handleOpenLogin} />
+    <div className="content">
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/logIn" element={<LogIn/>} />
@@ -37,8 +40,11 @@ export default function App() {
         <Route path="/adminStart" element={<AdminStart/>} />
         <Route path="/gallery" element={<Gallery/>} />
       </Routes>
+      </div>
       <LogIn open={isLoginOpen} onClose={handleCloseLogin} />
+      <Footer />      
     </HashRouter>
+    </div>
   );
 }
 

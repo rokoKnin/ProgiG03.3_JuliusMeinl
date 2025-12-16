@@ -52,15 +52,47 @@
     
     background-size: cover;
     gap:20px;
-    background-image: url("../public/back.jpg");
+    background-image: url("/back.jpg");
 }
 html{
     background-size: cover;
     gap:20px;
-    background-image: url("../public/back.jpg");
+    background-image: url("/back.jpg");
+}
+html,body{
+    height: 100%;
+    margin: 0;
 }
 .adminStartButtons{
     display: flex;
     flex-direction: row;
     gap: 20px;
 }
+.footerBody{
+    background-color: #1976d2;
+    text-align: center;
+    padding: 1rem;
+    bottom: 0;
+    width: 100%;
+    margin-top: auto;
+}
+.footerContent{
+    color: white;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.appContainer{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+.content{
+    flex: 1 0 auto;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
