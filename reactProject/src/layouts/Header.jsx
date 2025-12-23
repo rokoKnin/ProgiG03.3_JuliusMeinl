@@ -27,7 +27,7 @@ function Header({ onOpenPopup }) {
 
 
   useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
+        axios.get(`${import.meta.env.VITE_API_URL}` + '/', {withCredentials: true}).then(response =>
         { setUser(response.data);
             console.log(user);
         })
