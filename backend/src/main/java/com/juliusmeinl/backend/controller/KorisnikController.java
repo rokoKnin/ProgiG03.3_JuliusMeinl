@@ -23,18 +23,18 @@ public class KorisnikController {
         this.korisnikService = korisnikService;
     }
 
-    //@GetMapping("/info")
-    //public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-    //    return principal.getAttributes();
-    //}
+//    @GetMapping("/info")
+//    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+//        return principal.getAttributes();
+//    }
 
-    @GetMapping("/info")
-    public Map<String, Object> getProfile() {
-        Korisnik loggedInUser = authService.getLoggedInUser()
-                .orElseThrow(RuntimeException::new);
-        Map<String, Object> profile = korisnikService.getProfileMap(loggedInUser);
-        return profile;
-    }
+//    @GetMapping("/info")
+//    public Map<String, Object> getProfile() {
+//        Korisnik loggedInUser = authService.getLoggedInUser()
+//                .orElseThrow(RuntimeException::new);
+//        Map<String, Object> profile = korisnikService.getProfileMap(loggedInUser);
+//        return profile;
+//    }
 
 
     @PostMapping

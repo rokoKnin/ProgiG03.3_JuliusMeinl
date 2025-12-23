@@ -1,0 +1,6 @@
+frontend: https://bluedilla.onrender.com/
+backend: https://demo-deploymnet-latest.onrender.com\
+internal baza url: postgresql://julius:ayIJJGkGMMGXiRjY4atn4TwRC3EJxYlw@dpg-d51f1375r7bs73dlrep0-a/juliusmeinl
+
+
+GOOGLE_REDIRECT_URL=http://localhost:8080/login/oauth2/code/google

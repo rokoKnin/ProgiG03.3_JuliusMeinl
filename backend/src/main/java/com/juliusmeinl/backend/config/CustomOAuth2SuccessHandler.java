@@ -23,6 +23,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     public CustomOAuth2SuccessHandler(KorisnikService userService) {
         this.userService = userService;
     }
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
