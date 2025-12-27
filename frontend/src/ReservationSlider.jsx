@@ -8,13 +8,20 @@ import Typography from '@mui/material/Typography';
 import Reservation from './Reservation';
 import { colors } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import axios from "axios";
 
 const steps = ['Datum i broj gostiju', 'Odabir dostupne sobe', 'Dodatni sadržaji'];
 
 export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-
+  const[datumDolaska,setDatumDolaska]=React.useState(dayjs().startOf('day'));
+  const[datumOdlaska,setDatumOdlaska]=React.useState(dayjs().add(1, 'day'));
   const isStepOptional = (step) => {
     return step === 2;
   };
@@ -23,13 +30,42 @@ export default function HorizontalLinearStepper() {
     return skipped.has(step);
   };
 
+  async function postDates(datumDolaska, datumOdlaska){
+    const datumi={
+      datumDolaska,
+      datumOdlaska
+    }
+       try {
+                  const response = await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/dates', datumi,  {withCredentials: true} )
+                  console.log('Success: Poslalo se sve', response.data)
+                  
+              } catch (error) {
+                  console.error('Error: nije se poslao post zbog necega', error.response?.data)
+              }
+
+    }
+  
+  
   const handleNext = () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
+    if(activeStep===0){
+      if(datumDolaska.isAfter(datumOdlaska)){
+      alert("Datum dolaska ne može biti nakon datuma odlaska!");
+      
+      return;
+      }
+      if(datumDolaska.isSame(datumOdlaska)){
+      alert("Datum dolaska ne može biti jednak datumu odlaska!");
+      return;
+      }
+      console.log(datumDolaska.format('DD.MM.YYYY'));
+      console.log(datumOdlaska.format('DD.MM.YYYY'));
+    postDates(datumDolaska.format('DD.MM.YYYY'), datumOdlaska.format('DD.MM.YYYY')); 
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
@@ -56,7 +92,13 @@ export default function HorizontalLinearStepper() {
   };
   let content;
 if (activeStep+1 === 1) {
-  content = <Reservation />;
+  content =<div> <h3>Odaberite datum</h3>
+       <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={['DatePicker', 'DatePicker']}>
+          <DatePicker label="Datum dolaska" name="datumDolaska" minDate={datumDolaska}value={datumDolaska} onChange={(newValue) => setDatumDolaska(newValue)} format="DD.MM.YYYY" />
+           <DatePicker label="Datum odlaska" name="datumOdlaska" minDate={datumDolaska.add(1, 'day')}value={datumOdlaska} onChange={(newValue) => setDatumOdlaska(newValue)} format="DD.MM.YYYY" />
+        </DemoContainer>
+      </LocalizationProvider></div>;
 } else if (activeStep+1 ===2) {
   content = <span>. korak</span>;
 } else {
