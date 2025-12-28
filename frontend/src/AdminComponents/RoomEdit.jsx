@@ -11,7 +11,7 @@ import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 
-export default function AdminInfo() {
+export default function RoomEdit() {
   const [isOpen, setIsOpen] = useState(false);
   const [broj_sobe, setBrojSobe] = useState(1);
   const [brojKreveta, setBrojKreveta] = useState(2);

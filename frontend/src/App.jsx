@@ -8,9 +8,7 @@ import About from "./About.jsx";
 import Contact from "./Contact.jsx";
 import Header from './layouts/Header.jsx';
 import ReservationSlider from './ReservationSlider.jsx';
-import InformationInput from './InformationInput.jsx';
 import Dashboard from './Dashboard.jsx';
-import AdminInfo from './AdminInfo.jsx';
 import Profil from './Profil.jsx';
 import AdminStart from './AdminStart.jsx';
 import Gallery from './Gallery.jsx';
@@ -31,11 +29,9 @@ export default function App() {
         <Route path="/" element={<HomePage/>} />
         <Route path="/logIn" element={<LogIn/>} />
         <Route path="/about" element={<About/>} />
-          <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/contact" element={<Contact/>} />
         <Route path="/reservation" element={<ReservationSlider/>} />
-        <Route path="/InformationInput" element={<InformationInput/>} />
-        <Route path="/adminInfo" element={<AdminInfo/>} />
         <Route path="/profil" element={<Profil/>} />
         <Route path="/adminStart" element={<AdminStart/>} />
         <Route path="/gallery" element={<Gallery/>} />
