@@ -68,7 +68,9 @@
     margin: 5px;
 }
 .adminStartContent {
-  padding: 20px;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
 }
 html{
     background-size: cover;
