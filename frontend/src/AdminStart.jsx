@@ -10,7 +10,7 @@ export default function AdminStart() {
   const [active, setActive] = useState("roomEdit");
   
   return(
-    <div className="adminStartBody">
+    <div className="adminStartBody" style= {{display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "space-between", height: "100%", minHeight: "100%", boxSizing: "border-box"}}>
       <div className="adminStartButtons">
         <Button variant="contained" onClick={() => setActive("roomEdit")} className={active === "roomEdit" ? "active" : ""}>Uredi sobe</Button>
         <Button variant="contained" onClick={() => setActive("statistics")} className={active === "statistics" ? "active" : ""}>Statistika</Button>
