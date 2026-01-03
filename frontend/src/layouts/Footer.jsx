@@ -24,7 +24,7 @@ export default function Footer(){
                     <Link style={{all:'unset',color: 'white', size: 'small', cursor: 'pointer'}} to="/reservation">
               Rezervacija soba
             </Link>
-                    <Link style={{all:'unset',color: 'white', size: 'small', cursor: 'pointer'}} to="/reservation">
+                    <Link style={{all:'unset',color: 'white', size: 'small', cursor: 'pointer'}} to="/reservationAdditionalServices">
               Rezervacija dodatnog sadržaja
             </Link>
                     <Link style={{all:'unset',color: 'white', size: 'small', cursor: 'pointer'}} to="/gallery">

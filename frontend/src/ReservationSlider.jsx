@@ -6,6 +6,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Reservation from './Reservation';
+import ReservationAdditionalServices from './ReservationAdditionalServices';
 import { colors } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -30,7 +31,7 @@ export default function HorizontalLinearStepper() {
  useEffect(() => {
   if(activeStep==1){
     axios
-      .get(`${import.meta.env.VITE_API_URL}` + '/dates', { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}` + 'api/room-reservation/available', { withCredentials: true })
       .then((responseSoba) => {
         setSlobodneSobe(responseSoba.data);
         setOdabranoSoba(new Array(responseSoba.data.length).fill(0) )
@@ -55,7 +56,7 @@ export default function HorizontalLinearStepper() {
       datumOdlaska
     }
        try {
-                  return await axios.post(`${import.meta.env.VITE_API_URL}` + '/dates', datumi,  {withCredentials: true} )
+                  return await axios.post(`${import.meta.env.VITE_API_URL}` + 'api/room-reservation/available', datumi,  {withCredentials: true} )
                   
                   
               } catch (error) {
@@ -82,9 +83,9 @@ export default function HorizontalLinearStepper() {
       alert("Datum dolaska ne može biti jednak datumu odlaska!");
       return;
       }
-     postDates(datumDolaska.format('DD.MM.YYYY'), datumOdlaska.format('DD.MM.YYYY')); 
+     postDates(datumDolaska.format('YYYY.MM.DD'), datumOdlaska.format('YYYY.MM.DD')); 
     }
-    if(activeStep===1){
+    if(activeStep===2){
       {/*potrebno ograničenje u broju soba */}
       if(totalOdabranih>5){
         alert("Nažalost, nije moguće rezervirati više o 5 soba.");
@@ -143,7 +144,7 @@ content=slobodneSobe.map((soba,i)=>(
               {soba.pogledNaMore && <div>Pogled na more</div>}
               <div>Cijena: {soba.cijena} €</div>
               <NumberInput value={odabranoSoba[i]||0} onChange={(event,val)=>{
-                if(val>soba.dostupno){
+                if(val>soba.brojDostupnih){
                   alert("Nije dostupno toliko soba te vrste");
                   return;
                 }
@@ -166,7 +167,7 @@ content=slobodneSobe.map((soba,i)=>(
   }
   
 } else {
-  content = <span>3. korak</span>;
+  content = <ReservationAdditionalServices showNext={false}/>;
 }
 
 

@@ -13,6 +13,7 @@ import Profil from './Profil.jsx';
 import AdminStart from './AdminStart.jsx';
 import Gallery from './Gallery.jsx';
 import Footer from "./layouts/Footer.jsx";
+import ReservationAdditionalServices from "./ReservationAdditionalServices.jsx";
 export default function App() {
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/profil" element={<Profil/>} />
         <Route path="/adminStart" element={<AdminStart/>} />
         <Route path="/gallery" element={<Gallery/>} />
+        <Route path="/reservationAdditionalServices" element={<ReservationAdditionalServices showNext={true}/>}/>
       </Routes>
       </div>
       <LogIn open={isLoginOpen} onClose={handleCloseLogin} />
