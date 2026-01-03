@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -21,7 +21,26 @@ export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const[datumDolaska,setDatumDolaska]=React.useState(dayjs().startOf('day'));
+  const[datumDanas,setDatumDanas]=React.useState(dayjs().startOf('day'));
   const[datumOdlaska,setDatumOdlaska]=React.useState(dayjs().add(1, 'day'));
+  const[slobodneSobe,setSlobodneSobe]=React.useState(null);
+  const[odabranoSoba,setOdabranoSoba]=React.useState([0]);
+  const[totalOdabranih,setTotalOdabranih]=React.useState(0);
+
+ useEffect(() => {
+  if(activeStep==1){
+    axios
+      .get(`${import.meta.env.VITE_API_URL}` + '/dates', { withCredentials: true })
+      .then((responseSoba) => {
+        setSlobodneSobe(responseSoba.data);
+        setOdabranoSoba(new Array(responseSoba.data.length).fill(0) )
+      })
+      .catch((error) => {console.log("myb nije povezano ");;
+    setSlobodneSobe(null)});
+    
+  }}, [activeStep]);
+  
+
   const isStepOptional = (step) => {
     return step === 2;
   };
@@ -36,8 +55,8 @@ export default function HorizontalLinearStepper() {
       datumOdlaska
     }
        try {
-                  const response = await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/dates', datumi,  {withCredentials: true} )
-                  console.log('Success: Poslalo se sve', response.data)
+                  return await axios.post(`${import.meta.env.VITE_API_URL}` + '/dates', datumi,  {withCredentials: true} )
+                  
                   
               } catch (error) {
                   console.error('Error: nije se poslao post zbog necega', error.response?.data)
@@ -45,8 +64,9 @@ export default function HorizontalLinearStepper() {
 
     }
   
-  
-  const handleNext = () => {
+ 
+    
+  const handleNext =  () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -62,9 +82,14 @@ export default function HorizontalLinearStepper() {
       alert("Datum dolaska ne može biti jednak datumu odlaska!");
       return;
       }
-      console.log(datumDolaska.format('DD.MM.YYYY'));
-      console.log(datumOdlaska.format('DD.MM.YYYY'));
-    postDates(datumDolaska.format('DD.MM.YYYY'), datumOdlaska.format('DD.MM.YYYY')); 
+     postDates(datumDolaska.format('DD.MM.YYYY'), datumOdlaska.format('DD.MM.YYYY')); 
+    }
+    if(activeStep===1){
+      {/*potrebno ograničenje u broju soba */}
+      if(totalOdabranih>5){
+        alert("Nažalost, nije moguće rezervirati više o 5 soba.");
+        return;
+      }
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
@@ -95,12 +120,51 @@ if (activeStep+1 === 1) {
   content =<div> <h3>Odaberite datum</h3>
        <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DatePicker', 'DatePicker']}>
-          <DatePicker label="Datum dolaska" name="datumDolaska" minDate={datumDolaska}value={datumDolaska} onChange={(newValue) => setDatumDolaska(newValue)} format="DD.MM.YYYY" />
-           <DatePicker label="Datum odlaska" name="datumOdlaska" minDate={datumDolaska.add(1, 'day')}value={datumOdlaska} onChange={(newValue) => setDatumOdlaska(newValue)} format="DD.MM.YYYY" />
+          <DatePicker label="Datum dolaska" name="datumDolaska" minDate={datumDanas}value={datumDolaska} onChange={(newValue) => setDatumDolaska(newValue)} format="DD.MM.YYYY" />
+           <DatePicker label="Datum odlaska" name="datumOdlaska" minDate={datumDanas.add(1, 'day')}value={datumOdlaska} onChange={(newValue) => setDatumOdlaska(newValue)} format="DD.MM.YYYY" />
         </DemoContainer>
       </LocalizationProvider></div>;
 } else if (activeStep+1 ===2) {
-  content = <span>. korak</span>;
+
+  if(slobodneSobe){
+content=slobodneSobe.map((soba,i)=>( 
+<div style={{
+              border: "1px solid gray",
+              padding: "8px",
+              marginBottom: "5px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ flexGrow: 1, paddingRight: "15px" }}>
+              <div>Naziv sobe: {soba.vrsta}</div>
+              {soba.balkon && <div>Balkon</div>}
+              {soba.pogledNaMore && <div>Pogled na more</div>}
+              <div>Cijena: {soba.cijena} €</div>
+              <NumberInput value={odabranoSoba[i]||0} onChange={(event,val)=>{
+                if(val>soba.dostupno){
+                  alert("Nije dostupno toliko soba te vrste");
+                  return;
+                }
+                const dodano=[...odabranoSoba];
+                dodano[i]=val;
+                let zb=0;
+                for(let ii=0;ii<dodano.length;ii++){
+                  if(dodano[ii]){
+                    zb+=dodano[ii];
+                  }
+                }
+                setTotalOdabranih(zb);
+                setOdabranoSoba(dodano)}} min={0} max={5} defaultValue={0}  />
+            </div>
+            <div style={{ flexShrink: 0 }}></div>
+              </div>))
+  }
+  else{
+   content= <span>Nema odgovarajućih soba na taj datum</span>
+  }
+  
 } else {
   content = <span>3. korak</span>;
 }
