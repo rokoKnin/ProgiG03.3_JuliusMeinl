@@ -28,7 +28,7 @@ export default function HorizontalLinearStepper() {
   const[odabranoSoba,setOdabranoSoba]=React.useState([0]);
   const[totalOdabranih,setTotalOdabranih]=React.useState(0);
 
- useEffect(() => {
+ {/*useEffect(() => {
   if(activeStep==1){
     axios
       .get(`${import.meta.env.VITE_API_URL}` + 'api/room-reservation/available', { withCredentials: true })
@@ -39,7 +39,7 @@ export default function HorizontalLinearStepper() {
       .catch((error) => {console.log("myb nije povezano ");;
     setSlobodneSobe(null)});
     
-  }}, [activeStep]);
+  }}, [activeStep]);*/}
   
 
   const isStepOptional = (step) => {
@@ -50,24 +50,28 @@ export default function HorizontalLinearStepper() {
     return skipped.has(step);
   };
 
-  async function postDates(datumDolaska, datumOdlaska){
+  async function postDates(datumOd, datumDo){
     const datumi={
-      datumDolaska,
-      datumOdlaska
+      datumOd,
+      datumDo
     }
+    console.log(datumi)
        try {
-                  return await axios.post(`${import.meta.env.VITE_API_URL}` + 'api/room-reservation/available', datumi,  {withCredentials: true} )
-                  
-                  
+                 const responseSoba= await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/room-reservation/available', datumi,  {withCredentials: true} )
+                setSlobodneSobe(responseSoba.data);
+                setOdabranoSoba(new Array(responseSoba.data.length).fill(0));
+                 return true; 
               } catch (error) {
                   console.error('Error: nije se poslao post zbog necega', error.response?.data)
-              }
+                  setSlobodneSobe(null);
+                  return false;
+                }
 
     }
   
  
     
-  const handleNext =  () => {
+  const handleNext = async () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -79,11 +83,12 @@ export default function HorizontalLinearStepper() {
       
       return;
       }
-      if(datumDolaska.isSame(datumOdlaska)){
+      if(datumDolaska.isSame(datumOdlaska,'day')){
       alert("Datum dolaska ne može biti jednak datumu odlaska!");
       return;
       }
-     postDates(datumDolaska.format('YYYY.MM.DD'), datumOdlaska.format('YYYY.MM.DD')); 
+     await postDates(datumDolaska.format('YYYY-MM-DD'), datumOdlaska.format('YYYY-MM-DD')); 
+    
     }
     if(activeStep===2){
       {/*potrebno ograničenje u broju soba */}
