@@ -25,46 +25,33 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
-            redirect-uri: ${GOOGLE_REDIRECT_URL}
-            scope: profile, email
-        provider:
-          google:
-            authorization-uri: <https://accounts.google.com/o/oauth2/v2/auth>
-            token-uri: <https://oauth2.googleapis.com/token>
-            user-info-uri: <https://www.googleapis.com/oauth2/v3/userinfo>
-            user-name-attribute: sub
 
 
 # ========== SERVER CONFIGURATION ==========
 server:
   port: ${PORT:8080}
-  forward-headers-strategy: framework
-  servlet:
-    session:
-      cookie:
-        same-site: lax
-        secure: true
+#  forward-headers-strategy: framework
   error:
     include-message: always
     include-binding-errors: always
     include-stacktrace: always
 
 # ========== LOGGING LEVELS ==========
-logging:
-  level:
-    root: DEBUG
-    org:
-      springframework:
-        web: DEBUG
-        security: DEBUG
-        security.oauth2: DEBUG
-        .: DEBUG
-      hibernate: DEBUG
+#logging:
+#  level:
+#    root: DEBUG
+#    org:
+#      springframework:
+#        web: DEBUG
+#        security: DEBUG
+#        security.oauth2: DEBUG
+#        .: DEBUG
+#      hibernate: DEBUG
 
 frontend:
   url: ${FRONTEND_URL:http://localhost:5173}
-# backend:
-#   url: ${BACKEND_URL:http://localhost:8080}
+#backend:
+#  url: ${BACKEND_URL:http://localhost:8080}
 
 
 

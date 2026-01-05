@@ -4,7 +4,6 @@ import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.MjestoId;
 import com.juliusmeinl.backend.service.AuthService;
 import com.juliusmeinl.backend.service.KorisnikService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +22,10 @@ public class KorisnikController {
         this.korisnikService = korisnikService;
     }
 
-//    @GetMapping("/info")
-//    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-//        return principal.getAttributes();
-//    }
+    @GetMapping("/info")
+    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+        return principal.getAttributes();
+    }
 
 //    @GetMapping("/info")
 //    public Map<String, Object> getProfile() {
