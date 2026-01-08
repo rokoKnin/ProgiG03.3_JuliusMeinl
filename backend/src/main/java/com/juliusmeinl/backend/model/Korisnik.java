@@ -1,9 +1,15 @@
 package com.juliusmeinl.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "korisnik")
 public class Korisnik {
@@ -26,7 +32,8 @@ public class Korisnik {
     private String telefon;
 
     @Column(name = "ovlastkorisnik", nullable = false, length = 10)
-    private String ovlast;
+    @Enumerated(EnumType.STRING)
+    private UlogaKorisnika ovlast = UlogaKorisnika.GOST;
 
 
     @ManyToOne
@@ -45,69 +52,69 @@ public class Korisnik {
     @OneToMany(mappedBy = "korisnik")
     private List<Recenzija> recenzije;
 
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getIme() {
-        return ime;
-    }
-    public void setIme(String ime) {
-        this.ime = ime;
-    }
-    public String getPrezime() {
-        return prezime;
-    }
-    public void setPrezime(String prezime) {
-        this.prezime = prezime;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getTelefon() {
-        return telefon;
-    }
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
-    }
-    public String getOvlast() {
-        return ovlast;
-    }
-    public void setOvlast(String ovlast) {
-        this.ovlast = ovlast;
-    }
-    public Mjesto getMjesto() {
-        return mjesto;
-    }
-    public void setMjesto(Mjesto mjesto) {
-        this.mjesto = mjesto;
-    }
+//    public Integer getId() {
+//        return id;
+//    }
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
+//    public String getIme() {
+//        return ime;
+//    }
+//    public void setIme(String ime) {
+//        this.ime = ime;
+//    }
+//    public String getPrezime() {
+//        return prezime;
+//    }
+//    public void setPrezime(String prezime) {
+//        this.prezime = prezime;
+//    }
+//    public String getEmail() {
+//        return email;
+//    }
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
+//    public String getTelefon() {
+//        return telefon;
+//    }
+//    public void setTelefon(String telefon) {
+//        this.telefon = telefon;
+//    }
+//    public String getOvlast() {
+//        return ovlast;
+//    }
+//    public void setOvlast(String ovlast) {
+//        this.ovlast = ovlast;
+//    }
+//    public Mjesto getMjesto() {
+//        return mjesto;
+//    }
+//    public void setMjesto(Mjesto mjesto) {
+//        this.mjesto = mjesto;
+//    }
 
 
 
 
-    public List<Rezervacija> getRezervacije() {
-        return rezervacije;
-    }
-    public void setRezervacije(List<Rezervacija> rezervacije) {
-        this.rezervacije = rezervacije;
-    }
-    public List<Upit> getUpiti() {
-        return upiti;
-    }
-    public void setUpiti(List<Upit> upiti) {
-        this.upiti = upiti;
-    }
-    public List<Recenzija> getRecenzije() {
-        return recenzije;
-    }
-    public void setRecenzije(List<Recenzija> recenzije) {
-        this.recenzije = recenzije;
-    }
+//    public List<Rezervacija> getRezervacije() {
+//        return rezervacije;
+//    }
+//    public void setRezervacije(List<Rezervacija> rezervacije) {
+//        this.rezervacije = rezervacije;
+//    }
+//    public List<Upit> getUpiti() {
+//        return upiti;
+//    }
+//    public void setUpiti(List<Upit> upiti) {
+//        this.upiti = upiti;
+//    }
+//    public List<Recenzija> getRecenzije() {
+//        return recenzije;
+//    }
+//    public void setRecenzije(List<Recenzija> recenzije) {
+//        this.recenzije = recenzije;
+//    }
 
 }

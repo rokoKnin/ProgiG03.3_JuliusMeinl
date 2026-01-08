@@ -1,9 +1,6 @@
 package com.juliusmeinl.backend.service;
 
-import com.juliusmeinl.backend.model.Drzava;
-import com.juliusmeinl.backend.model.Korisnik;
-import com.juliusmeinl.backend.model.Mjesto;
-import com.juliusmeinl.backend.model.MjestoId;
+import com.juliusmeinl.backend.model.*;
 import com.juliusmeinl.backend.repository.DrzavaRepository;
 import com.juliusmeinl.backend.repository.KorisnikRepository;
 import com.juliusmeinl.backend.repository.MjestoRepository;
@@ -71,7 +68,7 @@ public class KorisnikService {
 
     //Provjerava je li korisnik vlasnik
     public boolean korisnikJeVlasnik(String email) {
-        Optional<Korisnik> korisnik = korisnikRepository.findByEmailAndOvlast(email, "VLASNIK");
+        Optional<Korisnik> korisnik = korisnikRepository.findByEmailAndOvlast(email, UlogaKorisnika.VLASNIK);
         return korisnik.isPresent();
     }
 
