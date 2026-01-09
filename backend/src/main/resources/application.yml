@@ -36,7 +36,7 @@ spring:
 # ========== SERVER CONFIGURATION ==========
 server:
   port: ${PORT:8080}
-  forward-headers-strategy: framework
+  # forward-headers-strategy: framework
   error:
     include-message: always
     include-binding-errors: always
@@ -44,8 +44,8 @@ server:
   servlet:
     session:
       cookie:
-        same-site: none
-        secure: true
+        same-site: lax
+        secure: false
 
 
 
