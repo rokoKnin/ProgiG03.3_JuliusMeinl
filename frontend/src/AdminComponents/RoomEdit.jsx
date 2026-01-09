@@ -64,16 +64,16 @@ export default function RoomEdit( { setExportHandler} ) {
     setPogledMore(soba.pogledNaMore);
   };
   const handleDelete = async (id) => {
-  if (!window.confirm("Jeste li sigurni da želite obrisati ovu sobu?")) return;
+    if (!window.confirm("Jeste li sigurni da želite obrisati ovu sobu?")) return;
 
-  try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}` + `/sobe/${id}`, { withCredentials: true });
-    setRendersoba((prev) => prev.filter((soba) => soba.id !== id));
-    
-  } catch (error) {
-    console.error("Greška prilikom brisanja sobe:");
-  }
-};
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}` + `/sobe/${id}`, { withCredentials: true });
+      setRendersoba((prev) => prev.filter((soba) => soba.id !== id));
+      
+    } catch (error) {
+      console.error("Greška prilikom brisanja sobe:");
+    }
+  };
   async function handleSubmit() {
     const novaSoba = {
         broj_sobe: broj_sobe,

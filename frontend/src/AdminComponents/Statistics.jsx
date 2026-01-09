@@ -13,6 +13,16 @@ ChartJS.defaults.plugins.title.color = 'black';
 
 export default function Statistics( { setExportHandler} ) {
     const [stats, setStats] = useState(null);
+    const generateColors = (length) => {
+        const baseColors = [
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(54, 162, 235, 0.8)',
+            'rgba(75, 192, 192, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(153, 102, 255, 0.8)',
+        ];
+        return Array.from({ length}, (_, i) => baseColors[i % baseColors.length]);
+    }
     useEffect(() => {
         axios
             .get(`${import.meta.env.VITE_API_URL}` + `/statistics`, { withCredentials: true })
@@ -43,6 +53,14 @@ export default function Statistics( { setExportHandler} ) {
     if (!stats) {
         return <div>Loading statistics...</div>;
     }
+
+    const validCountryData = stats.country.name.length === stats.country.data.length;
+    if (!validCountryData) {
+        console.warn('Country names and data arrays have different lengths');
+    }
+
+    const countryColors = generateColors(stats.country.name.length);
+    const countyColors = generateColors(stats.county.name.length);
 
     const yearlyLineData = {
         labels: stats.yearly.month.map(month => `${month}`),
@@ -111,14 +129,10 @@ export default function Statistics( { setExportHandler} ) {
         labels: stats.country.name,
         datasets: [
             {
-                data: [
-                    stats.country.data
-                ], 
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.8)',
-                    'rgba(54, 162, 235, 0.8)',
-                    'rgba(75, 192, 192, 0.8)'
-                ]
+                data: stats.country.data, 
+                backgroundColor: countryColors,
+                borderWidth: 1,
+                borderColor: 'white'
             }
         ]
     };
@@ -126,14 +140,10 @@ export default function Statistics( { setExportHandler} ) {
         labels: stats.county.name,
         datasets: [
             {
-                data: [
-                    stats.county.data
-                ], 
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.8)',
-                    'rgba(54, 162, 235, 0.8)',
-                    'rgba(75, 192, 192, 0.8)'
-                ]
+                data: stats.county.data, 
+                backgroundColor: countyColors,
+                borderWidth: 1,
+                borderColor: 'white'
             }
         ]
     }; 
