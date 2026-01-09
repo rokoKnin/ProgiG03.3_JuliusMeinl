@@ -13,4 +13,12 @@ public interface SobaRepository extends JpaRepository<Soba, Integer> {
 
     //@Query("SELECT id FROM Soba WHERE vrsta = :vrsta")
     List<Soba> findByVrsta(VrstaSobe vrsta);
+
+    @Query("""
+    SELECT s.vrsta, s.balkon, s.pogledNaMore, COUNT(s)
+    FROM Soba s
+    WHERE s.id NOT IN :zauzeteIds
+    GROUP BY s.vrsta, s.balkon, s.pogledNaMore
+    """)
+    List<Object[]> countDostupneSobePoVrsti(List<Integer> zauzeteIds);
 }

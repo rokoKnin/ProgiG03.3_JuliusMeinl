@@ -1,0 +1,118 @@
+.map-container {
+  height: 500px;
+  width: 50%;
+  border: 2px solid black;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.mapa{
+    display: flex;
+    justify-content: center;
+    width:100%;
+    
+}
+.dodaj_goste{
+    margin-top:20px;
+    padding:10px;
+    background-color:#1976d2;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    display:flex;
+    flex-direction: row;
+    gap:10px;
+    align-items: center;
+}
+.link_reservation{
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: bold;
+    cursor: pointer;
+}
+.home_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+    background: linear-gradient(to right,#ffffff,#1976d2);
+    border-radius: 15px;
+}
+.home_container img{
+    width: 50%;
+    border-radius: 15px;
+}
+.adminStartBody{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-color: #f5f5f5;
+    
+    background-size: cover;
+    gap:20px;
+    background-image: url("/back.jpg");
+}
+.adminStartButtons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px;
+}
+.adminSeparator {
+    width: 100%;
+    height: 1px;
+    background-color: #1976d2;
+    margin: 5px;
+}
+.adminStartContent {
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+}
+html{
+    background-size: cover;
+    gap:20px;
+    background-image: url("/back.jpg");
+}
+html,body{
+    height: 100%;
+    margin: 0;
+}
+.adminStartButtons{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.footerContent{
+    color: white;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.footerBody{
+    background-color: #1976d2;
+    text-align: center;
+    padding: 1rem;
+    bottom: 0;
+    width: 100%;
+    margin-top: auto;
+}
+.appContainer{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+.content{
+    flex: 1 1 0%;
+    margin-left: 5%;
+    margin-right: 5%;
+    min-height: 0;
+}
+
