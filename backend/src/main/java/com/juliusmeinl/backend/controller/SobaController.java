@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/rooms")  // rec graciji da promijeni na front
+@RequestMapping("/api/rooms")
 @CrossOrigin(origins = "*")
 public class SobaController {
 

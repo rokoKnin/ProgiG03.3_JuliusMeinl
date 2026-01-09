@@ -1,23 +1,29 @@
 package com.juliusmeinl.backend.service;
 
+import com.juliusmeinl.backend.model.Korisnik;
+import com.juliusmeinl.backend.model.Rezervacija;
+import com.juliusmeinl.backend.repository.KorisnikRepository;
+import com.juliusmeinl.backend.repository.RezervacijaRepository;
 import com.juliusmeinl.backend.repository.RezervirajSobuRepository;
 import com.juliusmeinl.backend.repository.SobaRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class RezervacijaService {
     private final SobaRepository sobaRepository;
     private final RezervirajSobuRepository rezervirajSobuRepository;
+    private final RezervacijaRepository rezervacijaRepository;
+    private final KorisnikRepository korisnikRepository;
 
-    public RezervacijaService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository) {
+    public RezervacijaService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository, RezervacijaRepository rezervacijaRepository, KorisnikRepository korisnikRepository) {
         this.sobaRepository = sobaRepository;
         this.rezervirajSobuRepository = rezervirajSobuRepository;
+        this.rezervacijaRepository = rezervacijaRepository;
+        this.korisnikRepository = korisnikRepository;
     }
 
 
@@ -44,5 +50,13 @@ public class RezervacijaService {
         return response;
     }
 
+    public void kreirajRezervaciju(Integer id) {
+        Optional<Korisnik> korisnik = korisnikRepository.findById(id);
+
+        Rezervacija rezervacija = new Rezervacija();
+        rezervacija.setKorisnik(korisnik.get());
+        rezervacija.setIznosRezervacije(BigDecimal.ZERO);
+        rezervacijaRepository.save(rezervacija);
+    }
 
 }
