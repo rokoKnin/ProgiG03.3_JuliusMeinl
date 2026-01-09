@@ -35,12 +35,20 @@ function Modal({ isOpen, onClose, children }) {
     document.body
   );
 }
+
 export default function ReservationAdditionalServices({showNext}) {
     
     const[datum,setDatum]=React.useState(dayjs().startOf('day'));
     const[datumDanas,setDatumDanas]=React.useState(dayjs().startOf('day'));
     const [isOpen, setIsOpen] = useState({open:false,name:null});
     const {open,name}=isOpen;
+    const [lista,setLista]=React.useState([])
+    const handleAdd=()=>{
+      if(!lista.includes(datum)){
+      setLista([...lista,datum])
+    }
+      
+    }
     return(
         <div style={{display:'flex',flexDirection:"column",justifyContent:"space-around",gap:"2rem"}}>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
@@ -68,10 +76,23 @@ export default function ReservationAdditionalServices({showNext}) {
     
     <Modal isOpen={isOpen} onClose={() => setIsOpen({open:false,name:null})}>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={['DatePicker', 'DatePicker']}>
-            <Typography>{name}</Typography>
-            <DatePicker label="Datum" name="datum" minDate={datumDanas}value={datum} onChange={(newValue) => setDatum(newValue)} format="DD.MM.YYYY" />
-            </DemoContainer>
+      <Box sx={{width:"100%",display:"flex",flexDirection:"column", gap:"1rem"}}>
+            
+              <Typography variant="h5"color="primary">{name}</Typography>
+              <Box sx={{width:"100%",display:"flex",flexDirection:"row", justifyContent:"space-around"}}>
+            <DatePicker sx={{width:"70%"}}label="Datum" name="datum" minDate={datumDanas}value={datum} onChange={(newValue) => setDatum(newValue)} format="DD.MM.YYYY" />
+            <Button variant="contained" color="primary" onClick={handleAdd}>+</Button>
+             </Box>
+             
+              {lista.map((rez)=>
+                (
+                 <Box>
+                  <Box sx={{display:"flex",justifyContent:"space-around",alignItems:"center"}}>{rez.format("DD.MM.YYYY")} <Button sx={{color:"white",backgroundColor:"red",borderRadius:"15px"}} >x</Button></Box>
+                   </Box>
+                )
+              )}
+            
+            </Box>
         </LocalizationProvider>
     </Modal>
     </div>)
