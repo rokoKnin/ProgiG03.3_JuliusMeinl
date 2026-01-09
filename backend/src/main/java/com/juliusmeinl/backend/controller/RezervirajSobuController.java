@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/room-reservation")
+@RequestMapping("api/reservations")
 public class RezervirajSobuController {
     private final RezervirajSobuService rezervirajSobuService;
 
@@ -21,7 +21,7 @@ public class RezervirajSobuController {
         this.rezervirajSobuService = rezervirajSobuService;
     }
 
-    @PostMapping("/available")
+    @PostMapping
     public List<Map<String, Object>> dostupneSobe(@RequestBody Map<String, String> dateMap) {
         // moram napravit counter za svaku vrstu sobe mogucu
         LocalDate datumOd = LocalDate.parse(dateMap.get("datumOd"));
