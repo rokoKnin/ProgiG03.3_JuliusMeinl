@@ -1,10 +1,7 @@
 package com.juliusmeinl.backend.service;
 
-import com.juliusmeinl.backend.model.Soba;
-import com.juliusmeinl.backend.model.VrstaSobe;
 import com.juliusmeinl.backend.repository.RezervirajSobuRepository;
 import com.juliusmeinl.backend.repository.SobaRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class RezervirajSobuService {
+public class RezervacijaService {
     private final SobaRepository sobaRepository;
     private final RezervirajSobuRepository rezervirajSobuRepository;
 
-    public RezervirajSobuService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository) {
+    public RezervacijaService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository) {
         this.sobaRepository = sobaRepository;
         this.rezervirajSobuRepository = rezervirajSobuRepository;
     }

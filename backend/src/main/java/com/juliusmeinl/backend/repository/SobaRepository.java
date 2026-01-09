@@ -15,10 +15,10 @@ public interface SobaRepository extends JpaRepository<Soba, Integer> {
     List<Soba> findByVrsta(VrstaSobe vrsta);
 
     @Query("""
-    SELECT s.vrsta, s.balkon, s.pogledNaMore, COUNT(s)
+    SELECT s.vrsta, s.balkon, s.pogledNaMore, s.cijena, COUNT(s)
     FROM Soba s
     WHERE s.id NOT IN :zauzeteIds
-    GROUP BY s.vrsta, s.balkon, s.pogledNaMore
+    GROUP BY s.vrsta, s.balkon, s.pogledNaMore, s.cijena
     """)
     List<Object[]> countDostupneSobePoVrsti(List<Integer> zauzeteIds);
 }
