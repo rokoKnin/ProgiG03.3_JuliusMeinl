@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS } from 'chart.js/auto';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import axios from 'axios';
@@ -11,7 +11,7 @@ ChartJS.defaults.plugins.title.align = 'center';
 ChartJS.defaults.plugins.title.font.size = 16;
 ChartJS.defaults.plugins.title.color = 'black';
 
-export default function Statistics() {
+export default function Statistics( { setExportHandler} ) {
     const [stats, setStats] = useState(null);
     useEffect(() => {
         axios
@@ -19,6 +19,26 @@ export default function Statistics() {
             .then(response => setStats(response.data))
             .catch(error => console.error('Error fetching statistics data:', error));
     }, []); 
+
+    useEffect(() => {
+        setExportHandler(() => exportStatistics);
+        return () => setExportHandler(null);
+    }, [setExportHandler]);
+
+    const exportStatistics = async (format) => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_URL}/statistics/export?format=${format}`,
+                {
+                    withCredentials: true,
+                    responseType: "blob",
+                }
+            );
+            downloadFile(response.data, `statistics.${format}`);
+        } catch (error) {
+            console.error("Error exporting statistics: ", error);
+        }
+    };
     
     if (!stats) {
         return <div>Loading statistics...</div>;
@@ -181,4 +201,13 @@ export default function Statistics() {
             </div>
         </div>
     );
+}
+
+function downloadFile(blob, filename) {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
 }

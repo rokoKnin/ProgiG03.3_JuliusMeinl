@@ -49,23 +49,13 @@
     align-items: center;
     height: 100vh;
     width: 100%;
-    background-color: #f5f5f5;
-    
-    background-size: cover;
-    gap:20px;
-    background-image: url("/back.jpg");
+    box-sizing: border-box;
 }
 .adminStartButtons {
     display: flex;
     justify-content: center;
     gap: 16px;
     padding: 20px;
-}
-.adminSeparator {
-    width: 100%;
-    height: 1px;
-    background-color: #1976d2;
-    margin: 5px;
 }
 .adminStartContent {
     padding: 20px;

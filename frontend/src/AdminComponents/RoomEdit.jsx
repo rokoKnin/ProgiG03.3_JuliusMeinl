@@ -11,7 +11,7 @@ import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 
-export default function RoomEdit() {
+export default function RoomEdit( { setExportHandler} ) {
   const [isOpen, setIsOpen] = useState(false);
   const [broj_sobe, setBrojSobe] = useState(1);
   const [brojKreveta, setBrojKreveta] = useState(2);
@@ -31,6 +31,26 @@ export default function RoomEdit() {
       })
       .catch((error) => console.error("Error ocurred", error));
   }, []);
+
+  useEffect(() => {
+    setExportHandler(() => exportRooms);
+    return () => setExportHandler(null);
+  }, [setExportHandler]);
+
+  const exportRooms = async (format) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/sobe/export?format=${format}`,
+        {
+          withCredentials: true,
+          responseType: "blob",
+        }
+      );
+      downloadFile(response.data, `sobe.${format}`);
+    } catch (error) {
+      console.error("Room export error:", error);
+    }
+  };
 
   const handleEditClick = (soba) => {
     setEditingSoba(soba);
@@ -227,6 +247,15 @@ export default function RoomEdit() {
         ))}
     </div>
   );
+}
+
+function downloadFile(blob, filename) {
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  window.URL.revokeObjectURL(url);
 }
 
 function Modal({ isOpen, onClose, onSubmit, children }) {
