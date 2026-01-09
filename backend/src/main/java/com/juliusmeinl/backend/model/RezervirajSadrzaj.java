@@ -10,15 +10,6 @@ public class RezervirajSadrzaj {
     @EmbeddedId
     private RezervirajSadrzajId id;
 
-    @Column(name = "datumodsadrzaj", nullable = false)
-    private LocalDate datumOd;
-
-    @Column(name = "datumdosadrzaj", nullable = false)
-    private LocalDate datumDo;
-
-    @Column(name = "cijena_sadrzaj", nullable = false)
-    private Integer cijena;
-
     @ManyToOne
     @MapsId("rezervacijaId")
     @JoinColumn(name = "rezervacija_id")
@@ -35,28 +26,10 @@ public class RezervirajSadrzaj {
     public void setId(RezervirajSadrzajId id) {
         this.id = id;
     }
-    public LocalDate getDatumOd() {
-        return datumOd;
-    }
-    public void setDatumOd(LocalDate datumOd) {
-        this.datumOd = datumOd;
-    }
-    public LocalDate getDatumDo() {
-        return datumDo;
-    }
-    public void setDatumDo(LocalDate datumDo) {
-        this.datumDo = datumDo;
-    }
-    public Integer getCijena() {
-        return cijena;
-    }
-    public void setCijena(Integer cijena) {
-        this.cijena = cijena;
-    }
+
     public Rezervacija getRezervacija() {
         return rezervacija;
     }
-
     public void setRezervacija(Rezervacija rezervacija) {
         this.rezervacija = rezervacija;
     }

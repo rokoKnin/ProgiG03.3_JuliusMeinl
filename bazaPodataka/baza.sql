@@ -1,4 +1,4 @@
-    CREATE TABLE drzava
+ CREATE TABLE drzava
     (
         drzava_id SERIAL,
         nazivDrzave VARCHAR(50) NOT NULL,
@@ -60,7 +60,7 @@
         dodatniSadrzaj_id SERIAL,
         vrstaDodatniSadrzaj VARCHAR(20) NOT NULL,
         statusDodatniSadrzaj VARCHAR(20) NOT NULL,
-        kapacitetDodatniSadrzaj INT NOT NULL,
+        cijena_sadrzaj NUMERIC(10,2) NOT NULL,
         PRIMARY KEY (dodatniSadrzaj_id)
     );
 
@@ -89,13 +89,10 @@
     (
         rezervacija_id INT NOT NULL,
         dodatniSadrzaj_id INT NOT NULL,
-        datumOdSadrzaj DATE NOT NULL,
-        datumDoSadrzaj DATE NOT NULL,
-        cijena_sadrzaj INT NOT NULL,
-        PRIMARY KEY (rezervacija_id, dodatniSadrzaj_id),
+        datum_sadrzaj DATE NOT NULL,
+        PRIMARY KEY (rezervacija_id, dodatniSadrzaj_id, datum_sadrzaj),
         FOREIGN KEY (rezervacija_id) REFERENCES rezervacija(rezervacija_id),
-        FOREIGN KEY (dodatniSadrzaj_id) REFERENCES dodatniSadrzaj(dodatniSadrzaj_id),
-        CHECK (datumDoSadrzaj > datumOdSadrzaj)
+        FOREIGN KEY (dodatniSadrzaj_id) REFERENCES dodatniSadrzaj(dodatniSadrzaj_id)
     );
 
     CREATE TABLE rezervirajSobu
@@ -109,3 +106,4 @@
         FOREIGN KEY (soba_id) REFERENCES soba(soba_id),
         CHECK (datumDoSoba > datumOdSoba)
     );
+
