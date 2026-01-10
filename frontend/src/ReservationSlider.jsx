@@ -56,7 +56,8 @@ export default function HorizontalLinearStepper() {
   const[brojOdabranoSoba,setBrojOdabranoSoba]=React.useState([0]);
   const[odabraneSobe,setOdabraneSobe]=React.useState([]);
   const[totalOdabranih,setTotalOdabranih]=React.useState(0);
-
+  const [user,setUser]=React.useState();
+  const[dodatniSadrzaj,SetDodatniSadrzaj]=React.useState([[],[],[]]);
  {/*useEffect(() => {
   if(activeStep==1){
     axios
@@ -69,7 +70,13 @@ export default function HorizontalLinearStepper() {
     setSlobodneSobe(null)});
     
   }}, [activeStep]);*/}
-  
+  useEffect(() => {
+            axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
+            { setUser(response.data);
+            })
+                .catch(error => console.error('Error ocurred', error))
+        }, []);
+        
 
   const isStepOptional = (step) => {
     return step === 2;
@@ -84,7 +91,6 @@ export default function HorizontalLinearStepper() {
       datumOd,
       datumDo
     }
-    console.log(datumi)
        try {
                  const responseSoba= await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/rooms/available', datumi,  {withCredentials: true} )
                 setSlobodneSobe(responseSoba.data);
@@ -97,7 +103,23 @@ export default function HorizontalLinearStepper() {
                 }
 
     }
-  
+  async function postSobeDodatniSadrzaj(odabraniDodatniSadrzaj, odabraneSobe){
+    const sadrzaj={
+      odabraneSobe,
+      odabraniDodatniSadrzaj
+    }
+    try {
+                console.log(odabraniDodatniSadrzaj)
+                 return await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
+                
+              
+              } catch (error) {
+                  console.error('Error: nije se poslao post zbog necega', error.response?.data)
+                 
+                  return false;
+                }
+          
+  }
  
     
   const handleNext = async () => {
@@ -121,14 +143,23 @@ export default function HorizontalLinearStepper() {
     }
     if(activeStep===1){
       {/*potrebno ograničenje u broju soba */}
+      
       if(totalOdabranih>5){
         alert("Nažalost, nije moguće rezervirati više o 5 soba.");
         return;
-      }
+      }}
+    if(activeStep===2){
+       const formatirano=dodatniSadrzaj.map((prev)=>
+        prev.map((kat,i)=>({
+            ...kat,datum:dayjs(kat.datum).format('YYYY-MM-DD')
+          }))
+        );
+      const uspjeh=await postSobeDodatniSadrzaj(formatirano,odabraneSobe);
+      
     }
+    
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
-    console.log(odabraneSobe);
   };
 
   const handleBack = () => {
@@ -152,7 +183,12 @@ export default function HorizontalLinearStepper() {
     setActiveStep(0);
   };
   let content;
-  
+  const handleAdditional=(lista)=>{
+     
+        SetDodatniSadrzaj(lista);
+       
+    
+  };
 if (activeStep+1 === 1) {
   content =<div> <h3>Odaberite datum</h3>
        <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -183,7 +219,7 @@ content=slobodneSobe.map((soba,i)=>(
               <div>
              <NumberInput value={brojOdabranoSoba[i]||0} onChange={(event,val)=>{
               const prethodna=brojOdabranoSoba[i]||0;
-              console.log(prethodna);
+              
                 if(val>soba.brojDostupnih){
                   alert("Nije dostupno toliko soba te vrste");
                   return;
@@ -196,7 +232,6 @@ content=slobodneSobe.map((soba,i)=>(
                     zb+=dodano[ii];
                   }
                 }
-                console.log(val);
                 if(prethodna<val){
                 setOdabraneSobe((prev)=>[...prev,soba]);
                 }else{
@@ -226,7 +261,7 @@ content=slobodneSobe.map((soba,i)=>(
   }
   
 } else {
-  content = <ReservationAdditionalServices showNext={false}/>;
+  content = <ReservationAdditionalServices showNext={false} onUpdate={handleAdditional}/>;
 }
 
 
@@ -251,10 +286,13 @@ content=slobodneSobe.map((soba,i)=>(
           );
         })}
       </Stepper>
+    
       {activeStep === steps.length ? (
+        
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
             <div>Uspješno ste napravili rezervaciju. Veselimo se vašem dolasku :)</div>
+            
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
