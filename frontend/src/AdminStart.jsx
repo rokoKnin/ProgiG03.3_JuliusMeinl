@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import RoomEdit from "./AdminComponents/RoomEdit.jsx";
 import Statistics from "./AdminComponents/Statistics.jsx";
 import UserEdit from "./AdminComponents/UserEdit.jsx";
-import { Link } from 'react-router-dom';
 
 export default function AdminStart() {
   const [active, setActive] = useState("roomEdit");
@@ -24,11 +23,13 @@ export default function AdminStart() {
         <Button variant="contained" onClick={() => setActive("roomEdit")} className={active === "roomEdit" ? "active" : ""}>Uredi sobe</Button>
         <Button variant="contained" onClick={() => setActive("statistics")} className={active === "statistics" ? "active" : ""}>Statistika</Button>
         <Button variant="contained" onClick={() => setActive("userEdit")} className={active === "userEdit" ? "active" : ""}>Uredi korisnike</Button>
+        <Button variant="contained" onClick={() => setActive("reservationEdit")} className={active === "reservationEdit" ? "active" : ""}>Pregled rezervacija</Button> 
       </div> 
       <div className="adminStartContent" style = {{flexGrow: 1, overflowY: "auto"}}>
         {active === "roomEdit" && <RoomEdit setExportHandler={setExportHandler}/>}
         {active === "statistics" && <Statistics setExportHandler={setExportHandler}/>}
         {active === "userEdit" && <UserEdit setExportHandler={setExportHandler}/>}
+        {active === "reservationEdit" && <ReservationEdit setExportHandler={setExportHandler}/>}
       </div>
       <div className = "adminExportButtons">
         <Button disabled={!exportHandler} 
