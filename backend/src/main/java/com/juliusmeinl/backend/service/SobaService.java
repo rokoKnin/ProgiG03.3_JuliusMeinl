@@ -6,7 +6,6 @@ import com.juliusmeinl.backend.model.Soba;
 import com.juliusmeinl.backend.model.VrstaSobe;
 import com.juliusmeinl.backend.repository.RezervirajSobuRepository;
 import com.juliusmeinl.backend.repository.SobaRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -130,7 +129,7 @@ public class SobaService {
         List<Integer> sobeZaRezervacijuIds = new ArrayList<>();
 
         List<SobaRequestDTO> sobaRequestDTO = rezervacijaRequestDTO.getSobe();
-        List<Integer> zauzeteIds = rezervirajSobuRepository.findNedostupneSobeById(rezervacijaRequestDTO.getDatumSobeOd(), rezervacijaRequestDTO.getDatumSobeDo());
+        List<Integer> zauzeteIds = rezervirajSobuRepository.findNedostupneSobeById(rezervacijaRequestDTO.getDatumOd(), rezervacijaRequestDTO.getDatumDo());
 
 
         for (SobaRequestDTO s : sobaRequestDTO) {

@@ -103,7 +103,7 @@ public class RezervacijaService {
         Rezervacija rezervacija = rezervacijaRepository.findById(rezervacijaId).orElseThrow(() -> new IllegalArgumentException("Rezervacija ne postoji"));
 
         for(DodatniSadrzajRequestDTO d : dodatniSadrzajRequestDTO) {
-            DodatniSadrzaj dodatniSadrzaj = dodatniSadrzajRepository.findByVrstaDodatniSadrzaj(d.getVrstaDodatnogSadrzaja()).orElseThrow(() -> new IllegalArgumentException("Dodatni sadrzaj ne postoji"));
+            DodatniSadrzaj dodatniSadrzaj = dodatniSadrzajRepository.findByVrsta(d.getVrstaDodatnogSadrzaja()).orElseThrow(() -> new IllegalArgumentException("Dodatni sadrzaj ne postoji"));
 
             cijenaRezervacijaSadrzaj = cijenaRezervacijaSadrzaj.add(dodatniSadrzaj.getCijena());
 

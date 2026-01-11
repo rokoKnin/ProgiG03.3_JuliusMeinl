@@ -1,13 +1,17 @@
 package com.juliusmeinl.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 import java.util.List;
 
 public class RezervacijaRequestDTO {
 
-    private LocalDate datumSobeOd;  //provjeriti jel ime oke, drugacije je od onog u sobaController
-    private LocalDate datumSobeDo;
+    private LocalDate datumOd;  //provjeriti jel ime oke, drugacije je od onog u sobaController
+    private LocalDate datumDo;
+    @JsonProperty("odabraneSobe")
     private List<SobaRequestDTO> sobe;
+    @JsonProperty("odabraniDodatniSadrzaj")
     private List<DodatniSadrzajRequestDTO> dodatniSadrzaji;
 
     public List<SobaRequestDTO> getSobe() {
@@ -25,17 +29,17 @@ public class RezervacijaRequestDTO {
     public void setDodatniSadrzaji(List<DodatniSadrzajRequestDTO> dodatniSadrzaji) {
         this.dodatniSadrzaji = dodatniSadrzaji;
     }
-    public LocalDate getDatumSobeOd() {
-        return datumSobeOd;
+    public LocalDate getDatumOd() {
+        return datumOd;
     }
-    public void setDatumSobeOd(LocalDate datumSobeOd) {
-        this.datumSobeOd = datumSobeOd;
+    public void setDatumOd(LocalDate datumOd) {
+        this.datumOd = datumOd;
     }
-    public LocalDate getDatumSobeDo() {
-        return datumSobeDo;
+    public LocalDate getDatumDo() {
+        return datumDo;
     }
-    public void setDatumSobeDo(LocalDate datumSobeDo) {
-        this.datumSobeDo = datumSobeDo;
+    public void setDatumDo(LocalDate datumDo) {
+        this.datumDo = datumDo;
     }
 }
 

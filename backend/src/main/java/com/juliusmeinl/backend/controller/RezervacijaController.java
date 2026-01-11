@@ -1,13 +1,9 @@
 package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
-import com.juliusmeinl.backend.model.Rezervacija;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
 import com.juliusmeinl.backend.service.SobaService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +32,7 @@ public class RezervacijaController {
         //ako nije rezervacija za sobu skipam ovo
         if(!rezervacijaRequestDTO.getSobe().isEmpty()) {
             List<Integer> dodijeljenjeSobeId = sobaService.dohvatiSobe(rezervacijaRequestDTO);
-            rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumSobeOd(), rezervacijaRequestDTO.getDatumSobeDo());
+            rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumOd(), rezervacijaRequestDTO.getDatumDo());
         }
         rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
     }
