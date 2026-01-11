@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import RoomEdit from "./AdminComponents/RoomEdit.jsx";
 import Statistics from "./AdminComponents/Statistics.jsx";
 import UserEdit from "./AdminComponents/UserEdit.jsx";
+import ReservationEdit from "./AdminComponents/ReservationEdit.jsx";
 
 export default function AdminStart() {
   const [active, setActive] = useState("roomEdit");
