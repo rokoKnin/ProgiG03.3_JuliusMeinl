@@ -27,7 +27,7 @@ Trebali bi vidjeti prozor Environment variables, ali ako se ne prikazuje klikom 
 
 u taj prozor dodajete vaše vrijednosti od gore environemnt varijablama na sljedeći način.
 
-DB_URL=jdbc:postgresql://localhost:5433/juliusmeinl;DB_USERNAME=postgres;DB_PASSWORD=postgres
+DB_URL=jdbc:postgresql://localhost:5432/juliusmeinl;DB_USERNAME=postgres;DB_PASSWORD=bazepodataka
 
 ovo je primjer mojih postavki, meni je port 5433 vama vjerojatno 5432. vrijednosti se odvajaju s ;
 

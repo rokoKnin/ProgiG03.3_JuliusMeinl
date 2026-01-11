@@ -33,10 +33,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         if (userService.existsByEmail(email)) {
             // korisnik je u bazi → preusmjeri na /home
-            response.sendRedirect(frontendUrl);
+            response.sendRedirect(frontendUrl + "/");
         } else {
             // novi korisnik → preusmjeri na dashboard
-            response.sendRedirect(  frontendUrl + "/#/dashboard");
+            response.sendRedirect( frontendUrl + "/#/dashboard");
         }
     }
 }
