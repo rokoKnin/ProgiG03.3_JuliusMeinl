@@ -98,18 +98,22 @@ export default function HorizontalLinearStepper() {
                  return true; 
               } catch (error) {
                   console.error('Error: nije se poslao post zbog necega', error.response?.data)
+                  console.error(error.response?.status)
+                  console.error(error.response)
                   setSlobodneSobe(null);
                   return false;
                 }
 
     }
-  async function postSobeDodatniSadrzaj(odabraniDodatniSadrzaj, odabraneSobe){
+  async function postSobeDodatniSadrzaj( datumOd,datumDo,odabraniDodatniSadrzaj, odabraneSobe){
     const sadrzaj={
+      datumOd,
+      datumDo,
       odabraneSobe,
       odabraniDodatniSadrzaj
     }
     try {
-                console.log(odabraniDodatniSadrzaj)
+                
                  return await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
                 
               
@@ -154,8 +158,10 @@ export default function HorizontalLinearStepper() {
             ...kat,datum:dayjs(kat.datum).format('YYYY-MM-DD')
           }))
         );
-      const uspjeh=await postSobeDodatniSadrzaj(formatirano,odabraneSobe);
-      
+      const uspjeh=await postSobeDodatniSadrzaj(datumDolaska.format('YYYY-MM-DD'), datumOdlaska.format('YYYY-MM-DD'),formatirano,odabraneSobe);
+      if(!uspjeh){
+        console.log("greska");
+      }
     }
     
     setActiveStep((prevActiveStep) => prevActiveStep + 1);

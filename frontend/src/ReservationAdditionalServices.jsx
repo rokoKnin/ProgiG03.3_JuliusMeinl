@@ -51,10 +51,12 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
 
   async function postDodatniSadrzaj(odabraneSobe,odabraniDodatniSadrzaj){
       const sadrzaj={
+       
         odabraneSobe,
         odabraniDodatniSadrzaj
       }
       try {
+                  console.log(odabraniDodatniSadrzaj)
                    return await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
                   
                 
