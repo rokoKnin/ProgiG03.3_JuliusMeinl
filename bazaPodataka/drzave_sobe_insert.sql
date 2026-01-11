@@ -343,3 +343,7 @@ INSERT INTO soba (broj_sobe, kat, vrsta, kapacitet, balkon, pogled_na_more, cije
 
 
 
+INSERT INTO dodatnisadrzaj (vrstaDodatniSadrzaj, statusDodatniSadrzaj, cijena_sadrzaj) VALUES
+  ('bazen', 'dostupan', 7.00),
+  ('restoran', 'dostupan', 10.00),
+  ('teretana', 'dostupan', 5.00);
