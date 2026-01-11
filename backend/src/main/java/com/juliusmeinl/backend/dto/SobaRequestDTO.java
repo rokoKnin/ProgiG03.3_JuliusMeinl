@@ -1,21 +1,24 @@
 package com.juliusmeinl.backend.dto;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class SobaRequestDTO {
 
-    private String vrstaSobe;
+    private String vrsta;
     private Boolean balkon;
     private Boolean pogledNaMore;
-    private LocalDate datumOd;
-    private LocalDate datumDo;
+    private BigDecimal cijena;
+    private Integer brojDostupnih;
 
-    public String getVrstaSobe() {
-        return vrstaSobe;
+    public String getVrsta() {
+        return vrsta;
     }
 
-    public void setVrstaSobe(String vrstaSobe) {
-        this.vrstaSobe = vrstaSobe;
+    public void setVrsta(String vrsta) {
+        this.vrsta = vrsta;
     }
 
     public Boolean getBalkon() {
@@ -34,20 +37,19 @@ public class SobaRequestDTO {
         this.pogledNaMore = pogledNaMore;
     }
 
-    public LocalDate getDatumOd() {
-        return datumOd;
+    public BigDecimal getCijena() {
+        return cijena;
+    }
+    public void setCijena(BigDecimal cijena) {
+        this.cijena = cijena;
+    }
+    public Integer getBrojDostupnih() {
+        return brojDostupnih;
+    }
+    public void setBrojDostupnih(Integer brojDostupnih) {
+        this.brojDostupnih = brojDostupnih;
     }
 
-    public void setDatumOd(LocalDate datumOd) {
-        this.datumOd = datumOd;
-    }
 
-    public LocalDate getDatumDo() {
-        return datumDo;
-    }
-
-    public void setDatumDo(LocalDate datumDo) {
-        this.datumDo = datumDo;
-    }
 }
 

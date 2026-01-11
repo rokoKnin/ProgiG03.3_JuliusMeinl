@@ -18,4 +18,5 @@ public interface RezervirajSobuRepository extends JpaRepository<RezervirajSobu, 
     List<Integer> findNedostupneSobeById(LocalDate datumOd, LocalDate datumDo);
 
 
+
 }

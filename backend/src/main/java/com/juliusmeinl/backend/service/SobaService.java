@@ -1,10 +1,15 @@
 package com.juliusmeinl.backend.service;
 
+import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
+import com.juliusmeinl.backend.dto.SobaRequestDTO;
 import com.juliusmeinl.backend.model.Soba;
 import com.juliusmeinl.backend.model.VrstaSobe;
 import com.juliusmeinl.backend.repository.RezervirajSobuRepository;
 import com.juliusmeinl.backend.repository.SobaRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -121,4 +126,29 @@ public class SobaService {
         return response;
     }
 
+    public List<Integer> dohvatiSobe(RezervacijaRequestDTO rezervacijaRequestDTO) {
+        List<Integer> sobeZaRezervacijuIds = new ArrayList<>(); // dodaj neki -1 id bezveze
+
+        List<SobaRequestDTO> sobaRequestDTO = rezervacijaRequestDTO.getSobe();
+        List<Integer> zauzeteIds = rezervirajSobuRepository.findNedostupneSobeById(rezervacijaRequestDTO.getDatumSobeOd(), rezervacijaRequestDTO.getDatumSobeDo());
+
+
+        for (SobaRequestDTO s : sobaRequestDTO) {
+            List<Integer> dostupneIds = sobaRepository.findDostupneSobeIds(s.getVrsta(), s.getBalkon(), s.getPogledNaMore(),zauzeteIds);
+
+            boolean pronadena = false;
+            for(Integer dostupneId : dostupneIds) {
+                if(!sobeZaRezervacijuIds.contains(dostupneId)) {
+                    sobeZaRezervacijuIds.add(dostupneId);
+                    pronadena = true;
+                    break;
+                }
+            }
+            if (!pronadena) throw new ResponseStatusException(HttpStatus.CONFLICT, "");
+        }
+
+        return sobeZaRezervacijuIds;
+    }
+
 }
+

@@ -1,7 +1,6 @@
 package com.juliusmeinl.backend.service;
 
-import com.juliusmeinl.backend.model.Korisnik;
-import com.juliusmeinl.backend.model.Rezervacija;
+import com.juliusmeinl.backend.model.*;
 import com.juliusmeinl.backend.repository.KorisnikRepository;
 import com.juliusmeinl.backend.repository.RezervacijaRepository;
 import com.juliusmeinl.backend.repository.RezervirajSobuRepository;
@@ -50,13 +49,36 @@ public class RezervacijaService {
         return response;
     }
 
-    public void kreirajRezervaciju(Integer id) {
+    public Integer kreirajRezervaciju(Integer id) {
         Optional<Korisnik> korisnik = korisnikRepository.findById(id);
 
         Rezervacija rezervacija = new Rezervacija();
         rezervacija.setKorisnik(korisnik.get());
         rezervacija.setIznosRezervacije(BigDecimal.ZERO);
-        rezervacijaRepository.save(rezervacija);
+
+        return rezervacijaRepository.save(rezervacija).getId();
+    }
+
+    public void rezervirajSobe(Integer rezervacijaId, List<Integer> dodijeljeneSobeId, LocalDate datumOd, LocalDate datumDo) {
+
+        Rezervacija rezervacija = rezervacijaRepository.findById(rezervacijaId).orElseThrow(() -> new IllegalArgumentException("Rezervacija ne postoji"));
+
+        for (Integer sobaId : dodijeljeneSobeId) {
+
+            Soba soba = sobaRepository.findById(sobaId).orElseThrow(() -> new IllegalArgumentException("Soba ne postoji"));
+
+            RezervirajSobu rs = new RezervirajSobu();
+
+            RezervirajSobuId id = new RezervirajSobuId(rezervacijaId, sobaId);
+            rs.setId(id);
+
+            rs.setRezervacija(rezervacija);
+            rs.setSoba(soba);
+            rs.setDatumOd(datumOd);
+            rs.setDatumDo(datumDo);
+
+            rezervirajSobuRepository.save(rs);
+        }
     }
 
 }

@@ -75,6 +75,7 @@ public class KorisnikService {
         return korisnik.isPresent();
     }
 
+    @Transactional
     public Integer trenutniKorisnikId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         OAuth2User oauthUser = (OAuth2User) auth.getPrincipal();
