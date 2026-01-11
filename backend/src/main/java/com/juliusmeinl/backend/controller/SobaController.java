@@ -5,12 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/sobe")
+@RequestMapping("/api/rooms")
 @CrossOrigin(origins = "*")
 public class SobaController {
 
@@ -174,5 +175,15 @@ public class SobaController {
         Soba azurirana = sobaService.spremiSobu(soba);
         return ResponseEntity.ok(azurirana);
     }
+
+    @PostMapping("/available")
+    public List<Map<String, Object>> dostupneSobe(@RequestBody Map<String, String> dateMap) {
+        // moram napravit counter za svaku vrstu sobe mogucu
+        LocalDate datumOd = LocalDate.parse(dateMap.get("datumOd"));
+        LocalDate datumDo = LocalDate.parse(dateMap.get("datumDo"));
+
+        return sobaService.dostupneSobe(datumOd, datumDo);
+    }
+
 
 }

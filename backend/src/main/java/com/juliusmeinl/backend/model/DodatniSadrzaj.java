@@ -1,6 +1,8 @@
 package com.juliusmeinl.backend.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -15,11 +17,12 @@ public class DodatniSadrzaj {
     @Column(name = "vrstadodatnisadrzaj", nullable = false, length = 20)
     private String vrsta;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "statusdodatnisadrzaj", nullable = false, length = 20)
-    private String status;
+    private StatusDodatniSadrzaj status;
 
-    @Column(name = "kapacitetdodatnisadrzaj", nullable = false)
-    private Integer kapacitet;
+    @Column(name = "cijena_sadrzaj", nullable = false)
+    private BigDecimal cijena;
 
     @OneToMany(mappedBy = "dodatniSadrzaj")
     private List<RezervirajSadrzaj> rezervacijeSadrzaja;
@@ -36,17 +39,17 @@ public class DodatniSadrzaj {
     public void setVrsta(String vrsta) {
         this.vrsta = vrsta;
     }
-    public String getStatus() {
+    public StatusDodatniSadrzaj getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(StatusDodatniSadrzaj status) {
         this.status = status;
     }
-    public Integer getKapacitet() {
-        return kapacitet;
+    public BigDecimal getCijena() {
+        return cijena;
     }
-    public void setKapacitet(Integer kapacitet) {
-        this.kapacitet = kapacitet;
+    public void setCijena(BigDecimal cijena) {
+        this.cijena = cijena;
     }
 
     public List<RezervirajSadrzaj> getRezervacijeSadrzaja() {
