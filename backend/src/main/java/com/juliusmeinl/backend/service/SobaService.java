@@ -127,7 +127,7 @@ public class SobaService {
     }
 
     public List<Integer> dohvatiSobe(RezervacijaRequestDTO rezervacijaRequestDTO) {
-        List<Integer> sobeZaRezervacijuIds = new ArrayList<>(); // dodaj neki -1 id bezveze
+        List<Integer> sobeZaRezervacijuIds = new ArrayList<>();
 
         List<SobaRequestDTO> sobaRequestDTO = rezervacijaRequestDTO.getSobe();
         List<Integer> zauzeteIds = rezervirajSobuRepository.findNedostupneSobeById(rezervacijaRequestDTO.getDatumSobeOd(), rezervacijaRequestDTO.getDatumSobeDo());

@@ -33,17 +33,13 @@ public class RezervacijaController {
         //napravi generalnu rezervaciju
         Integer rezervacijaId =  rezervirajService.kreirajRezervaciju(korisnikService.trenutniKorisnikId());
 
-        //metoda za id soba koje mogu
-        List<Integer> dodijeljenjeSobeId = sobaService.dohvatiSobe(rezervacijaRequestDTO);
-
-        rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumSobeOd(), rezervacijaRequestDTO.getDatumSobeDo());
-
-
+        //ako nije rezervacija za sobu skipam ovo
+        if(!rezervacijaRequestDTO.getSobe().isEmpty()) {
+            List<Integer> dodijeljenjeSobeId = sobaService.dohvatiSobe(rezervacijaRequestDTO);
+            rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumSobeOd(), rezervacijaRequestDTO.getDatumSobeDo());
+        }
+        rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
     }
-
-    
-    //stavit dodatan sadrzaj u bazu, promijenit da dodatni sadrzaj ima cijenu a rezervacija nema i da nije datum od do
-    //nekako zbrojit cijenu azurirat rezervaciju
 
 
 }
