@@ -4,15 +4,13 @@ import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.MjestoId;
 import com.juliusmeinl.backend.model.UlogaKorisnika;
 import com.juliusmeinl.backend.service.KorisnikService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,9 +26,16 @@ public class KorisnikController {
         this.korisnikService = korisnikService;
     }
 
+
     @GetMapping("/info")
     public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
         return principal.getAttributes();
+    }
+
+
+    @GetMapping
+    public List<Map<String, Object>> getAllUsers() {
+        return korisnikService.getAllUsersForFrontend();
     }
 
 
@@ -41,25 +46,42 @@ public class KorisnikController {
         korisnik.setPrezime(userMap.get("prezime"));
         korisnik.setEmail(userMap.get("email"));
         korisnik.setTelefon(userMap.get("telefon"));
-        korisnik.setOvlast(UlogaKorisnika.GOST);
+        korisnik.setOvlast(String.valueOf(UlogaKorisnika.GOST));
 
         String postBr = userMap.get("postBr");
         String nazMjesto = userMap.get("nazMjesto");
-
         MjestoId mjestoId = new MjestoId(postBr, nazMjesto);
-        mjestoId.setNazMjesto(mjestoId.getNazMjesto().toLowerCase().replaceAll(" ", "")); //prilagodba input imena mjesta za bazu
+        mjestoId.setNazMjesto(mjestoId.getNazMjesto().toLowerCase().replaceAll(" ", "")); // prilagodba inputa
 
         String nazDrzava = userMap.get("nazDrzava");
 
-        return new ResponseEntity<>(korisnikService.spremiKorisnika(korisnik, mjestoId, nazDrzava), HttpStatus.CREATED);
-
+        Korisnik savedUser = korisnikService.spremiKorisnika(korisnik, mjestoId, nazDrzava);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
+
+
+    @PutMapping("/{userId}/role")
+    public ResponseEntity<?> updateUserRole(@PathVariable Integer userId, @RequestBody Map<String, String> body) {
+        String novaUloga = body.get("uloga");
+        if (novaUloga == null) return ResponseEntity.badRequest().build();
+
+        Korisnik korisnik = korisnikService.updateRole(userId, novaUloga);
+        return ResponseEntity.ok(Map.of("id", korisnik.getId(), "uloga", korisnik.getOvlast()));
+    }
+
+
+    @GetMapping("/check-vlasnik")
+    public boolean provjeriVlasnika(@RequestParam String email) {
+        return korisnikService.korisnikJeVlasnik(email);
+    }
+
+
     @GetMapping("/export")
     public ResponseEntity<ByteArrayResource> exportUsers(@RequestParam String format) {
         ByteArrayResource file;
         MediaType mediaType;
 
-        switch(format.toLowerCase()){
+        switch (format.toLowerCase()) {
             case "xlsx":
                 file = korisnikService.exportUsersXLSX();
                 mediaType = MediaType.parseMediaType(
@@ -82,25 +104,4 @@ public class KorisnikController {
                 .contentType(mediaType)
                 .body(file);
     }
-
-    @GetMapping("/check-vlasnik")
-    public boolean provjeriVlasnika(@RequestParam String email) {
-        return korisnikService.korisnikJeVlasnik(email);
-    }
-}
-
-    @GetMapping
-    public List<Map<String, Object>> getAllUsers() {
-        return korisnikService.getAllUsersForFrontend();
-    }
-    @PutMapping("/{userId}/role")
-    public ResponseEntity<?> updateUserRole(@PathVariable Integer userId, @RequestBody Map<String, String> body) {
-        String novaUloga = body.get("uloga");
-        if (novaUloga == null) return ResponseEntity.badRequest().build();
-
-        Korisnik korisnik = korisnikService.updateRole(userId, novaUloga);
-        return ResponseEntity.ok(Map.of("id", korisnik.getId(), "uloga", korisnik.getOvlast()));
-    }
-
-
 }

@@ -26,20 +26,9 @@ export default function Statistics({ setExportHandler }) {
     };
 
     useEffect(() => {
-        axios
-            .get(`${import.meta.env.VITE_API_URL}/statistics`, { withCredentials: true })
-            .then(response => setStats(response.data))
-            .catch(error => console.error('Error fetching statistics data:', error));
-    }, []);
-
-    useEffect(() => {
-        axios
-            .get(`${import.meta.env.VITE_API_URL}/statistics`, { withCredentials: true })
-            .then(response => {
-                console.log("Stats from backend:", response.data);
-                setStats(response.data);
-            })
-            .catch(error => console.error('Error fetching statistics data:', error));
+        axios.get(`${import.meta.env.VITE_API_URL}/api/statistics`, { withCredentials: true })
+            .then(res => setStats(res.data))
+            .catch(err => console.error(err));
     }, []);
 
     useEffect(() => {
@@ -47,10 +36,11 @@ export default function Statistics({ setExportHandler }) {
         return () => setExportHandler(null);
     }, [setExportHandler, stats]);
 
+
     const exportStatistics = async (format) => {
         try {
             const response = await axios.get(
-                `${import.meta.env.VITE_API_URL}/statistics/export?format=${format}`,
+                `${import.meta.env.VITE_API_URL}/api/statistics/export?format=${format}`,
                 { withCredentials: true, responseType: 'blob' }
             );
             downloadFile(response.data, `statistics.${format}`);

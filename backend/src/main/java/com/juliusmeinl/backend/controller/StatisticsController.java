@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 @RestController
-@RequestMapping("/statistics")
+@RequestMapping("/api/statistics")
 public class StatisticsController {
 
     private final RezervirajSobuService rezervirajSobuService;

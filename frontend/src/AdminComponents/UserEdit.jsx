@@ -13,7 +13,7 @@ export default function UserEdit({ setExportHandler }) {
     // Dohvat korisnika
     useEffect(() => {
         axios
-            .get(`${import.meta.env.VITE_API_URL}/users`, { withCredentials: true })
+            .get(`${import.meta.env.VITE_API_URL}/api/users`, { withCredentials: true })
             .then(response => {
                 setRenderUsers(response.data);
                 setError(null);
@@ -34,7 +34,7 @@ export default function UserEdit({ setExportHandler }) {
     const exportUsers = async (format) => {
         try {
             const response = await axios.get(
-                `${import.meta.env.VITE_API_URL}/users/export?format=${format}`,
+                `${import.meta.env.VITE_API_URL}/api/users/export?format=${format}`,
                 { withCredentials: true, responseType: "blob" }
             );
             downloadFile(response.data, `users.${format}`);
@@ -50,7 +50,7 @@ export default function UserEdit({ setExportHandler }) {
         if (!window.confirm("Jeste li sigurni da želite obrisati ovog korisnika?")) return;
 
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/users/${id}`, { withCredentials: true });
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/users/${id}`, { withCredentials: true });
             setRenderUsers(prev => prev.filter(user => user.id !== id));
         } catch (error) {
             console.error("Error deleting user:", error);
@@ -69,7 +69,7 @@ export default function UserEdit({ setExportHandler }) {
         setSaving(true);
         try {
             await axios.put(
-                `${import.meta.env.VITE_API_URL}/users/${userId}/role`,
+                `${import.meta.env.VITE_API_URL}/api/users/${userId}/role`,
                 { uloga: newRole },
                 { withCredentials: true }
             );
