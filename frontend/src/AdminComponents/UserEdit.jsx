@@ -124,7 +124,7 @@ export default function UserEdit({ setExportHandler }) {
                     >
                         <div style={{ flexGrow: 1, paddingRight: "15px" }}>
                             <h4 style={{ margin: "0 0 8px 0" }}>
-                                {user.ime} {user.prezime}
+                                <div>{user.ime} {user.prezime}</div>
                                 {user.uloga === "ADMIN" && (
                                     <span style={{
                                         color: "white",

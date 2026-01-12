@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+
 export default function ReservationEdit( { setExportHandler}) {
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -48,7 +49,9 @@ export default function ReservationEdit( { setExportHandler}) {
         }
     };
 
-    const filteredReservations = (reservations || []).filter((reservation) => {
+    const filteredReservations = Array.isArray(reservations) ? reservations.filter((reservation) => {
+        if (!reservation) return false;
+
         const userName = reservation.user?.name || "";
         const userSurname = reservation.user?.surname || "";
         const reservationId = reservation.reservationId?.toString() || "";
@@ -62,7 +65,7 @@ export default function ReservationEdit( { setExportHandler}) {
         const matchPayment = filters.payment === "ALL" || reservation.paymentStatus === filters.payment;
 
         return matchSearch && matchDateFrom && matchDateTo && matchPayment;
-    });
+    }): [];
 
     if (loading) return <div>Učitavanje rezervacija...</div>;
     if (error) return <div style={{ color: "red" }}>{error}</div>;
@@ -83,6 +86,7 @@ export default function ReservationEdit( { setExportHandler}) {
             }}>
                 <input
                     type="text"
+                    style= {{ flexGrow: 1, minWidth: "100px", maxWidth: "200px", borderRadius: "5px", padding: "5px", fontFamily: "inherit"}}
                     placeholder="Pretraži po imenu ili ID-u"
                     value={filters.search}
                     onChange={(e) =>
@@ -90,9 +94,10 @@ export default function ReservationEdit( { setExportHandler}) {
                     }
                 />
                 <div>
-                    <label style={{ marginRight: "5px" }}>Od:</label>
+                    <strong style={{ marginRight: "5px" }}>Od:</strong>
                     <input
                         type="date"
+                        style={{borderRadius: "5px", padding: "5px", minWidth: "100px", fontFamily: "inherit"}}
                         value={filters.dateFrom}
                         onChange={(e) =>
                             setFilters({ ...filters, dateFrom: e.target.value })
@@ -100,9 +105,10 @@ export default function ReservationEdit( { setExportHandler}) {
                     />
                 </div>
                 <div>
-                    <label style={{ marginRight: "5px" }}>Do:</label>
+                    <strong style={{ marginRight: "5px" }}>Do:</strong>
                     <input
                         type="date"
+                        style={{borderRadius: "5px", padding: "5px", minWidth: "100px", fontFamily: "inherit"}}
                         value={filters.dateTo}
                         onChange={(e) =>
                             setFilters({ ...filters, dateTo: e.target.value })
@@ -110,6 +116,7 @@ export default function ReservationEdit( { setExportHandler}) {
                     />
                 </div>
                 <select
+                    style={{borderRadius: "5px", padding: "5px", minWidth: "80px", fontFamily: "inherit"}}
                     value={filters.payment}
                     onChange={(e) =>
                         setFilters({ ...filters, payment: e.target.value })
@@ -125,42 +132,47 @@ export default function ReservationEdit( { setExportHandler}) {
                 flex: 1,
                 overflowX: "auto",
                 overflowY: "auto",
+
             }}>
                 <table
                     style={{
                         width: "100%",
+                        overflowX: "auto",
                         borderCollapse: "collapse",
+                        border: "2px solid #1976d2",
                     }}
                 >
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Ime korisnika</th>
-                            <th>Prezime korisnika</th>
-                            <th>ID korisnika</th>
-                            <th>Datum od</th>
-                            <th>Datum do</th>
-                            <th>Vrsta sobe</th>
-                            <th>ID sobe</th>
-                            <th>Dodatan sadržaj</th>
-                            <th>ID dodatnog sadržaja</th>
-                            <th>Status plaćanja</th>
+                        <tr style={{border: "2px solid #1976d2"}}>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>ID</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Ime korisnika</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Prezime korisnika</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>ID korisnika</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Datum od</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Datum do</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Broj sobe</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Vrsta sobe</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>ID sobe</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Dodatan sadržaj</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>ID dodatnog sadržaja</th>
+                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Status plaćanja</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredReservations.map((reservation) => (
-                            <tr key={reservation.reservationId}>
-                                <td>{reservation.reservationId}</td>
-                                <td>{reservation.user.name}</td>
-                                <td>{reservation.user.surname}</td>
-                                <td>{reservation.user.userId}</td>
-                                <td>{new Date(reservation.dateFrom).toLocaleDateString()}</td>
-                                <td>{new Date(reservation.dateTo).toLocaleDateString()}</td>
-                                <td>{reservation.room.roomType}</td>
-                                <td>{reservation.room.roomId}</td>
-                                <td>{reservation.additionalContent.content}</td>
-                                <td>{reservation.additionalContent.contentId}</td>
-                                <td>{reservation.paymentStatus}</td>
+                            <tr style={{border: "1px solid #1976d2"}} key={reservation.reservationId}>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.reservationId}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.user.name}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.user.surname}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.user.userId}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{new Date(reservation.dateFrom).toLocaleDateString()}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{new Date(reservation.dateTo).toLocaleDateString()}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.room.roomNumber}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.room.roomType}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.room.roomId}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.additionalContent.content}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.additionalContent.contentId}</td>
+                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.paymentStatus}</td>
                             </tr>
                         ))}
                     </tbody>

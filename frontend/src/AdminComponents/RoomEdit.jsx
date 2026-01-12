@@ -117,7 +117,7 @@ export default function RoomEdit( { setExportHandler} ) {
           className="nova_soba_btn"
           variant="contained"
           color="primary"
-          sx={{ marginTop: "10px" }}
+          sx={{ marginBottom: "10px" }}
           onClick={() => {
             setIsEditing(false);
             setEditingSoba(null);
@@ -177,7 +177,7 @@ export default function RoomEdit( { setExportHandler} ) {
                 control={<Radio />}
                 label="Bračni krevet"
               />
-              <FormControlLabel value="PENTAHOUSE" control={<Radio />} label="Penthouse" />
+              <FormControlLabel value="PENTHOUSE" control={<Radio />} label="Penthouse" />
             </RadioGroup>
           </div>
         )}
@@ -186,7 +186,7 @@ export default function RoomEdit( { setExportHandler} ) {
             <FormLabel>Odaberi tip kreveta:</FormLabel>
             <RadioGroup row value={vrsta} onChange={(e) => setVrsta(e.target.value)}>
               <FormControlLabel value="TROKREVETNA" control={<Radio />} label="Trokrevetna" />
-              <FormControlLabel value="PENTAHOUSE" control={<Radio />} label="Penthouse" />
+              <FormControlLabel value="PENTHOUSE" control={<Radio />} label="Penthouse" />
             </RadioGroup>
           </div>
         )}
