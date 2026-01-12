@@ -5,9 +5,9 @@ spring:
 
   # ====== POSTAVKE BAZE PODATAKA ======
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/juliusmeinl
+    username: postgres
+    password: bazapodataka
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
