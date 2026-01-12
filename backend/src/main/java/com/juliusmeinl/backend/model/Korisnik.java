@@ -26,7 +26,8 @@ public class Korisnik {
     private String telefon;
 
     @Column(name = "ovlastkorisnik", nullable = false, length = 20)
-    private String ovlast;
+    @Enumerated(EnumType.STRING)
+    private UlogaKorisnika ovlast = UlogaKorisnika.GOST;
 
 
     @ManyToOne
@@ -75,12 +76,15 @@ public class Korisnik {
     public void setTelefon(String telefon) {
         this.telefon = telefon;
     }
-    public String getOvlast() {
+
+    public UlogaKorisnika getOvlast() {
         return ovlast;
     }
-    public void setOvlast(String ovlast) {
+
+    public void setOvlast(UlogaKorisnika ovlast) {
         this.ovlast = ovlast;
     }
+
     public Mjesto getMjesto() {
         return mjesto;
     }

@@ -87,7 +87,7 @@ public class KorisnikController {
     public boolean provjeriVlasnika(@RequestParam String email) {
         return korisnikService.korisnikJeVlasnik(email);
     }
-}
+
 
     @GetMapping
     public List<Map<String, Object>> getAllUsers() {
@@ -101,6 +101,5 @@ public class KorisnikController {
         Korisnik korisnik = korisnikService.updateRole(userId, novaUloga);
         return ResponseEntity.ok(Map.of("id", korisnik.getId(), "uloga", korisnik.getOvlast()));
     }
-
 
 }
