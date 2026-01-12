@@ -100,7 +100,7 @@ export default function HorizontalLinearStepper() {
                  const responseSoba= await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/rooms/available', datumi,  {withCredentials: true} )
                 setSlobodneSobe(responseSoba.data);
                 setBrojOdabranoSoba(new Array(responseSoba.data.length).fill(0));
-                 return true; 
+                 return true;
               } catch (error) {
                   console.error('Error: nije se poslao post zbog necega', error.response?.data)
                   console.error(error.response?.status)
@@ -163,10 +163,9 @@ export default function HorizontalLinearStepper() {
         return;
       }}
     if(activeStep===2){
-       const formatirano=dodatniSadrzaj.map((prev)=>
-        prev.map((kat,i)=>({
+       const formatirano=dodatniSadrzaj.flat().map((kat,i)=>({
             ...kat,datum:dayjs(kat.datum).format('YYYY-MM-DD')
-          }))
+          })
         );
       const uspjeh=await postSobeDodatniSadrzaj(datumDolaska.format('YYYY-MM-DD'), datumOdlaska.format('YYYY-MM-DD'),formatirano,odabraneSobe);
       if(!uspjeh){

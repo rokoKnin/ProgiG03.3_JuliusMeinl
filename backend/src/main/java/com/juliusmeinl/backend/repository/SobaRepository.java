@@ -31,7 +31,7 @@ public interface SobaRepository extends JpaRepository<Soba, Integer> {
       AND s.id NOT IN  :zauzeteIds
     """)
     List<Integer> findDostupneSobeIds(
-            String vrsta,
+            VrstaSobe vrsta,
             boolean balkon,
             boolean pogledNaMore,
             List<Integer> zauzeteIds
