@@ -25,7 +25,7 @@ export default function RoomEdit( { setExportHandler} ) {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}` + '/sobe', { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}` + '/api/rooms', { withCredentials: true })
       .then((response) => {
         setRendersoba(response.data);
       })
@@ -40,7 +40,7 @@ export default function RoomEdit( { setExportHandler} ) {
   const exportRooms = async (format) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/sobe/export?format=${format}`,
+        `${import.meta.env.VITE_API_URL}/api/rooms/export?format=${format}`,
         {
           withCredentials: true,
           responseType: "blob",
@@ -67,7 +67,7 @@ export default function RoomEdit( { setExportHandler} ) {
     if (!window.confirm("Jeste li sigurni da želite obrisati ovu sobu?")) return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}` + `/sobe/${id}`, { withCredentials: true });
+      await axios.delete(`${import.meta.env.VITE_API_URL}` + `/api/rooms/${id}`, { withCredentials: true });
       setRendersoba((prev) => prev.filter((soba) => soba.id !== id));
       
     } catch (error) {
@@ -86,7 +86,7 @@ export default function RoomEdit( { setExportHandler} ) {
     try {
       if (isEditing && editingSoba) {
         const response = await axios.put(
-            `${import.meta.env.VITE_API_URL}` + `/sobe/${editingSoba.id}`,
+            `${import.meta.env.VITE_API_URL}` + `/api/rooms/${editingSoba.id}`,
           novaSoba,
           { withCredentials: true }
         );
@@ -95,7 +95,7 @@ export default function RoomEdit( { setExportHandler} ) {
         );
       } else {
         const response = await axios.post(
-            `${import.meta.env.VITE_API_URL}` + "/sobe",
+            `${import.meta.env.VITE_API_URL}` + "/api/rooms",
           novaSoba,
           { withCredentials: true }
         );
