@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Value("${frontend.url}")
+    @Value("${julius.frontend.url}")
     private String frontendUrl;
 
 
