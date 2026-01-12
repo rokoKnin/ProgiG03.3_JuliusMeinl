@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react"
-import axios from "axios";
+import React from "react"
 import {
   AppBar,
   Button,
@@ -14,7 +13,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 
-function Header({ onOpenPopup }) {
+function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -23,16 +22,28 @@ function Header({ onOpenPopup }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [user, setUser] = useState(null);
+    const handleLoginClick = () => {
+        window.location.href = `${import.meta.env.VITE_API_URL}` + '/api/oauth2/authorization/google';
+    };
+  const email = localStorage.getItem("email");
 
+  let accessToken = localStorage.getItem("access_token");
+  if (!accessToken) {
+      const urlParams = new URLSearchParams(window.location.search);
+      accessToken = urlParams.get("access_token");
+      if (accessToken) {
+          localStorage.setItem("access_token", accessToken);
+      }
+  }
 
-  useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
-        { setUser(response.data);
-            console.log(user);
-        })
-            .catch(error => console.error('Error ocurred', error))
-    }, []);
+  // useEffect(() => {
+  //       axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
+  //       { setUser(response.data);
+  //           console.log(user);
+  //       })
+  //           .catch(error => console.error('Error ocurred', error))
+  //   }, []);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -72,11 +83,8 @@ function Header({ onOpenPopup }) {
             <MenuItem onClick={handleClose} component={Link} to="/reservation">
               Rezervacija soba
             </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/reservationAdditionalServices">
+            <MenuItem onClick={handleClose} component={Link} to="/reservation">
               Rezervacija dodatnog sadržaja
-            </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/gallery">
-              Galerija
             </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/contact">
               Kontakt
@@ -91,30 +99,30 @@ function Header({ onOpenPopup }) {
             Modrila
           </Typography>
           
-          {user && (
+          {email && (
   <div>
 
-    {user.email === "juliusmeinlt3.3@gmail.com" && (
-      <Button color="inherit" component={Link} to="/adminStart">
+    {email === "juliusmeinlt3.3@gmail.com" && (
+      <Button color="inherit" component={Link} to="/adminInfo">
             Admin
           </Button>
     )}
   </div>
-        )}{user && (
+        )}{email && (
   <div>
 
-    {user.email && (
+    {email && (
       <Button color="inherit" component={Link} to="/profil">
             profil
           </Button>
     )}
   </div>
-        )} {!user && (
+        )} {!email && (
   
   <div>
 
     
-      <Button color="inherit" onClick={onOpenPopup}>
+      <Button color="inherit" onClick={handleLoginClick}>
             Login
           </Button>
     

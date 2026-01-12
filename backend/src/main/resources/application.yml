@@ -23,7 +23,6 @@ spring:
           serializer:
             same-site: none
             use-secure-cookie: true
-          store-type: none
   security:
     oauth2:
       client:
@@ -36,7 +35,7 @@ spring:
 # ========== SERVER CONFIGURATION ==========
 server:
   port: ${PORT:8080}
-  # forward-headers-strategy: framework
+  forward-headers-strategy: framework
   error:
     include-message: always
     include-binding-errors: always
@@ -44,15 +43,15 @@ server:
   servlet:
     session:
       cookie:
-        same-site: lax
-        secure: false
+        same-site: none
+        secure: true
 
 
 
 # ========== LOGGING LEVELS ==========
 logging:
   level:
-    #    root: DEBUG
+#    root: DEBUG
     org:
       apache:
         http: DEBUG
@@ -63,10 +62,12 @@ logging:
           oauth2: DEBUG
 #      hibernate: DEBUG
 
-frontend:
-    url: http://localhost:5173
-  # url: https://bluedilla.onrender.com
-
+julius:
+  admin:
+    email: juliusmeinlt3.3@gmail.com
+  frontend:
+#    url: http://localhost:5173
+    url: https://bluedilla.onrender.com
 
 
 

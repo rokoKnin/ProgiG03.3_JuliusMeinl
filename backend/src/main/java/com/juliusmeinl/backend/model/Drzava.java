@@ -1,12 +1,20 @@
 package com.juliusmeinl.backend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "drzava")
 public class Drzava {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "drzava_id")
@@ -17,23 +25,4 @@ public class Drzava {
 
     @OneToMany(mappedBy = "drzava")
     private List<Mjesto> mjesta;
-
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getNazivDrzave() {
-        return nazivDrzave;
-    }
-    public void setNazivDrzave(String nazivDrzave) {
-        this.nazivDrzave = nazivDrzave;
-    }
-    public List<Mjesto> getMjesta() {
-        return mjesta;
-    }
-    public void setMjesta(List<Mjesto> mjesta) {
-        this.mjesta = mjesta;
-    }
 }
