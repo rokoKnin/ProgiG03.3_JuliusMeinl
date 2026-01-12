@@ -1,6 +1,5 @@
 package com.juliusmeinl.backend.controller;
 
-import com.juliusmeinl.backend.repository.RezervirajSobuRepository;
 import com.juliusmeinl.backend.service.RezervirajSobuService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
