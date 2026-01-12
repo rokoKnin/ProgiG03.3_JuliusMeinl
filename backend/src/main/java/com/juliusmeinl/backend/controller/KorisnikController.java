@@ -2,8 +2,13 @@ package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.MjestoId;
-import com.juliusmeinl.backend.service.AuthService;
+import com.juliusmeinl.backend.model.UlogaKorisnika;
 import com.juliusmeinl.backend.service.KorisnikService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,44 +19,29 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class KorisnikController {
 
-    private AuthService authService;
-
     private final KorisnikService korisnikService;
-    public KorisnikController(KorisnikService korisnikService, AuthService authService) {
+
+    public KorisnikController(KorisnikService korisnikService) {
         this.korisnikService = korisnikService;
-        this.authService = authService;
     }
 
-    //public KorisnikController(KorisnikService korisnikService) {
-    //  this.korisnikService = korisnikService;
-    //}
-
-    //@GetMapping("/info")
-    //public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-    //    return principal.getAttributes();
-    //}
-
     @GetMapping("/info")
-    public Map<String, Object> getProfile() {
-        Korisnik loggedInUser = authService.getLoggedInUser()
-                .orElseThrow(RuntimeException::new);
-        Map<String, Object> profile = korisnikService.getProfileMap(loggedInUser);
-        return profile;
+    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+        return principal.getAttributes();
     }
 
 
     @PostMapping
-    public Korisnik kreirajKorisnika(@RequestBody Map<String, String> userMap) {
-
+    public ResponseEntity<Korisnik> kreirajKorisnika(@RequestBody Map<String, String> userMap) {
         Korisnik korisnik = new Korisnik();
         korisnik.setIme(userMap.get("ime"));
         korisnik.setPrezime(userMap.get("prezime"));
         korisnik.setEmail(userMap.get("email"));
         korisnik.setTelefon(userMap.get("telefon"));
-        korisnik.setOvlast("GOST");
+        korisnik.setOvlast(UlogaKorisnika.GOST);
 
         String postBr = userMap.get("postBr");
         String nazMjesto = userMap.get("nazMjesto");
@@ -61,7 +51,8 @@ public class KorisnikController {
 
         String nazDrzava = userMap.get("nazDrzava");
 
-        return korisnikService.spremiKorisnika(korisnik, mjestoId, nazDrzava);
+        return new ResponseEntity<>(korisnikService.spremiKorisnika(korisnik, mjestoId, nazDrzava), HttpStatus.CREATED);
+
     }
     @GetMapping("/export")
     public ResponseEntity<ByteArrayResource> exportUsers(@RequestParam String format) {
@@ -96,6 +87,7 @@ public class KorisnikController {
     public boolean provjeriVlasnika(@RequestParam String email) {
         return korisnikService.korisnikJeVlasnik(email);
     }
+}
 
     @GetMapping
     public List<Map<String, Object>> getAllUsers() {

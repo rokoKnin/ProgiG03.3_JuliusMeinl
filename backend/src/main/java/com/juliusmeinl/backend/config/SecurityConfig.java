@@ -1,10 +1,17 @@
 package com.juliusmeinl.backend.config;
 
+
+import com.juliusmeinl.backend.service.CustomOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -14,34 +21,49 @@ import java.util.List;
 
 @Slf4j
 @Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2SuccessHandler successHandler;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   CustomOAuth2SuccessHandler successHandler) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors-> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // svi endpointi otvoreni
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ovo je rijeslio error za preflight
+                        .requestMatchers("/api/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .oauth2Login(oauth2 -> oauth2.disable()); // onemogući OAuth login
+                .oauth2Login(oauth2 ->
+                        oauth2
+                                .userInfoEndpoint(userInfoEndpoint ->
+                                        userInfoEndpoint.userService(customOAuth2UserService)
+                                )
+                                .successHandler(successHandler)
+                );
+
         return http.build();
     }
-
 
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173", "http://localhost:8080", "http://localhost:5432"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); //
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setExposedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
     }
 

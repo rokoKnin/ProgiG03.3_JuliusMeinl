@@ -4,3 +4,5 @@
 # intelij
 
 .idea
+
+backend/.env

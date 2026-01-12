@@ -1,5 +1,6 @@
 package com.juliusmeinl.backend.service;
 
+import com.juliusmeinl.backend.model.*;
 import com.itextpdf.text.Font;
 import com.juliusmeinl.backend.model.Drzava;
 import com.juliusmeinl.backend.model.Korisnik;
@@ -8,6 +9,9 @@ import com.juliusmeinl.backend.model.MjestoId;
 import com.juliusmeinl.backend.repository.DrzavaRepository;
 import com.juliusmeinl.backend.repository.KorisnikRepository;
 import com.juliusmeinl.backend.repository.MjestoRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,7 @@ import com.itextpdf.text.pdf.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class KorisnikService {
@@ -82,11 +87,19 @@ public class KorisnikService {
 
     //Provjerava je li korisnik vlasnik
     public boolean korisnikJeVlasnik(String email) {
-        Optional<Korisnik> korisnik = korisnikRepository.findByEmailAndOvlast(email, "VLASNIK");
+        Optional<Korisnik> korisnik = korisnikRepository.findByEmailAndOvlast(email, UlogaKorisnika.VLASNIK);
         return korisnik.isPresent();
     }
 
+    @Transactional
+    public Integer trenutniKorisnikId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2User oauthUser = (OAuth2User) auth.getPrincipal();
+        String email = oauthUser.getAttribute("email");
+        Optional<Korisnik> korisnik = korisnikRepository.findByEmail(email);
 
+        return korisnik.get().getId();
+    }
     @Transactional
     public ByteArrayResource exportUsersXLSX() {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {

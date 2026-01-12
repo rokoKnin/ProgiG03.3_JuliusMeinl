@@ -23,6 +23,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     public CustomOAuth2SuccessHandler(KorisnikService userService) {
         this.userService = userService;
     }
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -33,10 +34,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         if (userService.existsByEmail(email)) {
             // korisnik je u bazi → preusmjeri na /home
-            response.sendRedirect(frontendUrl);
+            response.sendRedirect("http://localhost:5173/");
         } else {
             // novi korisnik → preusmjeri na dashboard
-            response.sendRedirect(  frontendUrl + "/#/dashboard");
+            response.sendRedirect( "http://localhost:5173/#/dashboard");
         }
     }
 }
