@@ -3,12 +3,16 @@ import com.juliusmeinl.backend.service.SobaService;
 import com.juliusmeinl.backend.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -184,6 +188,36 @@ public class SobaController {
 
         return sobaService.dostupneSobe(datumOd, datumDo);
     }
+
+    @GetMapping("/export")
+    public ResponseEntity<ByteArrayResource> exportRooms(@RequestParam String format) {
+
+        ByteArrayResource file;
+        MediaType mediaType;
+
+        switch (format.toLowerCase()) {
+            case "xlsx" -> {
+                file = sobaService.exportRoomsXLSX();
+                mediaType = MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
+            case "pdf" -> {
+                file = sobaService.exportRoomsPDF();
+                mediaType = MediaType.APPLICATION_PDF;
+            }
+            case "xml" -> {
+                file = sobaService.exportRoomsXML();
+                mediaType = MediaType.APPLICATION_XML;
+            }
+            default -> throw new RuntimeException("Nepodržani format");
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=rooms." + format)
+                .contentType(mediaType)
+                .body(file);
+    }
+
 
 
 }
