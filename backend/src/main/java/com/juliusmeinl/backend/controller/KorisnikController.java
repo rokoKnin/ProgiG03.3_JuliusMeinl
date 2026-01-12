@@ -46,7 +46,8 @@ public class KorisnikController {
         korisnik.setPrezime(userMap.get("prezime"));
         korisnik.setEmail(userMap.get("email"));
         korisnik.setTelefon(userMap.get("telefon"));
-        korisnik.setOvlast(String.valueOf(UlogaKorisnika.GOST));
+        korisnik.setOvlast(String.valueOf
+                (UlogaKorisnika.GOST));
 
         String postBr = userMap.get("postBr");
         String nazMjesto = userMap.get("nazMjesto");
