@@ -1,10 +1,15 @@
 package com.juliusmeinl.backend.service;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.juliusmeinl.backend.model.Rezervacija;
+import com.juliusmeinl.backend.model.RezervirajSadrzaj;
 import com.juliusmeinl.backend.model.RezervirajSobu;
 import com.juliusmeinl.backend.model.VrstaSobe;
+import com.juliusmeinl.backend.repository.RezervacijaRepository;
+import com.juliusmeinl.backend.repository.RezervirajSadrzajRepository;
 import com.juliusmeinl.backend.repository.RezervirajSobuRepository;
 import com.juliusmeinl.backend.repository.SobaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
@@ -48,18 +53,23 @@ public class RezervirajSobuService {
         }
         return response;
     }
-    // ===========================
-    // GENERATE STATISTICS
-    // ===========================
+    @Autowired
+    private RezervacijaRepository rezervacijaRepository;
+
+    @Autowired
+    private RezervirajSadrzajRepository rezervirajSadrzajRepository;
+
     public Map<String, Object> generateStatistics() {
 
         Map<String, Object> stats = new HashMap<>();
         List<RezervirajSobu> rezervacije = rezervirajSobuRepository.findAll();
+        List<Rezervacija> sveRezervacije = rezervacijaRepository.findAll();
 
         Map<String, Long> country = new HashMap<>();
         Map<String, Long> county = new HashMap<>();
 
         Map<Integer, Map<String, Integer>> monthlyPieCounter = new HashMap<>();
+        Map<String, Integer> monthlyExtra = new HashMap<>(); // Bazen, Teretana, Restoran
 
         Map<Integer, Integer> yearlyTotal = new HashMap<>();
         Map<Integer, Integer> yearlyKing = new HashMap<>();
@@ -69,14 +79,14 @@ public class RezervirajSobuService {
 
         Map<Integer, List<VrstaSobe>> monthlyDays = new HashMap<>();
 
+        // ===========================
+        // PROCESIRANJE REZERVACIJA SOBE
+        // ===========================
         for (RezervirajSobu rs : rezervacije) {
             if (rs.getRezervacija() == null || rs.getSoba() == null) continue;
 
-            String drzava = rs.getRezervacija()
-                    .getKorisnik().getMjesto().getDrzava().getNazivDrzave();
-
-            String zupanija = rs.getRezervacija()
-                    .getKorisnik().getMjesto().getId().getNazMjesto();
+            String drzava = rs.getRezervacija().getKorisnik().getMjesto().getDrzava().getNazivDrzave();
+            String zupanija = rs.getRezervacija().getKorisnik().getMjesto().getId().getNazMjesto();
 
             country.merge(drzava, 1L, Long::sum);
             county.merge(zupanija, 1L, Long::sum);
@@ -86,12 +96,13 @@ public class RezervirajSobuService {
             int day = datum.getDayOfMonth();
             VrstaSobe tip = rs.getSoba().getVrsta();
 
+            // Mjesečni Pie (tipovi soba)
             monthlyPieCounter
                     .computeIfAbsent(month, m -> new HashMap<>())
                     .merge(tip.name(), 1, Integer::sum);
 
+            // Godišnji broj po sobama
             yearlyTotal.merge(month, 1, Integer::sum);
-
             switch (tip) {
                 case DVOKREVETNA_KING -> yearlyKing.merge(month, 1, Integer::sum);
                 case DVOKREVETNA_TWIN -> yearlyTwin.merge(month, 1, Integer::sum);
@@ -102,26 +113,47 @@ public class RezervirajSobuService {
             monthlyDays.computeIfAbsent(day, d -> new ArrayList<>()).add(tip);
         }
 
-        // COUNTRY
+        // ===========================
+        // PROCESIRANJE DODATNIH SADRZAJA
+        // ===========================
+        int currentMonth = LocalDate.now().getMonthValue();
+
+        List<RezervirajSadrzaj> sviSadrzaji = rezervirajSadrzajRepository.findAll();
+        for (RezervirajSadrzaj rs : sviSadrzaji) {
+            if (rs.getRezervacija() == null || rs.getDodatniSadrzaj() == null) continue;
+
+            LocalDate datum = rs.getRezervacija().getDatumRezerviranja();
+            if (datum.getMonthValue() != currentMonth) continue;
+
+            String vrsta = rs.getDodatniSadrzaj().getVrsta().toUpperCase();
+            monthlyExtra.merge(vrsta, 1, Integer::sum);
+        }
+
+        // ===========================
+        // KREIRANJE OUTPUTA
+        // ===========================
         stats.put("country", Map.of(
                 "name", new ArrayList<>(country.keySet()),
                 "data", new ArrayList<>(country.values())
         ));
 
-        // COUNTY
-        stats.put("county", Map.of(
+        stats.put("city", Map.of(
                 "name", new ArrayList<>(county.keySet()),
                 "data", new ArrayList<>(county.values())
         ));
 
-        // MONTHLY PIE
-        int currentMonth = LocalDate.now().getMonthValue();
         Map<String, Integer> pie = monthlyPieCounter.getOrDefault(currentMonth, new HashMap<>());
         stats.put("monthlyPie", Map.of(
                 "DVOKREVETNA_KING", pie.getOrDefault("DVOKREVETNA_KING", 0),
                 "DVOKREVETNA_TWIN", pie.getOrDefault("DVOKREVETNA_TWIN", 0),
                 "TROKREVETNA", pie.getOrDefault("TROKREVETNA", 0),
                 "PENTHOUSE", pie.getOrDefault("PENTHOUSE", 0)
+        ));
+
+        stats.put("monthlyExtra", Map.of(
+                "BAZEN", monthlyExtra.getOrDefault("BAZEN", 0),
+                "TERETANA", monthlyExtra.getOrDefault("TERETANA", 0),
+                "RESTORAN", monthlyExtra.getOrDefault("RESTORAN", 0)
         ));
 
         // MONTHLY LINE
@@ -141,7 +173,6 @@ public class RezervirajSobuService {
             triple.add((int) list.stream().filter(v -> v == VrstaSobe.TROKREVETNA).count());
             pent.add((int) list.stream().filter(v -> v == VrstaSobe.PENTHOUSE).count());
         }
-
         stats.put("monthly", Map.of(
                 "day", days,
                 "total", total,
@@ -220,6 +251,7 @@ public class RezervirajSobuService {
         addMonthlyPieTable(document, stats);
         addCountryTable(document, stats);
         addCountyTable(document, stats);
+        addMonthlyExtraTable(document, stats);
 
         document.close();
     }
@@ -282,9 +314,14 @@ public class RezervirajSobuService {
 
         doc.add(t);
     }
-
     private void addCountryTable(Document doc, Map<String, Object> stats) {
         Map<String, Object> c = (Map<String, Object>) stats.get("country");
+        if (c == null) return;  // sigurnosna provjera
+
+        List<String> names = (List<String>) c.getOrDefault("name", List.of());
+        List<Long> data = (List<Long>) c.getOrDefault("data", List.of());
+
+        if (names.isEmpty() || data.isEmpty()) return; // nema podataka, ne crtaj tablicu
 
         doc.add(new Paragraph("\nRezervacije po državama").setBold());
 
@@ -292,10 +329,7 @@ public class RezervirajSobuService {
         t.addCell("Država");
         t.addCell("Broj");
 
-        List<String> names = (List<String>) c.get("name");
-        List<Long> data = (List<Long>) c.get("data");
-
-        for (int i = 0; i < names.size(); i++) {
+        for (int i = 0; i < Math.min(names.size(), data.size()); i++) {
             t.addCell(names.get(i));
             t.addCell(data.get(i).toString());
         }
@@ -303,8 +337,18 @@ public class RezervirajSobuService {
         doc.add(t);
     }
 
+
     private void addCountyTable(Document doc, Map<String, Object> stats) {
+        // Dohvati mapu za županije
         Map<String, Object> c = (Map<String, Object>) stats.get("county");
+        if (c == null) return;  // Ako nema podataka, ne raditi ništa
+
+        // Dohvati liste s fallback-om na prazne liste
+        List<String> names = (List<String>) c.getOrDefault("name", List.of());
+        List<Long> data = (List<Long>) c.getOrDefault("data", List.of());
+
+        // Ako su prazne, preskoči crtanje tablice
+        if (names.isEmpty() || data.isEmpty()) return;
 
         doc.add(new Paragraph("\nRezervacije po županijama").setBold());
 
@@ -312,16 +356,15 @@ public class RezervirajSobuService {
         t.addCell("Županija");
         t.addCell("Broj");
 
-        List<String> names = (List<String>) c.get("name");
-        List<Long> data = (List<Long>) c.get("data");
-
-        for (int i = 0; i < names.size(); i++) {
+        // Iteriraj do minimalne veličine između names i data
+        for (int i = 0; i < Math.min(names.size(), data.size()); i++) {
             t.addCell(names.get(i));
             t.addCell(data.get(i).toString());
         }
 
         doc.add(t);
     }
+
     private void exportXlsx(Map<String, Object> stats, OutputStream out) throws Exception {
 
         Workbook workbook = new XSSFWorkbook();
@@ -331,6 +374,7 @@ public class RezervirajSobuService {
         createMonthlyPieSheet(workbook, stats);
         createCountrySheet(workbook, stats);
         createCountySheet(workbook, stats);
+        createMonthlyExtraSheet(workbook, stats);
 
         workbook.write(out);
         workbook.close();
@@ -431,17 +475,22 @@ public class RezervirajSobuService {
     }
     private void createCountySheet(Workbook workbook, Map<String, Object> stats) {
 
-        Sheet sheet = workbook.createSheet("County");
         Map<String, Object> county = (Map<String, Object>) stats.get("county");
+        if (county == null) return; // Ako nema podataka, ne radi ništa
 
-        List<String> names = (List<String>) county.get("name");
-        List<Long> values = (List<Long>) county.get("data");
+        List<String> names = (List<String>) county.getOrDefault("name", List.of());
+        List<Long> values = (List<Long>) county.getOrDefault("data", List.of());
+
+        if (names.isEmpty() || values.isEmpty()) return; // Ako su prazne liste, preskoči sheet
+
+        Sheet sheet = workbook.createSheet("County");
 
         Row header = sheet.createRow(0);
         header.createCell(0).setCellValue("Županija");
         header.createCell(1).setCellValue("Broj rezervacija");
 
-        for (int i = 0; i < names.size(); i++) {
+        // Iteriraj do minimalne veličine lista
+        for (int i = 0; i < Math.min(names.size(), values.size()); i++) {
             Row row = sheet.createRow(i + 1);
             row.createCell(0).setCellValue(names.get(i));
             row.createCell(1).setCellValue(values.get(i));
@@ -451,6 +500,43 @@ public class RezervirajSobuService {
         sheet.autoSizeColumn(1);
     }
 
+    private void addMonthlyExtraTable(Document doc, Map<String,Object> stats) {
+        Map<String,Integer> extra = (Map<String,Integer>) stats.get("monthlyExtra");
+        if (extra == null) return;
+
+        doc.add(new Paragraph("\nDodatni sadržaji").setBold());
+        Table t = new Table(2);
+        t.addCell("Sadržaj");
+        t.addCell("Broj");
+
+        extra.forEach((k,v) -> {
+            t.addCell(k);
+            t.addCell(v.toString());
+        });
+
+        doc.add(t);
+    }
+
+    private void createMonthlyExtraSheet(Workbook workbook, Map<String, Object> stats) {
+
+        Sheet sheet = workbook.createSheet("Monthly Extra");
+        Map<String, Integer> extra = (Map<String, Integer>) stats.get("monthlyExtra");
+        if (extra == null) return;
+
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Sadržaj");
+        header.createCell(1).setCellValue("Broj rezervacija");
+
+        int rowIdx = 1;
+        for (Map.Entry<String, Integer> entry : extra.entrySet()) {
+            Row row = sheet.createRow(rowIdx++);
+            row.createCell(0).setCellValue(entry.getKey());
+            row.createCell(1).setCellValue(entry.getValue());
+        }
+
+        sheet.autoSizeColumn(0);
+        sheet.autoSizeColumn(1);
+    }
 
 
 }

@@ -245,11 +245,14 @@ public class KorisnikService {
                 return "VLASNIK";
             case ZAPOSLENIK:
                 return "ZAPOSLENIK";
+            case ADMIN:
+                return "ADMIN"; // <-- dodano
             case GOST:
             default:
-                return "GOST"; // fallback za stare role poput ADMIN
+                return "GOST";
         }
     }
+
 
 
     @Transactional

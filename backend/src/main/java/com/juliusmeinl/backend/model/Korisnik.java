@@ -1,7 +1,6 @@
 package com.juliusmeinl.backend.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -29,11 +28,11 @@ public class Korisnik {
     @Enumerated(EnumType.STRING)
     private UlogaKorisnika ovlast = UlogaKorisnika.GOST;
 
-
-    @ManyToOne
+    // DOZVOLJAVAMO da korisnik nema mjesto (nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "postbr", referencedColumnName = "postbr", nullable = false),
-            @JoinColumn(name = "nazmjesto", referencedColumnName = "nazmjesto", nullable = false)
+            @JoinColumn(name = "postbr", referencedColumnName = "postbr", nullable = true),
+            @JoinColumn(name = "nazmjesto", referencedColumnName = "nazmjesto", nullable = true)
     })
     private Mjesto mjesto;
 
@@ -45,6 +44,10 @@ public class Korisnik {
 
     @OneToMany(mappedBy = "korisnik")
     private List<Recenzija> recenzije;
+
+    // =====================
+    // GETTERI I SETTERI
+    // =====================
 
     public Integer getId() {
         return id;
@@ -80,7 +83,6 @@ public class Korisnik {
     public UlogaKorisnika getOvlast() {
         return ovlast;
     }
-
     public void setOvlast(UlogaKorisnika ovlast) {
         this.ovlast = ovlast;
     }
@@ -91,9 +93,6 @@ public class Korisnik {
     public void setMjesto(Mjesto mjesto) {
         this.mjesto = mjesto;
     }
-
-
-
 
     public List<Rezervacija> getRezervacije() {
         return rezervacije;
@@ -113,5 +112,4 @@ public class Korisnik {
     public void setRecenzije(List<Recenzija> recenzije) {
         this.recenzije = recenzije;
     }
-
 }
