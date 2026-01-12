@@ -1,5 +1,6 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -24,6 +25,7 @@ public class RezervirajSobu {
     @ManyToOne
     @MapsId("sobaId")
     @JoinColumn(name = "soba_id")
+    @JsonBackReference
     private Soba soba;
 
     public RezervirajSobuId getId() {

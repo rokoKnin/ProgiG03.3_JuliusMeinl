@@ -4,24 +4,30 @@ import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.MjestoId;
 import com.juliusmeinl.backend.service.AuthService;
 import com.juliusmeinl.backend.service.KorisnikService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class KorisnikController {
 
     private AuthService authService;
 
     private final KorisnikService korisnikService;
-
-    public KorisnikController(KorisnikService korisnikService) {
+    public KorisnikController(KorisnikService korisnikService, AuthService authService) {
         this.korisnikService = korisnikService;
+        this.authService = authService;
     }
+
+    //public KorisnikController(KorisnikService korisnikService) {
+    //  this.korisnikService = korisnikService;
+    //}
 
     //@GetMapping("/info")
     //public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
@@ -57,11 +63,52 @@ public class KorisnikController {
 
         return korisnikService.spremiKorisnika(korisnik, mjestoId, nazDrzava);
     }
+    @GetMapping("/export")
+    public ResponseEntity<ByteArrayResource> exportUsers(@RequestParam String format) {
+        ByteArrayResource file;
+        MediaType mediaType;
+
+        switch(format.toLowerCase()){
+            case "xlsx":
+                file = korisnikService.exportUsersXLSX();
+                mediaType = MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                break;
+            case "pdf":
+                file = korisnikService.exportUsersPDF();
+                mediaType = MediaType.APPLICATION_PDF;
+                break;
+            case "xml":
+                file = korisnikService.exportUsersXML();
+                mediaType = MediaType.APPLICATION_XML;
+                break;
+            default:
+                throw new RuntimeException("Nepodržani format");
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=users." + format)
+                .contentType(mediaType)
+                .body(file);
+    }
+
     @GetMapping("/check-vlasnik")
     public boolean provjeriVlasnika(@RequestParam String email) {
         return korisnikService.korisnikJeVlasnik(email);
     }
+
+    @GetMapping
+    public List<Map<String, Object>> getAllUsers() {
+        return korisnikService.getAllUsersForFrontend();
+    }
+    @PutMapping("/{userId}/role")
+    public ResponseEntity<?> updateUserRole(@PathVariable Integer userId, @RequestBody Map<String, String> body) {
+        String novaUloga = body.get("uloga");
+        if (novaUloga == null) return ResponseEntity.badRequest().build();
+
+        Korisnik korisnik = korisnikService.updateRole(userId, novaUloga);
+        return ResponseEntity.ok(Map.of("id", korisnik.getId(), "uloga", korisnik.getOvlast()));
+    }
+
+
 }
-
-
-

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS } from 'chart.js/auto';
-import { Line, Pie, Bar } from 'react-chartjs-2';
+import { Line, Pie } from 'react-chartjs-2';
 import axios from 'axios';
 
 ChartJS.defaults.maintainAspectRatio = false;
@@ -11,8 +11,9 @@ ChartJS.defaults.plugins.title.align = 'center';
 ChartJS.defaults.plugins.title.font.size = 16;
 ChartJS.defaults.plugins.title.color = 'black';
 
-export default function Statistics( { setExportHandler} ) {
+export default function Statistics({ setExportHandler }) {
     const [stats, setStats] = useState(null);
+
     const generateColors = (length) => {
         const baseColors = [
             'rgba(255, 99, 132, 0.8)',
@@ -21,193 +22,123 @@ export default function Statistics( { setExportHandler} ) {
             'rgba(255, 206, 86, 0.8)',
             'rgba(153, 102, 255, 0.8)',
         ];
-        return Array.from({ length}, (_, i) => baseColors[i % baseColors.length]);
-    }
+        return Array.from({ length }, (_, i) => baseColors[i % baseColors.length]);
+    };
+
     useEffect(() => {
         axios
-            .get(`${import.meta.env.VITE_API_URL}` + `/statistics`, { withCredentials: true })
+            .get(`${import.meta.env.VITE_API_URL}/statistics`, { withCredentials: true })
             .then(response => setStats(response.data))
             .catch(error => console.error('Error fetching statistics data:', error));
-    }, []); 
+    }, []);
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_API_URL}/statistics`, { withCredentials: true })
+            .then(response => {
+                console.log("Stats from backend:", response.data);
+                setStats(response.data);
+            })
+            .catch(error => console.error('Error fetching statistics data:', error));
+    }, []);
 
     useEffect(() => {
         setExportHandler(() => exportStatistics);
         return () => setExportHandler(null);
-    }, [setExportHandler]);
+    }, [setExportHandler, stats]);
 
     const exportStatistics = async (format) => {
         try {
             const response = await axios.get(
                 `${import.meta.env.VITE_API_URL}/statistics/export?format=${format}`,
-                {
-                    withCredentials: true,
-                    responseType: "blob",
-                }
+                { withCredentials: true, responseType: 'blob' }
             );
             downloadFile(response.data, `statistics.${format}`);
         } catch (error) {
             console.error("Error exporting statistics: ", error);
         }
     };
-    
-    if (!stats) {
-        return <div>Loading statistics...</div>;
-    }
 
-    const validCountryData = stats.country.name.length === stats.country.data.length;
-    if (!validCountryData) {
-        console.warn('Country names and data arrays have different lengths');
-    }
+    if (!stats) return <div>Loading statistics...</div>;
 
     const countryColors = generateColors(stats.country.name.length);
     const countyColors = generateColors(stats.county.name.length);
 
+    // === Yearly line chart ===
     const yearlyLineData = {
-        labels: stats.yearly.month.map(month => `${month}`),
+        labels: stats.yearly.month.map(m => `${m}`),
         datasets: [
-            {
-                label: 'Ukupano rezervacija',
-                data: stats.yearly.total
-            },
-            {
-                label: 'Dvokrevetne sobe',
-                data: stats.yearly.double
-            },
-            {
-                label: 'Trokrevetne sobe',
-                data: stats.yearly.triple
-            },
-            {
-                label: 'Penthouse sobe',
-                data: stats.yearly.penthouse
-            }
+            { label: 'Ukupno rezervacija', data: stats.yearly.total },
+            { label: 'Dvokrevetna King', data: stats.yearly.DVOKREVETNA_KING },
+            { label: 'Dvokrevetna Twin', data: stats.yearly.DVOKREVETNA_TWIN },
+            { label: 'Trokrevetna', data: stats.yearly.TROKREVETNA },
+            { label: 'Penthouse', data: stats.yearly.PENTHOUSE },
         ]
     };
+
+    // === Monthly line chart ===
     const monthlyLineData = {
-        labels: stats.monthly.day.map(day => `${day}`),
+        labels: stats.monthly.day.map(d => `${d}`),
         datasets: [
-            {
-                label: 'Ukupano rezervacija',
-                data: stats.monthly.total
-            },
-            {
-                label: 'Dvokrevetne sobe',
-                data: stats.monthly.double
-            },
-            {
-                label: 'Trokrevetne sobe',
-                data: stats.monthly.triple
-            },
-            {
-                label: 'Penthouse sobe',
-                data: stats.monthly.penthouse
-            }
+            { label: 'Ukupno rezervacija', data: stats.monthly.total },
+            { label: 'Dvokrevetna King', data: stats.monthly.DVOKREVETNA_KING },
+            { label: 'Dvokrevetna Twin', data: stats.monthly.DVOKREVETNA_TWIN },
+            { label: 'Trokrevetna', data: stats.monthly.TROKREVETNA },
+            { label: 'Penthouse', data: stats.monthly.PENTHOUSE },
         ]
     };
+
+    // === Monthly pie chart ===
     const monthlyPieData = {
-        labels: [
-            'Dvokrevetne sobe',
-            'Trokrevetne sobe',
-            'Penthouse sobe'
-        ],
+        labels: ['Dvokrevetna King', 'Dvokrevetna Twin', 'Trokrevetna', 'Penthouse'],
         datasets: [
             {
                 data: [
-                    stats.monthlyPie.double,
-                    stats.monthlyPie.triple,
-                    stats.monthlyPie.penthouse
-                ], 
+                    stats.monthlyPie.DVOKREVETNA_KING,
+                    stats.monthlyPie.DVOKREVETNA_TWIN,
+                    stats.monthlyPie.TROKREVETNA,
+                    stats.monthlyPie.PENTHOUSE
+                ],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.8)',
                     'rgba(54, 162, 235, 0.8)',
-                    'rgba(75, 192, 192, 0.8)'
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
                 ]
             }
         ]
     };
+
+    // === Country pie chart ===
     const countryPieData = {
         labels: stats.country.name,
-        datasets: [
-            {
-                data: stats.country.data, 
-                backgroundColor: countryColors,
-                borderWidth: 1,
-                borderColor: 'white'
-            }
-        ]
+        datasets: [{ data: stats.country.data, backgroundColor: countryColors, borderWidth: 1, borderColor: 'white' }]
     };
+
+    // === County pie chart ===
     const countyPieData = {
         labels: stats.county.name,
-        datasets: [
-            {
-                data: stats.county.data, 
-                backgroundColor: countyColors,
-                borderWidth: 1,
-                borderColor: 'white'
-            }
-        ]
-    }; 
+        datasets: [{ data: stats.county.data, backgroundColor: countyColors, borderWidth: 1, borderColor: 'white' }]
+    };
+
+
 
     return (
-        /*<div>
-            <h2>Statistika</h2>
-            <p>Ovdje će ići statistički podaci o korisnicima, rezervacijama i slično.</p>
-        </div>*/
-        
-        <div className="Statistics" style= {{display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "space-between", height: "100%", minHeight: "100%", boxSizing: "border-box"}}>
-            <div className="dataCard" style={{width: "100%", height: "20rem", background: "white"}}>
-                <Line
-                    data={yearlyLineData}
-                    options={{
-                        plugins: {
-                            title: {
-                                text: "Godišnji broj rezervacija"
-                            }
-                        }
-                    }}
-                />
+        <div className="Statistics" style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "space-between", height: "100%", minHeight: "100%", boxSizing: "border-box" }}>
+            <div className="dataCard" style={{ width: "100%", height: "20rem", background: "white" }}>
+                <Line data={yearlyLineData} options={{ plugins: { title: { text: "Godišnji broj rezervacija" } } }} />
             </div>
-            <div className="dataCard" style={{width: "45%", height: "20rem", background: "white"}}>
-                <Line 
-                    data= {monthlyLineData}
-                    options={{
-                        plugins: {
-                            title: {
-                                text: "Mjesečni broj rezervacija"
-                            }
-                        }
-                    }}
-                />
+            <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
+                <Line data={monthlyLineData} options={{ plugins: { title: { text: "Mjesečni broj rezervacija" } } }} />
             </div>
-            <div className="dataCard" style={{width: "45%", height: "20rem", background: "white"}}>
-                <Pie data= {monthlyPieData}
-                options={{
-                        plugins: {
-                            title: {
-                                text: "Postotak rezervacija po tipu sobe za ovaj mjesec"
-                            }
-                        }
-                    }} />
+            <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
+                <Pie data={monthlyPieData} options={{ plugins: { title: { text: "Postotak rezervacija po tipu sobe za ovaj mjesec" } } }} />
             </div>
-            <div className="dataCard" style={{width: "45%", height: "20rem", background: "white"}}>
-                <Pie data= {countryPieData}
-                options={{
-                        plugins: {
-                            title: {
-                                text: "Postotak rezervacija po državama"
-                            }
-                        }
-                    }} />
+            <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
+                <Pie data={countryPieData} options={{ plugins: { title: { text: "Postotak rezervacija po državama" } } }} />
             </div>
-            <div className="dataCard" style={{width: "45%", height: "20rem", background: "white"}}>
-                <Pie data= {countyPieData}
-                options={{
-                        plugins: {
-                            title: {
-                                text: "Postotak rezervacija po županijama"
-                            }
-                        }
-                    }} />
+            <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
+                <Pie data={countyPieData} options={{ plugins: { title: { text: "Postotak rezervacija po županijama" } } }} />
             </div>
         </div>
     );

@@ -25,7 +25,7 @@ public class Korisnik {
     @Column(name = "telefonkorisnik", nullable = false, unique = true, length = 20)
     private String telefon;
 
-    @Column(name = "ovlastkorisnik", nullable = false, length = 10)
+    @Column(name = "ovlastkorisnik", nullable = false, length = 20)
     private String ovlast;
 
 

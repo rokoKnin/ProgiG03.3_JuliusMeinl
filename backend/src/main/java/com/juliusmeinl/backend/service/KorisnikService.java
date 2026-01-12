@@ -1,5 +1,6 @@
 package com.juliusmeinl.backend.service;
 
+import com.itextpdf.text.Font;
 import com.juliusmeinl.backend.model.Drzava;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.Mjesto;
@@ -10,9 +11,19 @@ import com.juliusmeinl.backend.repository.MjestoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+
+import java.util.*;
+
+import org.springframework.core.io.ByteArrayResource;
+import java.io.ByteArrayOutputStream;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class KorisnikService {
@@ -76,7 +87,133 @@ public class KorisnikService {
     }
 
 
+    @Transactional
+    public ByteArrayResource exportUsersXLSX() {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Users");
+            Row header = sheet.createRow(0);
+            String[] columns = {"Ime","Prezime","Email","Telefon","Uloga","Drzava","Mjesto","PostanskiBroj"};
+            for(int i=0;i<columns.length;i++) header.createCell(i).setCellValue(columns[i]);
+
+            List<Korisnik> users = korisnikRepository.findAll();
+            int rowIdx=1;
+            for(Korisnik k : users){
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(k.getIme());
+                row.createCell(1).setCellValue(k.getPrezime());
+                row.createCell(2).setCellValue(k.getEmail());
+                row.createCell(3).setCellValue(k.getTelefon());
+                row.createCell(4).setCellValue(k.getOvlast());
+                row.createCell(5).setCellValue(k.getMjesto().getDrzava().getNazivDrzave());
+                row.createCell(6).setCellValue(k.getMjesto().getId().getNazMjesto());
+                row.createCell(7).setCellValue(k.getMjesto().getId().getPostBr());
+            }
+
+            workbook.write(out);
+            return new ByteArrayResource(out.toByteArray());
+        } catch(Exception e){
+            throw new RuntimeException("Greška pri XLSX izvozu korisnika", e);
+        }
+    }
+
+    // XML
+    @Transactional
+    public ByteArrayResource exportUsersXML() {
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            List<Korisnik> users = korisnikRepository.findAll();
+            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<users>\n".getBytes());
+
+            for(Korisnik k : users){
+                out.write(("  <user>\n").getBytes());
+                out.write(("    <ime>"+k.getIme()+"</ime>\n").getBytes());
+                out.write(("    <prezime>"+k.getPrezime()+"</prezime>\n").getBytes());
+                out.write(("    <email>"+k.getEmail()+"</email>\n").getBytes());
+                out.write(("    <telefon>"+k.getTelefon()+"</telefon>\n").getBytes());
+                out.write(("    <uloga>"+k.getOvlast()+"</uloga>\n").getBytes());
+                out.write(("    <drzava>"+k.getMjesto().getDrzava().getNazivDrzave()+"</drzava>\n").getBytes());
+                out.write(("    <mjesto>"+k.getMjesto().getId().getNazMjesto()+"</mjesto>\n").getBytes());
+                out.write(("    <postanskiBroj>"+k.getMjesto().getId().getPostBr()+"</postanskiBroj>\n").getBytes());
+                out.write(("  </user>\n").getBytes());
+            }
+
+            out.write("</users>".getBytes());
+            return new ByteArrayResource(out.toByteArray());
+        } catch(Exception e){
+            throw new RuntimeException("Greška pri XML izvozu korisnika", e);
+        }
+    }
+
+    // PDF
+    @Transactional
+    public ByteArrayResource exportUsersPDF() {
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Document document = new Document();
+            PdfWriter.getInstance(document, out);
+            document.open();
+
+            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+            Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+
+            PdfPTable table = new PdfPTable(8);
+            table.setWidthPercentage(100);
+            table.setWidths(new int[]{3,3,5,3,2,3,3,2});
+
+            String[] columns = {"Ime","Prezime","Email","Telefon","Uloga","Drzava","Mjesto","PostanskiBroj"};
+            for(String col : columns){
+                PdfPCell cell = new PdfPCell(new Phrase(col, headerFont));
+                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                table.addCell(cell);
+            }
+
+            List<Korisnik> users = korisnikRepository.findAll();
+            for(Korisnik k : users){
+                table.addCell(new Phrase(k.getIme(), cellFont));
+                table.addCell(new Phrase(k.getPrezime(), cellFont));
+                table.addCell(new Phrase(k.getEmail(), cellFont));
+                table.addCell(new Phrase(k.getTelefon(), cellFont));
+                table.addCell(new Phrase(k.getOvlast(), cellFont));
+                table.addCell(new Phrase(k.getMjesto().getDrzava().getNazivDrzave(), cellFont));
+                table.addCell(new Phrase(k.getMjesto().getId().getNazMjesto(), cellFont));
+                table.addCell(new Phrase(k.getMjesto().getId().getPostBr(), cellFont));
+            }
+
+            document.add(table);
+            document.close();
+            return new ByteArrayResource(out.toByteArray());
+
+        } catch(Exception e){
+            throw new RuntimeException("Greška pri PDF izvozu korisnika", e);
+        }
+    }
+
+    public List<Map<String, Object>> getAllUsersForFrontend() {
+        List<Korisnik> users = korisnikRepository.findAll();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Korisnik k : users) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", k.getId());
+            map.put("ime", k.getIme());
+            map.put("prezime", k.getPrezime());
+            map.put("email", k.getEmail());
+            map.put("telefon", k.getTelefon());
+            map.put("drzava", k.getMjesto().getDrzava().getNazivDrzave());
+            map.put("mjesto", k.getMjesto().getId().getNazMjesto());
+            map.put("postanskiBroj", k.getMjesto().getId().getPostBr());
+            map.put("uloga", k.getOvlast()); // frontend očekuje polje "uloga"
+            result.add(map);
+        }
+
+        return result;
+    }
+    @Transactional
+    public Korisnik updateRole(Integer userId, String novaUloga) {
+        Korisnik korisnik = korisnikRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Korisnik ne postoji"));
+
+        korisnik.setOvlast(novaUloga);
+        return korisnikRepository.save(korisnik);
+    }
 
 
 }
-
