@@ -10,6 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface DrzavaRepository extends JpaRepository<Drzava, Integer> {
+
+    Drzava findById(long id);
+
+    Drzava findByNazivDrzave(String nazivDrzave);
+
     @Query("SELECT d.id FROM Drzava d WHERE d.nazivDrzave = :nazivDrzave")
     Integer findIdByNazivDrzave(String nazivDrzave);  //primi ime drzave vrati njen id
 }

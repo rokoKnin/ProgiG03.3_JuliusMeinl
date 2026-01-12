@@ -1,7 +1,8 @@
 package com.juliusmeinl.backend.model;
 
 public enum UlogaKorisnika {
-    GOST,
+    NEREGISTRIRAN,
+    REGISTRIRAN,
     ZAPOSLENIK,
     VLASNIK
 }

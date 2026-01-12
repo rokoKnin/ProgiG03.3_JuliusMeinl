@@ -134,7 +134,7 @@ public class SobaController {
 
         soba.setKapacitet(kapacitet);
         System.out.println(soba.getBrojSobe() + soba.getKat() + soba.getCijena() + soba.getVrsta() + soba.getBalkon());
-        return sobaService.spremiSobu(soba);
+        return  sobaService.spremiSobu(soba);
     }
 
     @DeleteMapping("/{id}")
