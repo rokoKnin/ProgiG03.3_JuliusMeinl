@@ -52,7 +52,7 @@ export default function Statistics({ setExportHandler }) {
     if (!stats) return <div>Loading statistics...</div>;
 
     const countryColors = generateColors(stats.country.name.length);
-    const countyColors = generateColors(stats.county.name.length);
+    const cityColors = generateColors(stats.city.name.length);
 
     // === Yearly line chart ===
     const yearlyLineData = {
@@ -99,6 +99,25 @@ export default function Statistics({ setExportHandler }) {
         ]
     };
 
+    // === Monthly extra content pie chart ===
+    const monthlyExtraPie = {
+        labels: ['Bazen', 'Teretana', 'Restoran'],
+        datasets: [
+            {
+                data: [
+                    stats.monthlyExtra.BAZEN,
+                    stats.monthlyExtra.TERETANA,
+                    stats.monthlyExtra.RESTORAN
+                ],
+                backgroundColor: [
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(199, 199, 199, 0.8)',
+                ]
+            }
+        ]
+    };
+
     // === Country pie chart ===
     const countryPieData = {
         labels: stats.country.name,
@@ -106,9 +125,9 @@ export default function Statistics({ setExportHandler }) {
     };
 
     // === County pie chart ===
-    const countyPieData = {
-        labels: stats.county.name,
-        datasets: [{ data: stats.county.data, backgroundColor: countyColors, borderWidth: 1, borderColor: 'white' }]
+    const cityPieData = {
+        labels: stats.city.name,
+        datasets: [{ data: stats.city.data, backgroundColor: cityColors, borderWidth: 1, borderColor: 'white' }]
     };
 
 
@@ -118,17 +137,20 @@ export default function Statistics({ setExportHandler }) {
             <div className="dataCard" style={{ width: "100%", height: "20rem", background: "white" }}>
                 <Line data={yearlyLineData} options={{ plugins: { title: { text: "Godišnji broj rezervacija" } } }} />
             </div>
-            <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
+            <div className="dataCard" style={{ width: "100%", height: "20rem", background: "white" }}>
                 <Line data={monthlyLineData} options={{ plugins: { title: { text: "Mjesečni broj rezervacija" } } }} />
             </div>
             <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
                 <Pie data={monthlyPieData} options={{ plugins: { title: { text: "Postotak rezervacija po tipu sobe za ovaj mjesec" } } }} />
             </div>
             <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
+                <Pie data={monthlyExtraPie} options={{ plugins: { title: { text: "Postotak korištenja dodatnih sadržaja za ovaj mjesec" } } }} />
+            </div>
+            <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
                 <Pie data={countryPieData} options={{ plugins: { title: { text: "Postotak rezervacija po državama" } } }} />
             </div>
             <div className="dataCard" style={{ width: "45%", height: "20rem", background: "white" }}>
-                <Pie data={countyPieData} options={{ plugins: { title: { text: "Postotak rezervacija po županijama" } } }} />
+                <Pie data={cityPieData} options={{ plugins: { title: { text: "Postotak rezervacija po gradovima" } } }} />
             </div>
         </div>
     );
