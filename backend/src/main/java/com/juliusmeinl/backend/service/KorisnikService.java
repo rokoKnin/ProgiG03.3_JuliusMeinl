@@ -116,7 +116,7 @@ public class KorisnikService {
                 row.createCell(1).setCellValue(k.getPrezime());
                 row.createCell(2).setCellValue(k.getEmail());
                 row.createCell(3).setCellValue(k.getTelefon());
-                row.createCell(4).setCellValue(k.getOvlast());
+                row.createCell(4).setCellValue(k.getOvlast().ordinal());
                 row.createCell(5).setCellValue(k.getMjesto().getDrzava().getNazivDrzave());
                 row.createCell(6).setCellValue(k.getMjesto().getId().getNazMjesto());
                 row.createCell(7).setCellValue(k.getMjesto().getId().getPostBr());
@@ -184,7 +184,7 @@ public class KorisnikService {
                 table.addCell(new Phrase(k.getPrezime(), cellFont));
                 table.addCell(new Phrase(k.getEmail(), cellFont));
                 table.addCell(new Phrase(k.getTelefon(), cellFont));
-                table.addCell(new Phrase(k.getOvlast(), cellFont));
+                table.addCell(new Phrase(String.valueOf(k.getOvlast()), cellFont));
                 table.addCell(new Phrase(k.getMjesto().getDrzava().getNazivDrzave(), cellFont));
                 table.addCell(new Phrase(k.getMjesto().getId().getNazMjesto(), cellFont));
                 table.addCell(new Phrase(k.getMjesto().getId().getPostBr(), cellFont));
@@ -210,22 +210,71 @@ public class KorisnikService {
             map.put("prezime", k.getPrezime());
             map.put("email", k.getEmail());
             map.put("telefon", k.getTelefon());
-            map.put("drzava", k.getMjesto().getDrzava().getNazivDrzave());
-            map.put("mjesto", k.getMjesto().getId().getNazMjesto());
-            map.put("postanskiBroj", k.getMjesto().getId().getPostBr());
-            map.put("uloga", k.getOvlast()); // frontend očekuje polje "uloga"
+
+            String drzava = "";
+            String mjesto = "";
+            String postanskiBroj = "";
+
+            if (k.getMjesto() != null) {
+                if (k.getMjesto().getDrzava() != null) {
+                    drzava = k.getMjesto().getDrzava().getNazivDrzave();
+                }
+                if (k.getMjesto().getId() != null) {
+                    mjesto = k.getMjesto().getId().getNazMjesto();
+                    postanskiBroj = k.getMjesto().getId().getPostBr();
+                }
+            }
+
+            map.put("drzava", drzava);
+            map.put("mjesto", mjesto);
+            map.put("postanskiBroj", postanskiBroj);
+
+            // Normalizacija role za frontend
+            map.put("uloga", normalizeUloga(k.getOvlast()));
             result.add(map);
         }
 
         return result;
     }
+
+    private String normalizeUloga(UlogaKorisnika uloga) {
+        if (uloga == null) return "GOST";
+
+        switch (uloga) {
+            case VLASNIK:
+                return "VLASNIK";
+            case ZAPOSLENIK:
+                return "ZAPOSLENIK";
+            case GOST:
+            default:
+                return "GOST"; // fallback za stare role poput ADMIN
+        }
+    }
+
+
     @Transactional
     public Korisnik updateRole(Integer userId, String novaUloga) {
         Korisnik korisnik = korisnikRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Korisnik ne postoji"));
 
-        korisnik.setOvlast(novaUloga);
+        // Sigurno parsiranje role samo za frontend vrijednosti
+        korisnik.setOvlast(parseUloga(novaUloga));
+
         return korisnikRepository.save(korisnik);
+    }
+
+    private UlogaKorisnika parseUloga(String uloga) {
+        if (uloga == null) return UlogaKorisnika.GOST;
+
+        switch (uloga.toUpperCase()) {
+            case "VLASNIK":
+                return UlogaKorisnika.VLASNIK;
+            case "ZAPOSLENIK":
+                return UlogaKorisnika.ZAPOSLENIK;
+            case "GOST":
+            default:
+                return UlogaKorisnika.GOST;
+        }
     }
 
 
