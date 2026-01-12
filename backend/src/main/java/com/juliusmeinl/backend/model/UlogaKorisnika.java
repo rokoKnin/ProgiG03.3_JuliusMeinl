@@ -4,5 +4,6 @@ public enum UlogaKorisnika {
     GOST,
 KORISNIK,
     ZAPOSLENIK,
-    VLASNIK
+    VLASNIK,
+    ADMIN
 }

@@ -116,7 +116,7 @@ public class KorisnikService {
                 row.createCell(1).setCellValue(k.getPrezime());
                 row.createCell(2).setCellValue(k.getEmail());
                 row.createCell(3).setCellValue(k.getTelefon());
-                row.createCell(4).setCellValue(k.getOvlast().ordinal());
+                row.createCell(4).setCellValue(k.getOvlast().name());
                 row.createCell(5).setCellValue(k.getMjesto().getDrzava().getNazivDrzave());
                 row.createCell(6).setCellValue(k.getMjesto().getId().getNazMjesto());
                 row.createCell(7).setCellValue(k.getMjesto().getId().getPostBr());
@@ -142,7 +142,7 @@ public class KorisnikService {
                 out.write(("    <prezime>"+k.getPrezime()+"</prezime>\n").getBytes());
                 out.write(("    <email>"+k.getEmail()+"</email>\n").getBytes());
                 out.write(("    <telefon>"+k.getTelefon()+"</telefon>\n").getBytes());
-                out.write(("    <uloga>"+k.getOvlast()+"</uloga>\n").getBytes());
+                out.write(("    <uloga>"+k.getOvlast().name()+"</uloga>\n").getBytes());
                 out.write(("    <drzava>"+k.getMjesto().getDrzava().getNazivDrzave()+"</drzava>\n").getBytes());
                 out.write(("    <mjesto>"+k.getMjesto().getId().getNazMjesto()+"</mjesto>\n").getBytes());
                 out.write(("    <postanskiBroj>"+k.getMjesto().getId().getPostBr()+"</postanskiBroj>\n").getBytes());
@@ -184,7 +184,7 @@ public class KorisnikService {
                 table.addCell(new Phrase(k.getPrezime(), cellFont));
                 table.addCell(new Phrase(k.getEmail(), cellFont));
                 table.addCell(new Phrase(k.getTelefon(), cellFont));
-                table.addCell(new Phrase(String.valueOf(k.getOvlast()), cellFont));
+                table.addCell(new Phrase(k.getOvlast().name(), cellFont));
                 table.addCell(new Phrase(k.getMjesto().getDrzava().getNazivDrzave(), cellFont));
                 table.addCell(new Phrase(k.getMjesto().getId().getNazMjesto(), cellFont));
                 table.addCell(new Phrase(k.getMjesto().getId().getPostBr(), cellFont));

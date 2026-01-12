@@ -67,7 +67,8 @@ public class KorisnikController {
         if (novaUloga == null) return ResponseEntity.badRequest().build();
 
         Korisnik korisnik = korisnikService.updateRole(userId, novaUloga);
-        return ResponseEntity.ok(Map.of("id", korisnik.getId(), "uloga", korisnik.getOvlast()));
+        return ResponseEntity.ok(Map.of("id", korisnik.getId(), "uloga", korisnik.getOvlast().name()));
+
     }
 
 
