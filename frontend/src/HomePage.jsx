@@ -5,32 +5,36 @@ import { Button, Typography} from '@mui/material';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-function HomePage({onOpenPopup}) {
+function HomePage() {
   const [user,setUser]=React.useState();
-   useEffect(() => {
-            axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
-            { setUser(response.data);
-            })
-                .catch(error => console.error('Error ocurred', error))
-        }, []);
-        
 
+  const email = localStorage.getItem('email');
+  // useEffect(() => {
+   //          axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
+   //          { setUser(response.data);
+   //          })
+   //              .catch(error => console.error('Error ocurred', error))
+   //      }, []);
+
+    const handleLoginClick = () => {
+        window.location.href = `${import.meta.env.VITE_API_URL}` + '/api/oauth2/authorization/google';
+    };
 
   return (
     <main style={{ padding: 16 }}>
       <h2 style={{ color: '#1976d2' }}>Dobrodošli u Modrila hotel</h2>
       <div className="home_container">
         {
-          user&& <Typography variant="h6" component={Link} to="/reservation"className="link_reservation">
+          email && <Typography variant="h6" component={Link} to="/reservation"className="link_reservation">
      Rezervirajte odmah!
      </Typography>
         }
         {
           
-          !user&& 
+          !email&&
           <div>
            {console.log("nema")}
-          <Button variant="h6" onClick={onOpenPopup}>
+          <Button variant="h6" onClick={handleLoginClick}>
             
      Rezervirajte odmah!
      </Button>

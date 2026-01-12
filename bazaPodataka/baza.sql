@@ -8,10 +8,12 @@
 
     CREATE TABLE mjesto
     (
+        id SERIAL,
         postBr VARCHAR(20),
         nazMjesto VARCHAR(50),
         drzava_id INT NOT NULL,
-        PRIMARY KEY (postBr, nazMjesto),
+        PRIMARY KEY (id),
+        UNIQUE (postBr, nazMjesto),
         FOREIGN KEY (drzava_id) REFERENCES drzava(drzava_id)
     );
 
@@ -22,13 +24,12 @@
         prezimeKorisnik VARCHAR(50) NOT NULL,
         emailKorisnik VARCHAR(50) NOT NULL,
         telefonKorisnik VARCHAR(20) NOT NULL,
-        ovlastKorisnik VARCHAR(10),
-        postBr VARCHAR(20) NOT NULL,
-        nazMjesto varchar(50) NOT NULL,
+        ovlastKorisnik VARCHAR(20),
+        mjesto_id INT NOT NULL,
         PRIMARY KEY (korisnik_id),
         UNIQUE (emailKorisnik),
         UNIQUE (telefonKorisnik),
-        FOREIGN KEY (postBr, nazMjesto) REFERENCES mjesto(postBr, nazMjesto)
+        FOREIGN KEY (mjesto_id) REFERENCES mjesto(id)
     );
 
     CREATE TABLE rezervacija
@@ -106,4 +107,3 @@
         FOREIGN KEY (soba_id) REFERENCES soba(soba_id),
         CHECK (datumDoSoba > datumOdSoba)
     );
-

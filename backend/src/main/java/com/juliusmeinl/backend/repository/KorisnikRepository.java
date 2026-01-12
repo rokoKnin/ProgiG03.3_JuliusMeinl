@@ -10,7 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface KorisnikRepository extends CrudRepository<Korisnik, Long> {
+public interface KorisnikRepository extends CrudRepository<Korisnik, Integer> {
     Optional<Korisnik> findByEmail(String email);// traži korisnika po emailu
 
     boolean existsByEmail(String email);         // provjera postoji li korisnik po emailu
