@@ -7,7 +7,7 @@ import java.util.List;
 
 public class RezervacijaRequestDTO {
 
-    private LocalDate datumOd;  //provjeriti jel ime oke, drugacije je od onog u sobaController
+    private LocalDate datumOd;
     private LocalDate datumDo;
     @JsonProperty("odabraneSobe")
     private List<SobaRequestDTO> sobe;
