@@ -59,6 +59,3 @@ function downloadFile(blob, filename) {
     a.click();
     window.URL.revokeObjectURL(url);
 }
-import React, { useEffect, useState } from 'react';
-import { Button, Select, MenuItem, Alert, CircularProgress } from "@mui/material";
-import axios from 'axios';
