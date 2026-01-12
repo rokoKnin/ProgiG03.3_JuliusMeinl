@@ -246,7 +246,11 @@ public class KorisnikService {
             case ZAPOSLENIK:
                 return "ZAPOSLENIK";
             case ADMIN:
-                return "ADMIN"; // <-- dodano
+                return "ADMIN";
+            case KORISNIK:
+                return "KORISNIK";
+            case RECEPCIONIST:
+                return "RECEPCIONIST";
             case GOST:
             default:
                 return "GOST";
@@ -255,29 +259,35 @@ public class KorisnikService {
 
 
 
-    @Transactional
+
     public Korisnik updateRole(Integer userId, String novaUloga) {
-        Korisnik korisnik = korisnikRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Korisnik ne postoji"));
+        UlogaKorisnika ulogaEnum;
+        try {
+            ulogaEnum = UlogaKorisnika.valueOf(novaUloga.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Nepoznata uloga: " + novaUloga);
+        }
 
-        // Sigurno parsiranje role samo za frontend vrijednosti
-        korisnik.setOvlast(parseUloga(novaUloga));
+        int updated = korisnikRepository.updateRoleOnly(userId, ulogaEnum);
+        if (updated == 0) {
+            throw new RuntimeException("Korisnik s ID " + userId + " ne postoji");
+        }
 
-        return korisnikRepository.save(korisnik);
+        // Vrati korisnika s novom ulogom
+        return korisnikRepository.findById(userId).orElseThrow();
     }
 
     private UlogaKorisnika parseUloga(String uloga) {
         if (uloga == null) return UlogaKorisnika.GOST;
 
-        switch (uloga.toUpperCase()) {
-            case "VLASNIK":
-                return UlogaKorisnika.VLASNIK;
-            case "ZAPOSLENIK":
-                return UlogaKorisnika.ZAPOSLENIK;
-            case "GOST":
-            default:
-                return UlogaKorisnika.GOST;
-        }
+        return switch (uloga.toUpperCase()) {
+            case "VLASNIK" -> UlogaKorisnika.VLASNIK;
+            case "ZAPOSLENIK" -> UlogaKorisnika.ZAPOSLENIK;
+            case "RECEPCIONIST" -> UlogaKorisnika.ZAPOSLENIK; // mapiranje
+            case "KORISNIK" -> UlogaKorisnika.KORISNIK;
+            case "ADMIN" -> UlogaKorisnika.ADMIN;
+            default -> UlogaKorisnika.GOST;
+        };
     }
 
 
