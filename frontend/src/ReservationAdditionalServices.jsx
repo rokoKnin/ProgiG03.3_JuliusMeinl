@@ -56,13 +56,16 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
         odabraniDodatniSadrzaj
       }
       try {
-                  console.log(odabraniDodatniSadrzaj)
-                   return await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
+                   const response= await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
                   
+                   return true;
                 
                 } catch (error) {
+                  
+                  console.log(sadrzaj)
                     console.error('Error: nije se poslao post zbog necega', error.response?.data)
-                   
+                   console.log(error.response.headers)
+                   console.log(error.response.status)
                     return false;
                   }
             
@@ -144,12 +147,7 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
       if(!showNext){
       slanje();}
     }
-     useEffect(() => {
-            axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
-            { setUser(response.data);
-            })
-                .catch(error => console.error('Error ocurred', error))
-        }, []);
+    
       let ind=0;
       if(name==="Bazen"){
         ind=0;
@@ -200,7 +198,7 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
           
                 {name && dodatniSadrzaj.at(ind).map((kategorija,index)=>(
                   
-                 <Box>
+                 <Box key={index}>
                   <Box sx={{display:"flex",justifyContent:"space-around",alignItems:"center"}}>{kategorija.datum.format("DD.MM.YYYY")}
                     <Button sx={{color:"white",backgroundColor:"red",borderRadius:"15px"} }onClick={()=>handleDelete(ind,kategorija.datum)}>x</Button></Box>
                    </Box>

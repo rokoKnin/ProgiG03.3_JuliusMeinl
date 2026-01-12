@@ -27,7 +27,7 @@ export default function App() {
       <Header onOpenPopup={handleOpenLogin} />
     <div className="content">
       <Routes>
-        <Route path="/" element={<HomePage/>} />
+        <Route path="/" element={<HomePage onOpenPopup={handleOpenLogin}/>} />
         <Route path="/logIn" element={<LogIn/>} />
         <Route path="/about" element={<About/>} />
         <Route path="/dashboard" element={<Dashboard/>} />

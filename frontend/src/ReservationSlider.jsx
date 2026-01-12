@@ -16,11 +16,14 @@ import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import axios from "axios";
 import { styled } from '@mui/system';
-
+import KingBedOutlinedIcon from '@mui/icons-material/KingBedOutlined';
+import SingleBedOutlinedIcon from '@mui/icons-material/SingleBedOutlined';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-
+import LivingOutlinedIcon from '@mui/icons-material/LivingOutlined';
+import BalconyOutlinedIcon from '@mui/icons-material/BalconyOutlined';
 import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_NumberInput';
+import TsunamiOutlinedIcon from '@mui/icons-material/TsunamiOutlined';
 const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
   return (
     <BaseNumberInput
@@ -56,7 +59,7 @@ export default function HorizontalLinearStepper() {
   const[brojOdabranoSoba,setBrojOdabranoSoba]=React.useState([0]);
   const[odabraneSobe,setOdabraneSobe]=React.useState([]);
   const[totalOdabranih,setTotalOdabranih]=React.useState(0);
-  const [user,setUser]=React.useState();
+  
   const[dodatniSadrzaj,SetDodatniSadrzaj]=React.useState([[],[],[]]);
  {/*useEffect(() => {
   if(activeStep==1){
@@ -70,14 +73,7 @@ export default function HorizontalLinearStepper() {
     setSlobodneSobe(null)});
     
   }}, [activeStep]);*/}
-  useEffect(() => {
-            axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
-            { setUser(response.data);
-            })
-                .catch(error => console.error('Error ocurred', error))
-        }, []);
-        
-
+ 
   const isStepOptional = (step) => {
     return step === 2;
   };
@@ -86,6 +82,15 @@ export default function HorizontalLinearStepper() {
     return skipped.has(step);
   };
 
+  const prikazSoba={
+    "DVOKREVETNA_KING":{label:"Dvokrevetna king soba", icon:<KingBedOutlinedIcon/>},
+    "TROKREVETNA":{label:"Trokrevetna soba", icon:(<><KingBedOutlinedIcon/><SingleBedOutlinedIcon/></>)},
+    "DVOKREVETNA_TWIN":{label:"Dvokrevetna twin soba", icon:(<><SingleBedOutlinedIcon/><SingleBedOutlinedIcon/></>)},
+    "PENTHOUSE":{label:"Penthouse", icon:(<><KingBedOutlinedIcon/><LivingOutlinedIcon/></>)},
+    "Balkon":{label:"Balkon",icon:<BalconyOutlinedIcon/>},
+    "Pogled na more":{label:"Pogled na more",icon:<TsunamiOutlinedIcon/>}
+
+  }
   async function postDates(datumOd, datumDo){
     const datumi={
       datumOd,
@@ -112,6 +117,7 @@ export default function HorizontalLinearStepper() {
       odabraneSobe,
       odabraniDodatniSadrzaj
     }
+    console.log(sadrzaj);
     try {
                 
                  return await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
@@ -150,6 +156,10 @@ export default function HorizontalLinearStepper() {
       
       if(totalOdabranih>5){
         alert("Nažalost, nije moguće rezervirati više o 5 soba.");
+        return;
+      }
+    if(totalOdabranih===0){
+        alert("Morate odabrati barem jednu sobu za rezervaciju.");
         return;
       }}
     if(activeStep===2){
@@ -206,8 +216,14 @@ if (activeStep+1 === 1) {
 } else if (activeStep+1 ===2) {
 
   if(slobodneSobe){
-content=slobodneSobe.map((soba,i)=>( 
-<div style={{
+content=slobodneSobe.map((soba,i)=>
+  {
+    const info=prikazSoba[soba.vrsta];
+    const balkon=prikazSoba["Balkon"];
+    const pogledNaMore=prikazSoba["Pogled na more"];
+  return(
+ 
+<div key={i}style={{
               border: "1px solid gray",
               padding: "8px",
               marginBottom: "5px",
@@ -218,9 +234,10 @@ content=slobodneSobe.map((soba,i)=>(
           >
             <div style={{ flexGrow: 1, paddingRight: "15px", display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center" }}>
               <div>
-              <div>Naziv sobe: {soba.vrsta}</div>
-              {soba.balkon && <div>Balkon</div>}
-              {soba.pogledNaMore && <div>Pogled na more</div>}
+               
+              <div style={{display:"flex",flexDirection:"row", gap:"5px"}}>Naziv sobe: {info.label} {info.icon}</div>
+              {soba.balkon && <div style={{display:"flex",flexDirection:"row", gap:"5px"}}>{balkon.label}{balkon.icon}</div>}
+              {soba.pogledNaMore && <div style={{display:"flex",flexDirection:"row", gap:"5px"}}>{pogledNaMore.label}{pogledNaMore.icon}</div>}
               <div>Cijena: {soba.cijena} €</div></div>
               <div>
              <NumberInput value={brojOdabranoSoba[i]||0} onChange={(event,val)=>{
@@ -259,9 +276,10 @@ content=slobodneSobe.map((soba,i)=>(
                 }} min={0} max={5} defaultValue={0}  />
             </div>
             </div>
-            <div style={{ flexShrink: 0 }}></div>
-              </div>))
-  }
+              </div>
+            )});
+  
+}
   else{
    content= <span>Nema odgovarajućih soba na taj datum</span>
   }
