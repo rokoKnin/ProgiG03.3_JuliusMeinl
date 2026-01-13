@@ -38,6 +38,7 @@ public class RezervacijaService {
         Rezervacija rezervacija = new Rezervacija();
         rezervacija.setKorisnik(korisnik.get());
         rezervacija.setIznosRezervacije(BigDecimal.ZERO);
+        rezervacija.setPlaceno(true);
 
         return rezervacijaRepository.save(rezervacija).getId();
     }
