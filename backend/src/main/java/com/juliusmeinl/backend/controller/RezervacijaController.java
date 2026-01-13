@@ -10,7 +10,10 @@ import com.juliusmeinl.backend.service.SobaService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("api/reservations")
 public class RezervacijaController {
@@ -35,17 +38,7 @@ public class RezervacijaController {
             rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumOd(), rezervacijaRequestDTO.getDatumDo());
         }
         rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
-    }/*
-    @GetMapping("/all")
-    public List<Rezervacija> sveRezervacije() {
-        List<Rezervacija> lista = rezervirajService.dohvatiSveRezervacije();
-        // inicijaliziraj lazy kolekcije
-        lista.forEach(r -> {
-            r.getSobe().size();     // pokreće dohvat soba
-            r.getSadrzaji().size(); // pokreće dohvat dodatnog sadržaja
-        });
-        return lista;
-    }*/
+    }
     @GetMapping("/all")
     public List<RezervacijaResponseDTO> sveRezervacije() {
         return rezervirajService.dohvatiSveRezervacijeDTO();
@@ -57,5 +50,42 @@ public class RezervacijaController {
     @PutMapping("/{id}")
     public Rezervacija azurirajRezervaciju(@PathVariable Integer id, @RequestBody Rezervacija rezervacijaInput) {
         return rezervirajService.azurirajRezervaciju(id, rezervacijaInput);
+    }
+
+
+    @GetMapping("/export")
+    public ResponseEntity<InputStreamResource> exportReservations(@RequestParam String format) {
+        try {
+            byte[] data;
+            String filename;
+            MediaType mediaType;
+
+            switch (format.toLowerCase()) {
+                case "pdf":
+                    data = rezervirajService.exportPdf();
+                    filename = "reservations.pdf";
+                    mediaType = MediaType.APPLICATION_PDF;
+                    break;
+                case "xlsx":
+                    data = rezervirajService.exportXlsx();
+                    filename = "reservations.xlsx";
+                    mediaType = MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    break;
+                case "xml":
+                    data = rezervirajService.exportXml();
+                    filename = "reservations.xml";
+                    mediaType = MediaType.APPLICATION_XML;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Nepoznat format: " + format);
+            }
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                    .contentType(mediaType)
+                    .body(new InputStreamResource(new java.io.ByteArrayInputStream(data)));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

@@ -289,34 +289,7 @@ public class KorisnikService {
     }
 
 
-/*
-    public Korisnik updateRole(Integer userId, String novaUloga) {
-        UlogaKorisnika ulogaEnum;
-        try {
-            ulogaEnum = UlogaKorisnika.valueOf(novaUloga.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Nepoznata uloga: " + novaUloga);
-        }
 
-        int updated = korisnikRepository.updateRoleOnly(userId, ulogaEnum);
-        if (updated == 0) {
-            throw new RuntimeException("Korisnik s ID " + userId + " ne postoji");
-        }
-
-        // Vrati korisnika s novom ulogom
-        return korisnikRepository.findById(userId).orElseThrow();
-    }
-*/
-    // private UlogaKorisnika parseUloga(String uloga) {
-//     if (uloga == null) return UlogaKorisnika.NEREGISTRIRAN;
-//
-//     return switch (uloga.toUpperCase()) {
-//         case "KORISNIK" -> UlogaKorisnika.REGISTRIRAN;
-//         case "RECEPCIONIST" -> UlogaKorisnika.ZAPOSLENIK;
-//         case "ADMIN" -> UlogaKorisnika.VLASNIK;  // mapiranje frontend "ADMIN" na backend VLASNIK
-//         default -> UlogaKorisnika.NEREGISTRIRAN;
-//     };
-// }
 
 
 
