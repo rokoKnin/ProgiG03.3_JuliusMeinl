@@ -5,6 +5,7 @@ import StarIcon from '@mui/icons-material/Star';
 import React, {useState} from "react"
 import {Button} from '@mui/material';
 import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
 const labels = {
   1: 'Nezadovoljavajuće',
   1.5: 'Nezadovoljavajuće prema zadovoljavajućem',
@@ -21,6 +22,7 @@ function getLabelText(value) {
   return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
 }
 export default function Review() {
+    const navigate = useNavigate();
    const [value, setValue] = React.useState(2);
   const [hover, setHover] = React.useState(-1);
     const [komentar,setKomentar]=React.useState("");
@@ -34,13 +36,13 @@ export default function Review() {
         }
          try {
                    const response= await axios.post(`${import.meta.env.VITE_API_URL}`+'/api/reviews/' + `${email}`, data,  {withCredentials: true} )
-                  
+                   navigate("/").then(window.location.reload)
                    return true;
-                
+
                 } catch (error) {
-                  
+
                     console.error('Error: nije se poslao post zbog necega', error.response?.data)
-                   
+
                     return false;
                   }
     }
@@ -72,3 +74,4 @@ export default function Review() {
     </Box>
   );
 }
+

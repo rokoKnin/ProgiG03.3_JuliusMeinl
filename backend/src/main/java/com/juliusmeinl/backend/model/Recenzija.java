@@ -1,5 +1,6 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -19,9 +20,10 @@ public class Recenzija {
     private String komentar;
 
     @Column(name = "datumrecenzija", nullable = false)
-    private LocalDate datum;
+    private LocalDate datum = LocalDate.now();
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "korisnik_id", nullable = false)
     private Korisnik korisnik;
 

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class Korisnik {
     @Enumerated(EnumType.STRING)
     private UlogaKorisnika ovlast;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "mjesto_id",referencedColumnName = "id", nullable = false)
     private Mjesto mjesto;
@@ -43,6 +45,7 @@ public class Korisnik {
     @OneToMany(mappedBy = "korisnik")
     private List<Upit> upiti;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "korisnik")
     private List<Recenzija> recenzije;
 }

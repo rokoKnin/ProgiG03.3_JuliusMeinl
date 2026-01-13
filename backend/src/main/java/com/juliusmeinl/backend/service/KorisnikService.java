@@ -67,16 +67,16 @@ public class KorisnikService {
         return korisnik.isPresent();
     }
 
-    //TODO: Rafaktorizirati za novi nacin formiranja SecurityContexta
-    @Transactional
-    public Integer trenutniKorisnikId() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        OAuth2User oauthUser = (OAuth2User) auth.getPrincipal();
-        String email = oauthUser.getAttribute("email");
-        Optional<Korisnik> korisnik = korisnikRepository.findByEmail(email);
-
-        return korisnik.get().getId();
-    }
+//    //TODO: Rafaktorizirati za novi nacin formiranja SecurityContexta
+//    @Transactional
+//    public Integer trenutniKorisnikId() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        OAuth2User oauthUser = (OAuth2User) auth.getPrincipal();
+//        String email = oauthUser.getAttribute("email");
+//        Optional<Korisnik> korisnik = korisnikRepository.findByEmail(email);
+//
+//        return korisnik.get().getId();
+//    }
     @Transactional
     public ByteArrayResource exportUsersXLSX() {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
