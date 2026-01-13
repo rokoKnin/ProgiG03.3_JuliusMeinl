@@ -1,13 +1,11 @@
 package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
+import com.juliusmeinl.backend.model.Rezervacija;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
 import com.juliusmeinl.backend.service.SobaService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,6 +34,20 @@ public class RezervacijaController {
         }
         rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
     }
+    @GetMapping("/all")
+    public List<Rezervacija> sveRezervacije() {
+        List<Rezervacija> lista = rezervirajService.dohvatiSveRezervacije();
+        // inicijaliziraj lazy kolekcije
+        lista.forEach(r -> {
+            r.getSobe().size();     // pokreće dohvat soba
+            r.getSadrzaji().size(); // pokreće dohvat dodatnog sadržaja
+        });
+        return lista;
+    }
 
 
+    @PutMapping("/{id}")
+    public Rezervacija azurirajRezervaciju(@PathVariable Integer id, @RequestBody Rezervacija rezervacijaInput) {
+        return rezervirajService.azurirajRezervaciju(id, rezervacijaInput);
+    }
 }
