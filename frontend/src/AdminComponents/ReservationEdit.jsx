@@ -16,16 +16,42 @@ export default function ReservationEdit( { setExportHandler}) {
     useEffect(() =>  {
         setLoading(true);
         axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}` + `/reservationEdit`, { withCredentials: true })
+            .get(`${import.meta.env.VITE_API_URL }/api/reservations/all`, { withCredentials: true })
             .then((response) => {
-                setReservations(response.data);
+                console.log("RAW RESPONSE:", response.data);
+                if (!Array.isArray(response.data)) {
+                    throw new Error("Backend ne vraća niz, već: " + typeof response.data);
+                }
+                const mapped = response.data.map(r => ({
+                    reservationId: r.id,
+                    user: r.korisnik,
+                    rooms: r.sobe,
+                    additionalContents: r.sadrzaji,
+                    paymentStatus: r.placeno ? "PAID" : "UNPAID",
+                    dateFrom: r.sobe.length ? r.sobe[0].datumOd : null,
+                    dateTo: r.sobe.length ? r.sobe[0].datumDo : null
+                }));
+                setReservations(mapped);
                 setError(null);
             })
             .catch((error) => {
                 console.error("Error fetching reservations:", error)
                 setError("Greška prilikom učitavanja rezervacija.");
             })
-            .finally(() => {setLoading(false)});
+            .finally(() => setLoading(false));
+
+
+        /*   axios
+               .get(`${import.meta.env.VITE_API_URL}}` + `api/reservations/all`, { withCredentials: true })
+               .then((response) => {
+                   setReservations(response.data);
+                   setError(null);
+               })
+               .catch((error) => {
+                   console.error("Error fetching reservations:", error)
+                   setError("Greška prilikom učitavanja rezervacija.");
+               })
+               .finally(() => {setLoading(false)});*/
     }, []);
 
     useEffect(() => {
@@ -36,7 +62,7 @@ export default function ReservationEdit( { setExportHandler}) {
     const exportReservations = async (format) => {
         try {
             const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/reservationEdit/export?format=${format}`,
+                `${import.meta.env.VITE_API_URL}/api/reservations/export?format=${format}`,
                 {
                     withCredentials: true,
                     responseType: "blob",
