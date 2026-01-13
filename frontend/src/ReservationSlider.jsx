@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Reservation from './Reservation';
 import ReservationAdditionalServices from './ReservationAdditionalServices';
 import { colors } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -59,7 +59,7 @@ export default function HorizontalLinearStepper() {
   const[brojOdabranoSoba,setBrojOdabranoSoba]=React.useState([0]);
   const[odabraneSobe,setOdabraneSobe]=React.useState([]);
   const[totalOdabranih,setTotalOdabranih]=React.useState(0);
-  
+  const navigate=useNavigate();
   const[dodatniSadrzaj,SetDodatniSadrzaj]=React.useState([[],[],[]]);
  {/*useEffect(() => {
   if(activeStep==1){
@@ -110,7 +110,7 @@ export default function HorizontalLinearStepper() {
                 }
 
     }
-  async function postSobeDodatniSadrzaj( datumOd,datumDo,odabraniDodatniSadrzaj, odabraneSobe){
+  {/*async function postSobeDodatniSadrzaj( datumOd,datumDo,odabraniDodatniSadrzaj, odabraneSobe){
     const sadrzaj={
       datumOd,
       datumDo,
@@ -129,9 +129,22 @@ export default function HorizontalLinearStepper() {
                   return false;
                 }
           
-  }
+  }*/}
  
+  const handleFinish=()=>{
+     const formatirano=dodatniSadrzaj.flat().map((kat,i)=>({
+            ...kat,datum:dayjs(kat.datum).format('YYYY-MM-DD')
+          })
+        );
+    const sadrzaj={
+      datumOd:datumDolaska.format("YYYY-MM-DD"),
+      datumDo:datumOdlaska.format("YYYY-MM-DD"),
+      odabraneSobe,
+     odabraniDodatniSadrzaj: formatirano
+    }
     
+      navigate('/payment',{state:sadrzaj});
+  }
   const handleNext = async () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
@@ -163,14 +176,14 @@ export default function HorizontalLinearStepper() {
         return;
       }}
     if(activeStep===2){
-       const formatirano=dodatniSadrzaj.flat().map((kat,i)=>({
+       {/*const formatirano=dodatniSadrzaj.flat().map((kat,i)=>({
             ...kat,datum:dayjs(kat.datum).format('YYYY-MM-DD')
           })
         );
       const uspjeh=await postSobeDodatniSadrzaj(datumDolaska.format('YYYY-MM-DD'), datumOdlaska.format('YYYY-MM-DD'),formatirano,odabraneSobe);
       if(!uspjeh){
         console.log("greska");
-      }
+      }*/}
     }
     
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -341,9 +354,12 @@ content=slobodneSobe.map((soba,i)=>
                 Skip
               </Button>
             )}
-            <Button onClick={handleNext} variant="contained" style={{color: "#e4e8ecff"}}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
+            {activeStep === steps.length - 1 &&
+            <Button  variant="contained" style={{color: "#e4e8ecff"}} onClick={handleFinish} >Finish</Button>
+              }
+              {activeStep !== steps.length - 1 &&
+              <Button  onClick={handleNext}variant="contained" style={{color: "#e4e8ecff"}}>Next</Button>
+              }
           </Box>
         </React.Fragment>
       )}
