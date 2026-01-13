@@ -2,22 +2,48 @@ import React, { useEffect, useState } from 'react';
 import { Button, Select, MenuItem, Alert, CircularProgress } from "@mui/material";
 import { Unstable_NumberInput as BaseNumberInput, numberInputClasses } from "@mui/base/Unstable_NumberInput";
 import { styled } from "@mui/system";
-
 import axios from 'axios';
+
+const IMAGE_MAPPING = {
+    'Bazen': '../public/pool2.jpg',
+    'Restoran': '../public/restaurant.jpg',
+    'Teretana': '../public/gym.jpg'
+}
 
 
 export default function ExtraContentEdit( { setExportHandler}) {
     const [extraContent, setExtraContent] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [price, setPrice] = useState(0);
+
+    // Function to get image path based on content name
+    const getImagePath = (contentName) => {
+        if (IMAGE_MAPPING[contentName]) {
+            return IMAGE_MAPPING[contentName];
+        }
+        
+        const matchedKey = Object.keys(IMAGE_MAPPING).find(key => 
+            contentName.toLowerCase().includes(key.toLowerCase()) || 
+            key.toLowerCase().includes(contentName.toLowerCase())
+        );
+        
+        if (matchedKey) {
+            return IMAGE_MAPPING[matchedKey];
+        }
+
+        return '../public/sea.png';
+    };
 
     useEffect(() => {
         setLoading(true);
         axios
-            .get(`${import.meta.env.VITE_API_URL}}` + `/extraContentEdit`, { withCredentials: true })
+            .get(`${import.meta.env.VITE_API_URL}/api/extraContentEdit`, { withCredentials: true })
             .then((response) => {
-                setExtraContent(response.data);
+                const ImgExtraContent = response.data.map(content => ({
+                    ...content, 
+                    image: getImagePath(content.name) 
+                }));
+                setExtraContent(ImgExtraContent);
                 setError(null);
             })
             .catch((error) => {
@@ -35,7 +61,7 @@ export default function ExtraContentEdit( { setExportHandler}) {
     const exportExtraContent = async (format) => {
         try {
             const response = await axios.get(
-                `${import.meta.env.VITE_API_URL}}/extraContentEdit/export?format=${format}`,
+                `${import.meta.env.VITE_API_URL}/api/extraContentEdit/export?format=${format}`,
                 { withCredentials: true, responseType: "blob", }
             );
             downloadFile(response.data, `extraContent.${format}`);
@@ -50,20 +76,29 @@ export default function ExtraContentEdit( { setExportHandler}) {
 
     return (
         <div>
-            
-            <div className="dataCard">
-                <h3>Bazen</h3>
-                <img src='../public/pool2.jpg' alt='Bazen' style={{ width: '200px', height: 'auto' }}/>
-                <div>Cijena: <NumberInput
-                                value={price}
-                                onChange={(e, val) => setPrice(val)}
-                                min={1}
-                                max={999}
-                            />
+            {extraContent.map((content) => (
+                <div key={content.id} className="dataCard">
+                    <h3>{content.name}</h3>
+                    <img src={content.image} alt={content.name} style={{ width: '200px', height: 'auto' }}/>
+                    <div>Cijena: <NumberInput
+                                    value={content.price}
+                                    onChange={(e, val) => setPrice(val)}
+                                    min={1}
+                                    max={999}
+                                />
+                    </div>
+                    <div><Select
+                            value={extraContent.status}
+                            onChange={(e) => setStatus(extraContent.id, e.target.value)}
+                            size="small"
+                            disabled={saving}
+                        >
+                            <MenuItem value="ENABLED">Enable</MenuItem>
+                            <MenuItem value="DISABLED">Disable</MenuItem>
+                        </Select></div>
+                    <Button variant="contained" onClick={() => handleSave(extraContent.id)}>Spremi</Button>
                 </div>
-        </div>
-
-
+            ))}
         </div>
     )
 }
