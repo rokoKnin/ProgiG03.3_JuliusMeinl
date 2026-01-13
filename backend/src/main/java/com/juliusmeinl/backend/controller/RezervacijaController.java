@@ -1,15 +1,15 @@
 package com.juliusmeinl.backend.controller;
 
+import com.juliusmeinl.backend.dto.DodatniSadrzajResponseDTO;
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
+import com.juliusmeinl.backend.service.DodatniSadrzajService;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
 import com.juliusmeinl.backend.service.SobaService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/reservations")
@@ -17,11 +17,13 @@ public class RezervacijaController {
     private final RezervacijaService rezervirajService;
     private final KorisnikService korisnikService;
     private final SobaService sobaService;
+    private final DodatniSadrzajService sadrzajService;
 
-    public RezervacijaController(RezervacijaService rezervirajService, KorisnikService korisnikService, SobaService sobaService) {
+    public RezervacijaController(RezervacijaService rezervirajService, KorisnikService korisnikService, SobaService sobaService, DodatniSadrzajService sadrzajService) {
         this.rezervirajService = rezervirajService;
         this.korisnikService = korisnikService;
         this.sobaService = sobaService;
+        this.sadrzajService = sadrzajService;
     }
 
     @PostMapping
@@ -35,6 +37,12 @@ public class RezervacijaController {
             rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumOd(), rezervacijaRequestDTO.getDatumDo());
         }
         rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
+
+    }
+
+    @GetMapping("/additional-services")
+    public List<DodatniSadrzajResponseDTO> rezervacijaSadrzajInformacije() {
+        return sadrzajService.informacijeSadrzaj();
     }
 
 
