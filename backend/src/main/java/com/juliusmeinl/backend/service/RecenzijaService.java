@@ -23,7 +23,7 @@ public class RecenzijaService {
         this.korisnikRepository = korisnikRepository;
     }
 
-    public void spremiRecenziju(String email, RecenzijaRequestDTO recenzijaDTO) {
+    public Recenzija spremiRecenziju(String email, RecenzijaRequestDTO recenzijaDTO) {
         Korisnik korisnik = korisnikRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ""));
 
         Recenzija recenzija = new Recenzija();
@@ -32,6 +32,6 @@ public class RecenzijaService {
         recenzija.setOcjena(recenzijaDTO.getValue());
         recenzija.setKomentar(recenzijaDTO.getKomentar());
 
-        recenzijaRepository.save(recenzija);
+       return recenzijaRepository.save(recenzija);
     }
 }

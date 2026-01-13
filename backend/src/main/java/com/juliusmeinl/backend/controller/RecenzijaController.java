@@ -1,7 +1,9 @@
 package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.dto.RecenzijaRequestDTO;
+import com.juliusmeinl.backend.model.Recenzija;
 import com.juliusmeinl.backend.service.RecenzijaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +18,11 @@ public class RecenzijaController {
     }
 
     @PostMapping("/{email}")
-    public ResponseEntity<Void> dodajRecenziju(
+    public ResponseEntity<Recenzija> dodajRecenziju(
             @PathVariable String email,
             @RequestBody RecenzijaRequestDTO recenzijaDTO) {
 
-        recenzijaService.spremiRecenziju(email, recenzijaDTO);
-        return ResponseEntity.ok().build();
+
+        return new ResponseEntity<>(recenzijaService.spremiRecenziju(email, recenzijaDTO), HttpStatus.CREATED);
     }
 }

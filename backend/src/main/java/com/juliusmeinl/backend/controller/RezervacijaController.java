@@ -2,6 +2,7 @@ package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.dto.DodatniSadrzajResponseDTO;
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
+import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.service.DodatniSadrzajService;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
@@ -26,10 +27,11 @@ public class RezervacijaController {
         this.sadrzajService = sadrzajService;
     }
 
-    @PostMapping
-    public void napraviRezervaciju(@RequestBody RezervacijaRequestDTO rezervacijaRequestDTO) {
-        //napravi generalnu rezervaciju
-        Integer rezervacijaId =  rezervirajService.kreirajRezervaciju(korisnikService.trenutniKorisnikId());
+    @PostMapping("/{korisnikEmail}")
+    public void napraviRezervaciju(@RequestBody RezervacijaRequestDTO rezervacijaRequestDTO, @PathVariable String korisnikEmail) {
+        Korisnik korisnik = korisnikService.findByEmail(korisnikEmail).orElseThrow(() -> new RuntimeException("Wrong email provided!\n"));
+
+        Integer rezervacijaId =  rezervirajService.kreirajRezervaciju(korisnik.getId());
 
         //ako nije rezervacija za sobu skipam ovo
         if(!rezervacijaRequestDTO.getSobe().isEmpty()) {
