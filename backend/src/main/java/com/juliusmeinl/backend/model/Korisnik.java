@@ -1,9 +1,9 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -33,16 +33,20 @@ public class Korisnik {
     @Enumerated(EnumType.STRING)
     private UlogaKorisnika ovlast;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mjesto_id",referencedColumnName = "id", nullable = false)
     private Mjesto mjesto;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "korisnik")
     private List<Rezervacija> rezervacije;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "korisnik")
     private List<Upit> upiti;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "korisnik")
     private List<Recenzija> recenzije;
 }

@@ -1,7 +1,9 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -23,11 +25,14 @@ public class Mjesto {
     @Column(name="postbr",nullable = false)
     private String postBr;
 
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ToString.Exclude
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "drzava_id", nullable = false)
     private Drzava drzava;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "mjesto")
     private List<Korisnik> korisnici;
 

@@ -1,5 +1,6 @@
 package com.juliusmeinl.backend.config;
 
+import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.service.KorisnikService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+
+import static com.juliusmeinl.backend.model.UlogaKorisnika.*;
 
 @Component
 @RequiredArgsConstructor
@@ -50,16 +53,19 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         String accessToken = authorizedClient.getAccessToken().getTokenValue();
 
-//        List<String> deaktivirani = korisnikService.getDeactivated();
         List<SimpleGrantedAuthority> authorities;
 
-        if (email.equals(adminEmail)) {
-            authorities = List.of(new SimpleGrantedAuthority("ROLE_VLASNIK"),
-                                  new SimpleGrantedAuthority("ROLE_RECEPCIONIST"));
-//        } else if(!deaktivirani.contains(email)){
-//            authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_REGISTRIRAN"));
+        List<Korisnik> vlasnici = korisnikService.getByRole(VLASNIK);
+        List<Korisnik> recepcionisti = korisnikService.getByRole(ZAPOSLENIK);
+
+        if (email != null && email.equals(adminEmail)) {
+            authorities = VLASNIK.getAuthorities();
+        } else if (email != null && vlasnici.stream().anyMatch(u -> u.getEmail().equals(email))) {
+            authorities = VLASNIK.getAuthorities();
+        } else if (email != null && recepcionisti.stream().anyMatch(u -> u.getEmail().equals(email))) {
+            authorities = ZAPOSLENIK.getAuthorities();
         } else {
-            authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_NEREGISTRIRAN"));
+            authorities = NEREGISTRIRAN.getAuthorities();;
         }
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(oauthUser, null, authorities);
@@ -70,8 +76,8 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         String prezime  = oauthUser.getAttribute("last_name");
         String telefon = oauthUser.getAttribute("phone_number");
 
+        //TODO: osigurati da se localstorage updatea sa svim potrebnim informacijama i onda kada korisnik vec postoji u bazi
         if (korisnikService.existsByEmail(email)) {
-            // korisnik je u bazi → preusmjeri na /home
             response.sendRedirect(frontendUrl + "/#/?access_token=" + accessToken);
         } else {
             String sufix = ime != null ? "&ime=" + ime : "";

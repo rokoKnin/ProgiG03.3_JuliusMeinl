@@ -103,7 +103,7 @@ function Header() {
   <div>
 
     {email === "juliusmeinlt3.3@gmail.com" && (
-      <Button color="inherit" component={Link} to="/adminInfo">
+      <Button color="inherit" component={Link} to="/adminStart">
             Admin
           </Button>
     )}
