@@ -21,7 +21,7 @@ export default function ReservationEdit( { setExportHandler}) {
                 console.log("RAW RESPONSE:", response.data);
                 if (!Array.isArray(response.data)) {
                     throw new Error("Backend ne vraća niz, već: " + typeof response.data);
-                }
+                }/*
                 const mapped = response.data.map(r => ({
                     reservationId: r.id,
                     user: r.korisnik,
@@ -30,7 +30,21 @@ export default function ReservationEdit( { setExportHandler}) {
                     paymentStatus: r.placeno ? "PAID" : "UNPAID",
                     dateFrom: r.sobe.length ? r.sobe[0].datumOd : null,
                     dateTo: r.sobe.length ? r.sobe[0].datumDo : null
+                }));*/
+                const mapped = response.data.map(r => ({
+                    reservationId: r.id,
+                    user: {
+                        name: r.ime,
+                        surname: r.prezime,
+                        email: r.email
+                    },
+                    rooms: r.sobe || [],                // <-- sigurnosna provjera
+                    additionalContents: r.sadrzaji || [], // <-- sigurnosna provjera
+                    paymentStatus: r.placeno ? "PAID" : "UNPAID",
+                    dateFrom: (r.sobe && r.sobe.length) ? r.sobe[0].datumOd : null,
+                    dateTo: (r.sobe && r.sobe.length) ? r.sobe[0].datumDo : null
                 }));
+
                 setReservations(mapped);
                 setError(null);
             })
@@ -184,6 +198,65 @@ export default function ReservationEdit( { setExportHandler}) {
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Status plaćanja</th>
                         </tr>
                     </thead>
+
+                    <tbody>
+                    {filteredReservations.map((reservation) => (
+                        <tr style={{ border: "1px solid #1976d2" }} key={reservation.reservationId}>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.reservationId}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.user?.name || "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.user?.surname || "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.user?.userId || "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.dateFrom
+                                    ? new Date(reservation.dateFrom).toLocaleDateString()
+                                    : "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.dateTo
+                                    ? new Date(reservation.dateTo).toLocaleDateString()
+                                    : "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.rooms.length > 0
+                                    ? reservation.rooms.map((r) => r.roomNumber).join(", ")
+                                    : "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.rooms.length > 0
+                                    ? reservation.rooms.map((r) => r.roomType).join(", ")
+                                    : "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.rooms.length > 0
+                                    ? reservation.rooms.map((r) => r.roomId).join(", ")
+                                    : "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.additionalContents.length > 0
+                                    ? reservation.additionalContents.map((c) => c.content).join(", ")
+                                    : "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.additionalContents.length > 0
+                                    ? reservation.additionalContents.map((c) => c.contentId).join(", ")
+                                    : "N/A"}
+                            </td>
+                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
+                                {reservation.paymentStatus || "N/A"}
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+
+                    {/*}
                     <tbody>
                         {filteredReservations.map((reservation) => (
                             <tr style={{border: "1px solid #1976d2"}} key={reservation.reservationId}>
@@ -201,7 +274,7 @@ export default function ReservationEdit( { setExportHandler}) {
                                 <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.paymentStatus}</td>
                             </tr>
                         ))}
-                    </tbody>
+                    </tbody>*/}
                 </table>
             </div>
         </div>

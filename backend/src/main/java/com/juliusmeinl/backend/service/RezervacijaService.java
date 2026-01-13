@@ -2,6 +2,7 @@ package com.juliusmeinl.backend.service;
 
 import com.juliusmeinl.backend.dto.DodatniSadrzajRequestDTO;
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
+import com.juliusmeinl.backend.dto.RezervacijaResponseDTO;
 import com.juliusmeinl.backend.model.*;
 import com.juliusmeinl.backend.repository.*;
 import org.springframework.stereotype.Service;
@@ -148,4 +149,7 @@ public class RezervacijaService {
         return rezervacijaRepository.save(rezervacija);
     }
 
+    public List<RezervacijaResponseDTO> dohvatiSveRezervacijeDTO() {
+        return rezervacijaRepository.findAllDTO();
+    }
 }

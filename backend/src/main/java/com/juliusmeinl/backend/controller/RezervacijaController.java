@@ -1,6 +1,8 @@
 package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
+import com.juliusmeinl.backend.dto.RezervacijaResponseDTO;
+import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.Rezervacija;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
@@ -33,7 +35,7 @@ public class RezervacijaController {
             rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumOd(), rezervacijaRequestDTO.getDatumDo());
         }
         rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
-    }
+    }/*
     @GetMapping("/all")
     public List<Rezervacija> sveRezervacije() {
         List<Rezervacija> lista = rezervirajService.dohvatiSveRezervacije();
@@ -43,7 +45,13 @@ public class RezervacijaController {
             r.getSadrzaji().size(); // pokreće dohvat dodatnog sadržaja
         });
         return lista;
+    }*/
+    @GetMapping("/all")
+    public List<RezervacijaResponseDTO> sveRezervacije() {
+        return rezervirajService.dohvatiSveRezervacijeDTO();
     }
+
+
 
 
     @PutMapping("/{id}")
