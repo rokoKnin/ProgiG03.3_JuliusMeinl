@@ -25,16 +25,16 @@ public class KorisnikController {
     }
 
 
-    @GetMapping("/info")
-    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-        return principal.getAttributes();
+//    @GetMapping("/info")
+//    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+//        return principal.getAttributes();
 //
 //        String email = ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("email");
 //        if (email == null) {
 //            return new ResponseEntity<>("",HttpStatus.OK);
 //        }
 //        return new ResponseEntity<>("{\"email\": \"" + email + "\"}", HttpStatus.OK);
-    }
+//    }
 
     @PutMapping
     public ResponseEntity<Korisnik> kreirajKorisnika(@RequestBody Korisnik korisnik) {

@@ -26,8 +26,8 @@ public class SobaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Soba>> getSveSobe() {
-        return ResponseEntity.ok(sobaService.getSveSobe());
+    public ResponseEntity<List<Soba>> getSobe() {
+        return ResponseEntity.ok(sobaService.getSobe());
     }
 
     @GetMapping("/{id}")
@@ -170,8 +170,8 @@ public class SobaController {
         BigDecimal novaCijena = sobaService.izracunajCijenu(
                 soba.getVrsta(),
                 soba.getKat(),
-                soba.imaBalkon(),
-                soba.imaPogledNaMore()
+                soba.getBalkon(),
+                soba.getPogledNaMore()
         );
         soba.setCijena(novaCijena);
 
