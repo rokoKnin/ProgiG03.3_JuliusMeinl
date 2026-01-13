@@ -1,9 +1,18 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.math.BigDecimal;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "soba")
 public class Soba {
@@ -39,65 +48,8 @@ public class Soba {
     @Column(name = "status", nullable = false)
     private StatusSobe status;
 
-    @OneToMany(mappedBy = "soba")
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToMany(mappedBy = "soba", fetch = FetchType.LAZY)
     private List<RezervirajSobu> rezervacijeSoba;
-
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getBrojSobe() {
-        return brojSobe;
-    }
-    public void setBrojSobe(String brojSobe) {
-        this.brojSobe = brojSobe;
-    }
-
-    public Integer getKat() {return kat;}
-    public void setKat(Integer kat) {this.kat = kat;}
-
-    public VrstaSobe getVrsta() {return vrsta;}
-    public void setVrsta(VrstaSobe vrsta) {this.vrsta = vrsta;}
-
-    public Integer getKapacitet() {return kapacitet;}
-    public void setKapacitet(Integer kapacitet) {this.kapacitet = kapacitet;}
-
-    public Boolean getBalkon() { return balkon; }
-    public void setBalkon(Boolean balkon) {this.balkon = balkon;}
-
-    public Boolean getPogledNaMore() {return pogledNaMore;}
-    public void setPogledNaMore(Boolean pogledNaMore) { this.pogledNaMore = pogledNaMore; }
-
-    public BigDecimal getCijena() {
-        return cijena;
-    }
-    public void setCijena(BigDecimal cijena) {
-        this.cijena = cijena;
-    }
-
-    public StatusSobe getStatus() {
-        return status;
-    }
-    public void setStatus(StatusSobe status) {
-        this.status = status;
-    }
-
-
-    public boolean imaBalkon() {
-        return this.balkon;
-    }
-
-    public boolean imaPogledNaMore() {
-        return this.pogledNaMore;
-    }
-
-    public List<RezervirajSobu> getRezervacijeSoba() {
-        return rezervacijeSoba;
-    }
-    public void setRezervacijeSoba(List<RezervirajSobu> rezervacijeSoba) {
-        this.rezervacijeSoba = rezervacijeSoba;
-    }
 }

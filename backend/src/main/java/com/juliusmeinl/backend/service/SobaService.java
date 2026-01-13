@@ -38,10 +38,10 @@ public class SobaService {
         this.rezervirajSobuRepository = rezervirajSobuRepository;
     }
 
-    public List<Soba> getSveSobe() {
+    public List<Soba> getSobe() {
         return sobaRepository.findAll()
                 .stream()
-                .sorted((s1, s2) -> s1.getBrojSobe().compareTo(s2.getBrojSobe()))
+                .sorted(Comparator.comparing(Soba::getBrojSobe))
                 .toList();
     }
 
@@ -190,8 +190,8 @@ public class SobaService {
                 row.createCell(1).setCellValue(s.getBrojSobe());
                 row.createCell(2).setCellValue(s.getKat());
                 row.createCell(3).setCellValue(s.getVrsta().name());
-                row.createCell(4).setCellValue(s.imaBalkon());
-                row.createCell(5).setCellValue(s.imaPogledNaMore());
+                row.createCell(4).setCellValue(s.getBalkon());
+                row.createCell(5).setCellValue(s.getPogledNaMore());
                 row.createCell(6).setCellValue(s.getKapacitet());
                 row.createCell(7).setCellValue(s.getCijena().toString());
                 row.createCell(8).setCellValue(s.getStatus().name());
@@ -231,8 +231,8 @@ public class SobaService {
                         s.getBrojSobe(),
                         s.getKat(),
                         s.getVrsta(),
-                        s.imaBalkon(),
-                        s.imaPogledNaMore(),
+                        s.getBalkon(),
+                        s.getPogledNaMore(),
                         s.getKapacitet(),
                         s.getCijena(),
                         s.getStatus()
@@ -278,8 +278,8 @@ public class SobaService {
                 table.addCell(new Phrase(s.getBrojSobe(), cellFont));
                 table.addCell(new Phrase(String.valueOf(s.getKat()), cellFont));
                 table.addCell(new Phrase(s.getVrsta().name(), cellFont));
-                table.addCell(new Phrase(String.valueOf(s.imaBalkon()), cellFont));
-                table.addCell(new Phrase(String.valueOf(s.imaPogledNaMore()), cellFont));
+                table.addCell(new Phrase(String.valueOf(s.getBalkon()), cellFont));
+                table.addCell(new Phrase(String.valueOf(s.getPogledNaMore()), cellFont));
                 table.addCell(new Phrase(String.valueOf(s.getKapacitet()), cellFont));
                 table.addCell(new Phrase(s.getCijena().toString(), cellFont));
                 table.addCell(new Phrase(s.getStatus().name(), cellFont));

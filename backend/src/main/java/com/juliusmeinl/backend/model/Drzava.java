@@ -1,10 +1,8 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -23,6 +21,8 @@ public class Drzava {
     @Column(name = "nazivdrzave", nullable = false, unique = true, length = 50)
     private String nazivDrzave;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "drzava")
     private List<Mjesto> mjesta;
 }

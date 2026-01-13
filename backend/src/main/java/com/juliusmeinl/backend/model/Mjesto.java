@@ -23,6 +23,7 @@ public class Mjesto {
     @Column(name="postbr",nullable = false)
     private String postBr;
 
+    @ToString.Exclude
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "drzava_id", nullable = false)
     private Drzava drzava;
