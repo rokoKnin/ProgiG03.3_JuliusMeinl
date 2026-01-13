@@ -1,5 +1,6 @@
 package com.juliusmeinl.backend.dto;
 
+import com.juliusmeinl.backend.model.VrstaSobe;
 import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.math.BigDecimal;
@@ -7,20 +8,18 @@ import java.time.LocalDate;
 
 public class SobaRequestDTO {
 
-    private String vrsta;
-    private Boolean balkon;
-    private Boolean pogledNaMore;
-    private BigDecimal cijena;
+    private VrstaSobe vrsta;
     private Integer brojDostupnih;
+    private Boolean pogledNaMore;
+    private Boolean balkon;
+    private BigDecimal cijena;
 
-    public String getVrsta() {
+    public VrstaSobe getVrsta() {
         return vrsta;
     }
-
-    public void setVrsta(String vrsta) {
+    public void setVrsta(VrstaSobe vrsta) {
         this.vrsta = vrsta;
     }
-
     public Boolean getBalkon() {
         return balkon;
     }

@@ -1,13 +1,9 @@
 package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
-import com.juliusmeinl.backend.model.Rezervacija;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
 import com.juliusmeinl.backend.service.SobaService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,17 +29,13 @@ public class RezervacijaController {
         //napravi generalnu rezervaciju
         Integer rezervacijaId =  rezervirajService.kreirajRezervaciju(korisnikService.trenutniKorisnikId());
 
-        //metoda za id soba koje mogu
-        List<Integer> dodijeljenjeSobeId = sobaService.dohvatiSobe(rezervacijaRequestDTO);
-
-        rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumSobeOd(), rezervacijaRequestDTO.getDatumSobeDo());
-
-
+        //ako nije rezervacija za sobu skipam ovo
+        if(!rezervacijaRequestDTO.getSobe().isEmpty()) {
+            List<Integer> dodijeljenjeSobeId = sobaService.dohvatiSobe(rezervacijaRequestDTO);
+            rezervirajService.rezervirajSobe(rezervacijaId, dodijeljenjeSobeId, rezervacijaRequestDTO.getDatumOd(), rezervacijaRequestDTO.getDatumDo());
+        }
+        rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
     }
-
-    
-    //stavit dodatan sadrzaj u bazu, promijenit da dodatni sadrzaj ima cijenu a rezervacija nema i da nije datum od do
-    //nekako zbrojit cijenu azurirat rezervaciju
 
 
 }

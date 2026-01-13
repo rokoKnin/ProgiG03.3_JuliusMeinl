@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Value("${frontend.url}")
+    @Value("${julius.frontend.url}")
     private String frontendUrl;
 
 
@@ -33,34 +33,37 @@ public class SecurityConfig {
     private final CustomOAuth2SuccessHandler successHandler;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   CustomOAuth2SuccessHandler successHandler) throws Exception {
+        http.csrf().disable()
+                .cors(cors-> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // svi endpointi otvoreni
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ovo je rijeslio error za preflight
+                        .requestMatchers("/api/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .oauth2Login(oauth2 -> oauth2.disable()); // onemogući OAuth login
+                .oauth2Login(oauth2 ->
+                        oauth2
+                                .userInfoEndpoint(userInfoEndpoint ->
+                                        userInfoEndpoint.userService(customOAuth2UserService)
+                                )
+                                .successHandler(successHandler)
+                );
+
         return http.build();
     }
-
-
-
 
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        // koristimo allowedOriginPatterns jer allowCredentials=true
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of(frontendUrl));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
     }
+
 }

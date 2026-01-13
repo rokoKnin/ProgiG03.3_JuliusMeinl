@@ -56,13 +56,16 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
         odabraniDodatniSadrzaj
       }
       try {
-                  console.log(odabraniDodatniSadrzaj)
-                   return await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
+                   const response= await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
                   
+                   return true;
                 
                 } catch (error) {
+                  
+                  console.log(sadrzaj)
                     console.error('Error: nije se poslao post zbog necega', error.response?.data)
-                   
+                   console.log(error.response.headers)
+                   console.log(error.response.status)
                     return false;
                   }
             
@@ -71,14 +74,14 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
     const handleAdd=()=>{
      
       const rez= {
-        vrstaDodatnogSadržaja: name,
+        vrstaDodatnogSadrzaja: name,
         datum: datum
       }
       let index=0;
-      if(name==="Bazen"){
+      if(name==="bazen"){
         index=0;
       }
-      else if (name==="Restoran"){
+      else if (name==="restoran"){
         index=1;
       }
       else{
@@ -115,20 +118,19 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
        } }
     }
     const handleNextAlone=async()=>{
-      const formatirano=dodatniSadrzaj.map((prev)=>
-        prev.map((kat,i)=>({
+      const formatirano=dodatniSadrzaj.flat().map((kat)=>({
             ...kat,datum:kat.datum.format('YYYY-MM-DD')
-          }))
+          })
         );
         const uspjeh=await postDodatniSadrzaj(odabraneSobe,formatirano);
         
       }
     const handleOdustani=(name)=>{
        let index=0;
-      if(name==="Bazen"){
+      if(name==="bazen"){
         index=0;
       }
-      else if (name==="Restoran"){
+      else if (name==="restoran"){
         index=1;
       }
       else{
@@ -144,17 +146,12 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
       if(!showNext){
       slanje();}
     }
-     useEffect(() => {
-            axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
-            { setUser(response.data);
-            })
-                .catch(error => console.error('Error ocurred', error))
-        }, []);
+    
       let ind=0;
-      if(name==="Bazen"){
+      if(name==="bazen"){
         ind=0;
       }
-      else if (name==="Restoran"){
+      else if (name==="restoran"){
         ind=1;
       }
       else{
@@ -165,21 +162,21 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
     <Box component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
             borderColor:"#007fff"},
-          borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:"Bazen"})}>
+          borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:"bazen"})}>
         <img src="./pool2.jpg" style={{width:"50%", borderRadius:"5px"}}></img>
-        <Typography sx={{color:"#e0e0e0"}}>Bazen</Typography>
+        <Typography sx={{color:"#e0e0e0"}}>bazen</Typography>
     </Box>
     <Box component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
             borderColor:"#007fff"},
-          borderRadius: '12px'}}onClick={() => setIsOpen({open:true,name:"Restoran"})}>
+          borderRadius: '12px'}}onClick={() => setIsOpen({open:true,name:"restoran"})}>
         <img src="./restaurant.jpg" style={{width:"50%",borderRadius:"5px"}}></img>
-        <Typography sx={{color:"#e0e0e0"}}>Restoran</Typography>
+        <Typography sx={{color:"#e0e0e0"}}>restoran</Typography>
     </Box>
     <Box component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%", minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
             borderColor:"#007fff"},
-          borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:"Teretana"})}>
+          borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:"teretana"})}>
         <img src="./gym.jpg" style={{width:"50%",borderRadius:"5px",}}></img>
-        <Typography sx={{color:"#e0e0e0"}}>Teretana</Typography>
+        <Typography sx={{color:"#e0e0e0"}}>teretana</Typography>
     </Box>
     </div>
     {showNext&&(<Box style={{display:"flex", justifyContent:"flex-end"}}>
@@ -200,7 +197,7 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
           
                 {name && dodatniSadrzaj.at(ind).map((kategorija,index)=>(
                   
-                 <Box>
+                 <Box key={index}>
                   <Box sx={{display:"flex",justifyContent:"space-around",alignItems:"center"}}>{kategorija.datum.format("DD.MM.YYYY")}
                     <Button sx={{color:"white",backgroundColor:"red",borderRadius:"15px"} }onClick={()=>handleDelete(ind,kategorija.datum)}>x</Button></Box>
                    </Box>

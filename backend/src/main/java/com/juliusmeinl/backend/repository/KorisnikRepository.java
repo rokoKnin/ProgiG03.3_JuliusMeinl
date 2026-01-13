@@ -8,10 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
+public interface KorisnikRepository extends CrudRepository<Korisnik, Integer> {
     Optional<Korisnik> findByEmail(String email);// traži korisnika po emailu
 
     boolean existsByEmail(String email);         // provjera postoji li korisnik po emailu
@@ -23,4 +26,6 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
     @Query("UPDATE Korisnik k SET k.ovlast = :uloga WHERE k.id = :userId")
     int updateRoleOnly(@Param("userId") Integer userId, @Param("uloga") UlogaKorisnika uloga);
 
+//    @Query("SELECT emailkorisnik FROM Korisnik k WHERE k.statusKor = false")
+//    List<String> getDeactivated();
 }

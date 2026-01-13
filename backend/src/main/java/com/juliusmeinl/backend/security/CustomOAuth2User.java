@@ -1,5 +1,8 @@
-//package com.juliusmeinl.backend.model;
+//package com.juliusmeinl.backend.security;
 //
+//import com.juliusmeinl.backend.model.Korisnik;
+//import com.juliusmeinl.backend.model.UlogaKorisnika;
+//import lombok.Getter;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +12,7 @@
 //import java.util.List;
 //import java.util.Map;
 //
+//@Getter
 //@RequiredArgsConstructor
 //public class CustomOAuth2User implements OAuth2User {
 //    private final Korisnik korisnik;
@@ -40,6 +44,6 @@
 //
 //    @Override
 //    public String getName() {
-//        return korisnik.getIme();
+//        return korisnik.getEmail();
 //    }
 //}
