@@ -10,6 +10,14 @@ export default function UserEdit({ setExportHandler }) {
     const [editedRoles, setEditedRoles] = useState({});
     const [saving, setSaving] = useState(false);
 
+    // Mapa za prikaz uloga (frontend-friendly)
+    const ulogaDisplayMap = {
+        REGISTRIRAN: "Korisnik",
+        ZAPOSLENIK: "Recepcionist",
+        VLASNIK: "Administrator",
+        NEREGISTRIRAN: "Gost"
+    };
+
     // Dohvat korisnika
     useEffect(() => {
         axios
@@ -43,7 +51,6 @@ export default function UserEdit({ setExportHandler }) {
             alert("Greška prilikom izvoza korisnika.");
         }
     };
-
 
     // Brisanje korisnika
     const handleDelete = async (id) => {
@@ -125,7 +132,7 @@ export default function UserEdit({ setExportHandler }) {
                         <div style={{ flexGrow: 1, paddingRight: "15px" }}>
                             <h4 style={{ margin: "0 0 8px 0" }}>
                                 <div>{user.ime} {user.prezime}</div>
-                                {user.uloga === "ADMIN" && (
+                                {user.uloga === "VLASNIK" && (
                                     <span style={{
                                         color: "white",
                                         marginLeft: "10px",
@@ -140,7 +147,8 @@ export default function UserEdit({ setExportHandler }) {
                             <div>Država: {user.drzava}</div>
                             <div>Mjesto: {user.mjesto}</div>
                             <div>Poštanski broj: {user.postanskiBroj}</div>
-                            <div>Uloga korisnika: {editingId === user.id ? (
+                            <div>
+                                Uloga korisnika: {editingId === user.id ? (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px' }}>
                                     <Select
                                         value={editedRoles[user.id] ?? user.uloga}
@@ -148,16 +156,17 @@ export default function UserEdit({ setExportHandler }) {
                                         size="small"
                                         disabled={saving}
                                     >
-                                        <MenuItem value="KORISNIK">Korisnik</MenuItem>
-                                        <MenuItem value="ADMIN">Administrator</MenuItem>
-                                        <MenuItem value="RECEPCIONIST">Recepcionist</MenuItem>
+                                        <MenuItem value="REGISTRIRAN">Korisnik</MenuItem>
+                                        <MenuItem value="VLASNIK">Administrator</MenuItem>
+                                        <MenuItem value="ZAPOSLENIK">Recepcionist</MenuItem>
                                     </Select>
+
                                     <Button size="small" variant="contained" onClick={() => handleSaveRole(user.id)} disabled={saving}>Save</Button>
                                     <Button size="small" onClick={handleCancelEdit} disabled={saving}>Cancel</Button>
                                 </div>
                             ) : (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px' }}>
-                                    <span>{user.uloga}</span>
+                                    <span>{ulogaDisplayMap[user.uloga]}</span>
                                     <Button size="small" variant="outlined" onClick={() => handleEditClick(user.id, user.uloga)}>Edit</Button>
                                 </div>
                             )}
@@ -166,7 +175,7 @@ export default function UserEdit({ setExportHandler }) {
                                 variant="contained"
                                 color="error"
                                 onClick={() => handleDelete(user.id)}
-                                disabled={user.uloga === "ADMIN"}
+                                disabled={user.uloga === "VLASNIK"}
                                 size="small"
                                 style={{ marginTop: '8px' }}
                             >

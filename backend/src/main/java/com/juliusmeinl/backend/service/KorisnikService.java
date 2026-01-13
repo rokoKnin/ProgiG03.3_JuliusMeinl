@@ -264,21 +264,32 @@ public class KorisnikService {
     }
 
     private String normalizeUloga(UlogaKorisnika uloga) {
-        if (uloga == null) return "GOST";
+        if (uloga == null) return "NEREGISTRIRAN"; // fallback na enum
 
-        return switch (uloga) {
-            case VLASNIK -> "KORISNIK";      // ako želiš da vlasnik bude "Korisnik" frontend label
-            case ZAPOSLENIK -> "RECEPCIONIST";
-            case REGISTRIRAN -> "KORISNIK";
-            case NEREGISTRIRAN -> "GOST";
-        };
+        // Vrati stvarnu enum vrijednost kao string
+        return uloga.name();
     }
 
 
 
+    @Transactional
+    public Korisnik updateRole(Integer userId, String novaUloga) {
+        Korisnik korisnik = korisnikRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Korisnik s ID " + userId + " ne postoji"));
+
+        UlogaKorisnika ulogaEnum;
+        try {
+            ulogaEnum = UlogaKorisnika.valueOf(novaUloga.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Nepoznata uloga: " + novaUloga);
+        }
+
+        korisnik.setOvlast(ulogaEnum);
+        return korisnikRepository.save(korisnik);
+    }
 
 
-
+/*
     public Korisnik updateRole(Integer userId, String novaUloga) {
         UlogaKorisnika ulogaEnum;
         try {
@@ -295,17 +306,17 @@ public class KorisnikService {
         // Vrati korisnika s novom ulogom
         return korisnikRepository.findById(userId).orElseThrow();
     }
-
-    private UlogaKorisnika parseUloga(String uloga) {
-        if (uloga == null) return UlogaKorisnika.NEREGISTRIRAN;
-
-        return switch (uloga.toUpperCase()) {
-            case "KORISNIK" -> UlogaKorisnika.REGISTRIRAN;
-            case "RECEPCIONIST" -> UlogaKorisnika.ZAPOSLENIK;
-            case "ADMIN" -> UlogaKorisnika.VLASNIK;  // mapiranje frontend "ADMIN" na backend VLASNIK
-            default -> UlogaKorisnika.NEREGISTRIRAN;
-        };
-    }
+*/
+    // private UlogaKorisnika parseUloga(String uloga) {
+//     if (uloga == null) return UlogaKorisnika.NEREGISTRIRAN;
+//
+//     return switch (uloga.toUpperCase()) {
+//         case "KORISNIK" -> UlogaKorisnika.REGISTRIRAN;
+//         case "RECEPCIONIST" -> UlogaKorisnika.ZAPOSLENIK;
+//         case "ADMIN" -> UlogaKorisnika.VLASNIK;  // mapiranje frontend "ADMIN" na backend VLASNIK
+//         default -> UlogaKorisnika.NEREGISTRIRAN;
+//     };
+// }
 
 
 

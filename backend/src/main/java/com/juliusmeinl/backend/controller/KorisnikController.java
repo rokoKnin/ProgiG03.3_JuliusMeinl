@@ -24,7 +24,11 @@ public class KorisnikController {
         this.korisnikService = korisnikService;
     }
 
-
+    @GetMapping
+    public List<Map<String, Object>> getAllUsers() {
+        // Ovo vraća korisnike spremne za frontend (bez parsiranja uloge)
+        return korisnikService.getAllUsersForFrontend();
+    }
     @GetMapping("/info")
     public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
         return principal.getAttributes();
