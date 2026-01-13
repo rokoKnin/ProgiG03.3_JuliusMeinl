@@ -44,11 +44,16 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
     const[datumDanas,setDatumDanas]=React.useState(dayjs().startOf('day'));
     const [isOpen, setIsOpen] = useState({open:false,name:null});
     const {open,name}=isOpen;
-    const [lista,setLista]=React.useState([])
-    const [user,setUser]=React.useState();
     const[dodatniSadrzaj,SetdodatniSadrzaj]=React.useState([[],[],[]]);
     const [odabraneSobe,setOdabraneSobe]=React.useState([]);
     const navigate=useNavigate();
+    const [sadrzaj,setSadrzaj]=React.useState([]);
+    useEffect(() => {
+         axios.get(`${import.meta.env.VITE_API_URL}` + '/api/reservations/additional-services', {withCredentials: true}).then(response =>
+         { setSadrzaj(response.data);
+         })
+             .catch(error => console.error('Error ocurred', error))
+     }, []);
 
   {/*async function postDodatniSadrzaj(odabraneSobe,odabraniDodatniSadrzaj){
       const sadrzaj={
@@ -70,7 +75,11 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
                   }
             
     }*/}
-
+    const vrste={
+      "bazen":"Bazen",
+      "restoran":"Restoran",
+      "teretana":"Teretana"
+    }
     const handleAdd=()=>{
      
       const rez= {
@@ -173,7 +182,20 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
     return(
         <div style={{display:'flex',flexDirection:"column",justifyContent:"space-around",gap:"2rem"}}>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
-    <Box component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
+        {sadrzaj.map((objekt,index)=>
+        (
+          objekt.dostupan&&
+          <Box key={index}component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
+            borderColor:"#007fff"},
+          borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:objekt.vrsta})}>
+        <img src={`./${objekt.vrsta}.jpg`} style={{width:"50%", borderRadius:"5px"}}></img>
+        <Typography sx={{color:"#e0e0e0"}}>{vrste[objekt.vrsta]}</Typography>
+        <Typography sx={{color:"#e0e0e0"}}>Cijena po danu: {objekt.cijena} eura</Typography>
+    </Box>
+        )
+        
+        )}
+   {/*} <Box component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
             borderColor:"#007fff"},
           borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:"bazen"})}>
         <img src="./pool2.jpg" style={{width:"50%", borderRadius:"5px"}}></img>
@@ -190,7 +212,7 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
           borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:"teretana"})}>
         <img src="./gym.jpg" style={{width:"50%",borderRadius:"5px",}}></img>
         <Typography sx={{color:"#e0e0e0"}}>teretana</Typography>
-    </Box>
+    </Box>*/}
     </div>
     {showNext&&(<Box style={{display:"flex", justifyContent:"flex-end"}}>
       <Button variant="contained" onClick={handleNextPayment}>Next</Button></Box>)
