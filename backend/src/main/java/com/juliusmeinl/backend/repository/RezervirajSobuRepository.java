@@ -17,5 +17,11 @@ public interface RezervirajSobuRepository extends JpaRepository<RezervirajSobu, 
     """)
     List<Integer> findNedostupneSobeById(LocalDate datumOd, LocalDate datumDo);
 
-
+    @Query("SELECT rs FROM RezervirajSobu rs " +
+            "JOIN FETCH rs.rezervacija r " +
+            "JOIN FETCH r.korisnik k " +
+            "JOIN FETCH k.mjesto m " +
+            "JOIN FETCH m.drzava d " +
+            "JOIN FETCH rs.soba s")
+    List<RezervirajSobu> findAllWithDetails();
 }
