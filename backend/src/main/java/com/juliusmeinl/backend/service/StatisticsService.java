@@ -25,12 +25,12 @@ import com.itextpdf.layout.element.Table;
 import java.util.List;
 import java.util.Map;
 @Service
-public class RezervirajSobuService {
+public class StatisticsService {
 
     private final SobaRepository sobaRepository;
     private final RezervirajSobuRepository rezervirajSobuRepository;
 
-    public RezervirajSobuService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository) {
+    public StatisticsService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository) {
         this.sobaRepository = sobaRepository;
         this.rezervirajSobuRepository = rezervirajSobuRepository;
     }
@@ -231,174 +231,6 @@ public class RezervirajSobuService {
     }
 
 
-    /*public Map<String, Object> generateStatistics() {
-
-        Map<String, Object> stats = new HashMap<>();
-        List<RezervirajSobu> rezervacije = rezervirajSobuRepository.findAll();
-        List<Rezervacija> sveRezervacije = rezervacijaRepository.findAll();
-
-        Map<String, Long> country = new HashMap<>();
-        Map<String, Long> county = new HashMap<>();
-
-        Map<Integer, Map<String, Integer>> monthlyPieCounter = new HashMap<>();
-        Map<String, Integer> monthlyExtra = new HashMap<>(); // Bazen, Teretana, Restoran
-
-        Map<Integer, Integer> yearlyTotal = new HashMap<>();
-        Map<Integer, Integer> yearlyKing = new HashMap<>();
-        Map<Integer, Integer> yearlyTwin = new HashMap<>();
-        Map<Integer, Integer> yearlyTriple = new HashMap<>();
-        Map<Integer, Integer> yearlyPent = new HashMap<>();
-
-        Map<Integer, List<VrstaSobe>> monthlyDays = new HashMap<>();
-
-        // ===========================
-        // PROCESIRANJE REZERVACIJA SOBE
-        // ===========================
-        for (RezervirajSobu rs : rezervacije) {
-            if (rs.getRezervacija() == null || rs.getSoba() == null) continue;
-
-            String drzava = "";
-            String zupanija = "";
-
-            if (rs.getRezervacija().getKorisnik().getMjesto() != null) {
-                Mjesto mjesto = rs.getRezervacija().getKorisnik().getMjesto();
-
-                if (mjesto.getDrzava() != null) {
-                    drzava = mjesto.getDrzava().getNazivDrzave();
-                }
-
-                if (mjesto.getNazMjesto() != null) {
-                    zupanija = mjesto.getNazMjesto();
-                }
-            }
-
-
-            country.merge(drzava, 1L, Long::sum);
-            county.merge(zupanija, 1L, Long::sum);
-
-            LocalDate datum = rs.getDatumOd();
-            int month = datum.getMonthValue();
-            int day = datum.getDayOfMonth();
-            VrstaSobe tip = rs.getSoba().getVrsta();
-
-            // Mjesečni Pie (tipovi soba)
-            monthlyPieCounter
-                    .computeIfAbsent(month, m -> new HashMap<>())
-                    .merge(tip.name(), 1, Integer::sum);
-
-            // Godišnji broj po sobama
-            yearlyTotal.merge(month, 1, Integer::sum);
-            switch (tip) {
-                case DVOKREVETNA_KING -> yearlyKing.merge(month, 1, Integer::sum);
-                case DVOKREVETNA_TWIN -> yearlyTwin.merge(month, 1, Integer::sum);
-                case TROKREVETNA -> yearlyTriple.merge(month, 1, Integer::sum);
-                case PENTHOUSE -> yearlyPent.merge(month, 1, Integer::sum);
-            }
-
-            monthlyDays.computeIfAbsent(day, d -> new ArrayList<>()).add(tip);
-        }
-
-        // ===========================
-        // PROCESIRANJE DODATNIH SADRZAJA
-        // ===========================
-        int currentMonth = LocalDate.now().getMonthValue();
-
-        List<RezervirajSadrzaj> sviSadrzaji = rezervirajSadrzajRepository.findAll();
-        for (RezervirajSadrzaj rs : sviSadrzaji) {
-            if (rs.getRezervacija() == null || rs.getDodatniSadrzaj() == null) continue;
-
-            LocalDate datum = rs.getRezervacija().getDatumRezerviranja();
-            if (datum.getMonthValue() != currentMonth) continue;
-
-            String vrsta = rs.getDodatniSadrzaj().getVrsta().toUpperCase();
-            monthlyExtra.merge(vrsta, 1, Integer::sum);
-        }
-
-        // ===========================
-        // KREIRANJE OUTPUTA
-        // ===========================
-        stats.put("country", Map.of(
-                "name", new ArrayList<>(country.keySet()),
-                "data", new ArrayList<>(country.values())
-        ));
-
-        stats.put("city", Map.of(
-                "name", new ArrayList<>(county.keySet()),
-                "data", new ArrayList<>(county.values())
-        ));
-
-        Map<String, Integer> pie = monthlyPieCounter.getOrDefault(currentMonth, new HashMap<>());
-        stats.put("monthlyPie", Map.of(
-                "DVOKREVETNA_KING", pie.getOrDefault("DVOKREVETNA_KING", 0),
-                "DVOKREVETNA_TWIN", pie.getOrDefault("DVOKREVETNA_TWIN", 0),
-                "TROKREVETNA", pie.getOrDefault("TROKREVETNA", 0),
-                "PENTHOUSE", pie.getOrDefault("PENTHOUSE", 0)
-        ));
-
-        stats.put("monthlyExtra", Map.of(
-                "BAZEN", monthlyExtra.getOrDefault("BAZEN", 0),
-                "TERETANA", monthlyExtra.getOrDefault("TERETANA", 0),
-                "RESTORAN", monthlyExtra.getOrDefault("RESTORAN", 0)
-        ));
-
-        // MONTHLY LINE
-        List<Integer> days = new ArrayList<>();
-        List<Integer> total = new ArrayList<>();
-        List<Integer> king = new ArrayList<>();
-        List<Integer> twin = new ArrayList<>();
-        List<Integer> triple = new ArrayList<>();
-        List<Integer> pent = new ArrayList<>();
-
-        for (int d = 1; d <= 31; d++) {
-            List<VrstaSobe> list = monthlyDays.getOrDefault(d, List.of());
-            days.add(d);
-            total.add(list.size());
-            king.add((int) list.stream().filter(v -> v == VrstaSobe.DVOKREVETNA_KING).count());
-            twin.add((int) list.stream().filter(v -> v == VrstaSobe.DVOKREVETNA_TWIN).count());
-            triple.add((int) list.stream().filter(v -> v == VrstaSobe.TROKREVETNA).count());
-            pent.add((int) list.stream().filter(v -> v == VrstaSobe.PENTHOUSE).count());
-        }
-        stats.put("monthly", Map.of(
-                "day", days,
-                "total", total,
-                "DVOKREVETNA_KING", king,
-                "DVOKREVETNA_TWIN", twin,
-                "TROKREVETNA", triple,
-                "PENTHOUSE", pent
-        ));
-
-        // YEARLY LINE
-        List<Integer> months = new ArrayList<>();
-        List<Integer> yTotal = new ArrayList<>();
-        List<Integer> yKing = new ArrayList<>();
-        List<Integer> yTwin = new ArrayList<>();
-        List<Integer> yTriple = new ArrayList<>();
-        List<Integer> yPent = new ArrayList<>();
-
-        for (int m = 1; m <= 12; m++) {
-            months.add(m);
-            yTotal.add(yearlyTotal.getOrDefault(m, 0));
-            yKing.add(yearlyKing.getOrDefault(m, 0));
-            yTwin.add(yearlyTwin.getOrDefault(m, 0));
-            yTriple.add(yearlyTriple.getOrDefault(m, 0));
-            yPent.add(yearlyPent.getOrDefault(m, 0));
-        }
-
-        stats.put("yearly", Map.of(
-                "month", months,
-                "total", yTotal,
-                "DVOKREVETNA_KING", yKing,
-                "DVOKREVETNA_TWIN", yTwin,
-                "TROKREVETNA", yTriple,
-                "PENTHOUSE", yPent
-        ));
-
-        return stats;
-    }*/
-
-    // ===========================
-    // EXPORT
-    // ===========================
     public ByteArrayResource exportStatistics(String format) {
 
         Map<String, Object> stats = generateStatistics();
@@ -420,9 +252,6 @@ public class RezervirajSobuService {
         }
     }
 
-    // ===========================
-    // PDF EXPORT
-    // ===========================
     private void exportPdf(Map<String, Object> stats, OutputStream out) {
 
         PdfWriter writer = new PdfWriter(out);
