@@ -21,29 +21,27 @@ export default function ReservationEdit( { setExportHandler}) {
                 console.log("RAW RESPONSE:", response.data);
                 if (!Array.isArray(response.data)) {
                     throw new Error("Backend ne vraća niz, već: " + typeof response.data);
-                }/*
-                const mapped = response.data.map(r => ({
-                    reservationId: r.id,
-                    user: r.korisnik,
-                    rooms: r.sobe,
-                    additionalContents: r.sadrzaji,
-                    paymentStatus: r.placeno ? "PAID" : "UNPAID",
-                    dateFrom: r.sobe.length ? r.sobe[0].datumOd : null,
-                    dateTo: r.sobe.length ? r.sobe[0].datumDo : null
-                }));*/
+                }
                 const mapped = response.data.map(r => ({
                     reservationId: r.id,
                     user: {
                         name: r.ime,
                         surname: r.prezime,
-                        email: r.email
+                        email: r.email,
+                        userId: r.korisnikId  // ← dodaj ovo
                     },
-                    rooms: r.sobe || [],                // <-- sigurnosna provjera
-                    additionalContents: r.sadrzaji || [], // <-- sigurnosna provjera
+                    rooms: (r.sobe && r.sobe.length)
+                        ? r.sobe
+                        : [{ roomNumber: "N/A", roomType: "N/A", roomId: "N/A", datumOd: null, datumDo: null }],  // ← fallback
+                    additionalContents: (r.sadrzaji && r.sadrzaji.length)
+                        ? r.sadrzaji
+                        : [{ content: "N/A", contentId: "N/A" }],  // ← fallback
                     paymentStatus: r.placeno ? "PAID" : "UNPAID",
                     dateFrom: (r.sobe && r.sobe.length) ? r.sobe[0].datumOd : null,
                     dateTo: (r.sobe && r.sobe.length) ? r.sobe[0].datumDo : null
                 }));
+
+
 
                 setReservations(mapped);
                 setError(null);
@@ -53,20 +51,9 @@ export default function ReservationEdit( { setExportHandler}) {
                 setError("Greška prilikom učitavanja rezervacija.");
             })
             .finally(() => setLoading(false));
+    }, []); // ✅ ZATVARANJE useEffect
 
 
-        /*   axios
-               .get(`${import.meta.env.VITE_API_URL}}` + `api/reservations/all`, { withCredentials: true })
-               .then((response) => {
-                   setReservations(response.data);
-                   setError(null);
-               })
-               .catch((error) => {
-                   console.error("Error fetching reservations:", error)
-                   setError("Greška prilikom učitavanja rezervacija.");
-               })
-               .finally(() => {setLoading(false)});*/
-    }, []);
 
     useEffect(() => {
         setExportHandler(() => exportReservations);
@@ -198,83 +185,42 @@ export default function ReservationEdit( { setExportHandler}) {
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Status plaćanja</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                    {filteredReservations.map((reservation) => (
-                        <tr style={{ border: "1px solid #1976d2" }} key={reservation.reservationId}>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.reservationId}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.user?.name || "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.user?.surname || "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.user?.userId || "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.dateFrom
-                                    ? new Date(reservation.dateFrom).toLocaleDateString()
-                                    : "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.dateTo
-                                    ? new Date(reservation.dateTo).toLocaleDateString()
-                                    : "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.rooms.length > 0
-                                    ? reservation.rooms.map((r) => r.roomNumber).join(", ")
-                                    : "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.rooms.length > 0
-                                    ? reservation.rooms.map((r) => r.roomType).join(", ")
-                                    : "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.rooms.length > 0
-                                    ? reservation.rooms.map((r) => r.roomId).join(", ")
-                                    : "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.additionalContents.length > 0
-                                    ? reservation.additionalContents.map((c) => c.content).join(", ")
-                                    : "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.additionalContents.length > 0
-                                    ? reservation.additionalContents.map((c) => c.contentId).join(", ")
-                                    : "N/A"}
-                            </td>
-                            <td style={{ border: "1px solid #1976d2", padding: "0px 10px" }}>
-                                {reservation.paymentStatus || "N/A"}
-                            </td>
-                        </tr>
-                    ))}
+                    {filteredReservations.map((reservation) =>
+                        reservation.rooms.length
+                            ? reservation.rooms.map((room, idx) => {
+                                const additional = reservation.additionalContents[idx] || { content: "N/A", contentId: "N/A" };
+                                return (
+                                    <tr key={`${reservation.reservationId}-${idx}`} style={{ border: "1px solid #1976d2" }}>
+                                        <td>{reservation.reservationId}</td>
+                                        <td>{reservation.user.name || "N/A"}</td>
+                                        <td>{reservation.user.surname || "N/A"}</td>
+                                        <td>{reservation.user.userId || "N/A"}</td>
+                                        <td>{room.datumOd ? new Date(room.datumOd).toLocaleDateString() : "N/A"}</td>
+                                        <td>{room.datumDo ? new Date(room.datumDo).toLocaleDateString() : "N/A"}</td>
+                                        <td>{room.roomNumber || "N/A"}</td>
+                                        <td>{room.roomType || "N/A"}</td>
+                                        <td>{room.roomId || "N/A"}</td>
+                                        <td>{additional.content}</td>
+                                        <td>{additional.contentId}</td>
+                                        <td>{reservation.paymentStatus || "N/A"}</td>
+                                    </tr>
+                                );
+                            })
+                            : (
+                                <tr key={reservation.reservationId} style={{ border: "1px solid #1976d2" }}>
+                                    <td>{reservation.reservationId}</td>
+                                    <td>{reservation.user.name || "N/A"}</td>
+                                    <td>{reservation.user.surname || "N/A"}</td>
+                                    <td>{reservation.user.userId || "N/A"}</td>
+                                    <td colSpan="8" style={{ textAlign: "center" }}>Nema soba</td>
+                                    <td colSpan="2" style={{ textAlign: "center" }}>Nema dodatnog sadržaja</td>
+                                    <td>{reservation.paymentStatus || "N/A"}</td>
+                                </tr>
+                            )
+                    )}
                     </tbody>
 
-                    {/*}
-                    <tbody>
-                        {filteredReservations.map((reservation) => (
-                            <tr style={{border: "1px solid #1976d2"}} key={reservation.reservationId}>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.reservationId}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.user.name}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.user.surname}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.user.userId}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{new Date(reservation.dateFrom).toLocaleDateString()}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{new Date(reservation.dateTo).toLocaleDateString()}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.room.roomNumber}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.room.roomType}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.room.roomId}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.additionalContent.content}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.additionalContent.contentId}</td>
-                                <td style={{border: "1px solid #1976d2", padding: "0px 10px"}}>{reservation.paymentStatus}</td>
-                            </tr>
-                        ))}
-                    </tbody>*/}
                 </table>
             </div>
         </div>
