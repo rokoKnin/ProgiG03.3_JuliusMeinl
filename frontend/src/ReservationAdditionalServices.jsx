@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { createPortal } from 'react-dom';
-
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 function Modal({ isOpen, onClose, children,onConfirm,onOdustani }) {
@@ -48,10 +48,10 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
     const [user,setUser]=React.useState();
     const[dodatniSadrzaj,SetdodatniSadrzaj]=React.useState([[],[],[]]);
     const [odabraneSobe,setOdabraneSobe]=React.useState([]);
+    const navigate=useNavigate();
 
-  async function postDodatniSadrzaj(odabraneSobe,odabraniDodatniSadrzaj){
+  {/*async function postDodatniSadrzaj(odabraneSobe,odabraniDodatniSadrzaj){
       const sadrzaj={
-       
         odabraneSobe,
         odabraniDodatniSadrzaj
       }
@@ -69,7 +69,7 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
                     return false;
                   }
             
-    }
+    }*/}
 
     const handleAdd=()=>{
      
@@ -117,14 +117,27 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
         onUpdate(dodatniSadrzaj);
        } }
     }
-    const handleNextAlone=async()=>{
+    {/*const handleNextAlone=async()=>{
       const formatirano=dodatniSadrzaj.flat().map((kat)=>({
             ...kat,datum:kat.datum.format('YYYY-MM-DD')
           })
         );
         const uspjeh=await postDodatniSadrzaj(odabraneSobe,formatirano);
         
+}*/}
+    const handleNextPayment=()=>
+      {
+      const formatirano=dodatniSadrzaj.flat().map((kat)=>({
+            ...kat,datum:kat.datum.format('YYYY-MM-DD')
+          })
+        );
+      const saljem={
+        odabraneSobe,
+        odabraniDodatniSadrzaj:formatirano
       }
+      navigate('/payment',{state:saljem});
+
+    }
     const handleOdustani=(name)=>{
        let index=0;
       if(name==="bazen"){
@@ -180,7 +193,7 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
     </Box>
     </div>
     {showNext&&(<Box style={{display:"flex", justifyContent:"flex-end"}}>
-      <Button variant="contained" onClick={handleNextAlone}>Next</Button></Box>)
+      <Button variant="contained" onClick={handleNextPayment}>Next</Button></Box>)
     }
     
     <Modal isOpen={isOpen} onConfirm={slanje} onOdustani={()=>{handleOdustani(isOpen.name)}} onClose={() => setIsOpen({open:false,name:null})}>
