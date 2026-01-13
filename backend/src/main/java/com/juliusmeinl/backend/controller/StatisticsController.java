@@ -1,6 +1,6 @@
 package com.juliusmeinl.backend.controller;
 
-import com.juliusmeinl.backend.service.RezervirajSobuService;
+import com.juliusmeinl.backend.service.StatisticsService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,21 +15,21 @@ import java.util.Map;
 @RequestMapping("/api/statistics")
 public class StatisticsController {
 
-    private final RezervirajSobuService rezervirajSobuService;
+    private final StatisticsService statisticsService;
 
-    public StatisticsController(RezervirajSobuService rezervirajSobuService) {
-        this.rezervirajSobuService = rezervirajSobuService;
+    public StatisticsController(StatisticsService statisticsService) {
+        this.statisticsService = statisticsService;
     }
 
     @GetMapping
     public Map<String, Object> getStatistics() {
-        return rezervirajSobuService.generateStatistics();
+        return statisticsService.generateStatistics();
     }
 
     @GetMapping("/export")
     public ResponseEntity<ByteArrayResource> exportStatistics(@RequestParam String format) {
 
-        ByteArrayResource file = rezervirajSobuService.exportStatistics(format);
+        ByteArrayResource file = statisticsService.exportStatistics(format);
 
         String contentType = "application/pdf";
         if ("xlsx".equalsIgnoreCase(format)) {
