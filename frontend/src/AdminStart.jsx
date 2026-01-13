@@ -5,6 +5,7 @@ import RoomEdit from "./AdminComponents/RoomEdit.jsx";
 import Statistics from "./AdminComponents/Statistics.jsx";
 import UserEdit from "./AdminComponents/UserEdit.jsx";
 import ReservationEdit from "./AdminComponents/ReservationEdit.jsx";
+import ExtraContentEdit from "./AdminComponents/ExtraContentEdit.jsx";
 
 export default function AdminStart() {
   const [active, setActive] = useState("roomEdit");
@@ -25,12 +26,14 @@ export default function AdminStart() {
         <Button variant="contained" onClick={() => setActive("statistics")} className={active === "statistics" ? "active" : ""}>Statistika</Button>
         <Button variant="contained" onClick={() => setActive("userEdit")} className={active === "userEdit" ? "active" : ""}>Uredi korisnike</Button>
         <Button variant="contained" onClick={() => setActive("reservationEdit")} className={active === "reservationEdit" ? "active" : ""}>Pregled rezervacija</Button> 
+        <Button variant="contained" onClick={() => setActive("extraContentEdit")} className={active === "extraContentEdit" ? "active" : ""}>Uredi dodatan sadržaj</Button>
       </div> 
       <div className="adminStartContent" style = {{flexGrow: 1, overflowY: "auto"}}>
         {active === "roomEdit" && <RoomEdit setExportHandler={setExportHandler}/>}
         {active === "statistics" && <Statistics setExportHandler={setExportHandler}/>}
         {active === "userEdit" && <UserEdit setExportHandler={setExportHandler}/>}
         {active === "reservationEdit" && <ReservationEdit setExportHandler={setExportHandler}/>}
+        {active === "extraContentEdit" && <ExtraContentEdit setExportHandler={setExportHandler}/>}
       </div>
       <div className = "adminExportButtons">
         <Button disabled={!exportHandler} 
