@@ -5,13 +5,11 @@ import com.itextpdf.text.Font;
 import com.juliusmeinl.backend.model.Drzava;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.Mjesto;
-//import com.juliusmeinl.backend.model.MjestoId;
 import com.juliusmeinl.backend.repository.DrzavaRepository;
 import com.juliusmeinl.backend.repository.KorisnikRepository;
+import com.juliusmeinl.backend.repository.MjestoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,20 +32,43 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class KorisnikService {
 
+    @Value("${julius.admin.email}")
+    private String adminEmail;
+
     private final KorisnikRepository korisnikRepository;
+    private final MjestoRepository mjestoRepository;
     private final DrzavaRepository drzavaRepository;
 
     @Transactional
     public Korisnik spremiKorisnika(Korisnik korisnik) {
+        Mjesto korisnikMjesto = korisnik.getMjesto();
+        korisnikMjesto.setNazMjesto(korisnikMjesto.getNazMjesto().toLowerCase());
+        Optional<Mjesto> mjesto = mjestoRepository.findByPostBrAndNazMjesto(korisnikMjesto.getPostBr(), korisnikMjesto.getNazMjesto());
+
+
         String imeIzJsona = korisnik.getMjesto().getDrzava().getNazivDrzave();
 
         Drzava drzava = drzavaRepository.findByNazivDrzave(imeIzJsona);
 
-        korisnik.getMjesto().setDrzava(drzava);
+        mjesto.ifPresentOrElse(
+                (m) -> {
+                        korisnik.setMjesto(m);
+                        korisnik.getMjesto().setDrzava(drzava);
+                    },
+                () -> {
+                    korisnik.setMjesto(new Mjesto());
+                    korisnik.getMjesto().setNazMjesto(korisnikMjesto.getNazMjesto());
+                    korisnik.getMjesto().setPostBr(korisnikMjesto.getPostBr());
+                    korisnik.getMjesto().setDrzava(drzava);
+                    mjestoRepository.save(korisnik.getMjesto());
+                });
 
-        //TODO: dodati da se nazMjesta formatira
 
-        korisnik.setOvlast(UlogaKorisnika.REGISTRIRAN);
+        if (korisnik.getEmail().equals(adminEmail)){
+            korisnik.setOvlast(UlogaKorisnika.VLASNIK);
+        }else{
+            korisnik.setOvlast(UlogaKorisnika.REGISTRIRAN);
+        }
         return korisnikRepository.save(korisnik);
     }
 
@@ -67,7 +88,7 @@ public class KorisnikService {
         return korisnik.isPresent();
     }
 
-//    //TODO: Rafaktorizirati za novi nacin formiranja SecurityContexta
+    //SOLVED: Rafaktorizirati za novi nacin formiranja SecurityContexta
 //    @Transactional
 //    public Integer trenutniKorisnikId() {
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -77,6 +98,7 @@ public class KorisnikService {
 //
 //        return korisnik.get().getId();
 //    }
+
     @Transactional
     public ByteArrayResource exportUsersXLSX() {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -288,6 +310,9 @@ public class KorisnikService {
         return korisnikRepository.save(korisnik);
     }
 
+    public List<Korisnik> getByRole(UlogaKorisnika ulogaKorisnika) {
+        return korisnikRepository.findByOvlast(ulogaKorisnika);
+    }
 
     public void deleteUser(Integer korisnikId) {
         Korisnik korisnik = korisnikRepository.findById(korisnikId).orElseThrow(

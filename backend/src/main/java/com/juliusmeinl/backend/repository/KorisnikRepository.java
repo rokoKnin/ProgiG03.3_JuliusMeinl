@@ -26,6 +26,8 @@ public interface KorisnikRepository extends CrudRepository<Korisnik, Integer> {
     @Query("UPDATE Korisnik k SET k.ovlast = :uloga WHERE k.id = :userId")
     int updateRoleOnly(@Param("userId") Integer userId, @Param("uloga") UlogaKorisnika uloga);
 
+    List<Korisnik> findByOvlast(UlogaKorisnika ulogaKorisnika);
+
 //    @Query("SELECT emailkorisnik FROM Korisnik k WHERE k.statusKor = false")
 //    List<String> getDeactivated();
 }

@@ -2,6 +2,7 @@ package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.dto.DodatniSadrzajResponseDTO;
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
+import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.dto.RezervacijaResponseDTO;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.service.DodatniSadrzajService;
@@ -9,6 +10,7 @@ import com.juliusmeinl.backend.model.Rezervacija;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
 import com.juliusmeinl.backend.service.SobaService;
+import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,17 +50,6 @@ public class RezervacijaController {
     public List<DodatniSadrzajResponseDTO> rezervacijaSadrzajInformacije() {
         return sadrzajService.informacijeSadrzaj();
     }
-    /*
-    @GetMapping("/all")
-    public List<Rezervacija> sveRezervacije() {
-        List<Rezervacija> lista = rezervirajService.dohvatiSveRezervacije();
-        // inicijaliziraj lazy kolekcije
-        lista.forEach(r -> {
-            r.getSobe().size();     // pokreće dohvat soba
-            r.getSadrzaji().size(); // pokreće dohvat dodatnog sadržaja
-        });
-        return lista;
-    }*/
 
     @GetMapping("/all")
     public List<RezervacijaResponseDTO> sveRezervacije() {

@@ -1,10 +1,9 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
 
@@ -39,9 +38,11 @@ public class Korisnik {
     @JoinColumn(name = "mjesto_id",referencedColumnName = "id", nullable = false)
     private Mjesto mjesto;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "korisnik")
     private List<Rezervacija> rezervacije;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "korisnik")
     private List<Upit> upiti;
 

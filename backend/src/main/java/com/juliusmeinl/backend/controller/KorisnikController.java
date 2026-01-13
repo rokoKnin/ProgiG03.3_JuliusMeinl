@@ -2,6 +2,7 @@ package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.service.KorisnikService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,29 +16,16 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class KorisnikController {
 
     private final KorisnikService korisnikService;
 
-    public KorisnikController(KorisnikService korisnikService) {
-        this.korisnikService = korisnikService;
-    }
-
     @GetMapping
     public List<Map<String, Object>> getAllUsers() {
         // Ovo vraća korisnike spremne za frontend (bez parsiranja uloge)
         return korisnikService.getAllUsersForFrontend();
-    }
-    @GetMapping("/info")
-    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-        return principal.getAttributes();
-//
-//        String email = ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("email");
-//        if (email == null) {
-//            return new ResponseEntity<>("",HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>("{\"email\": \"" + email + "\"}", HttpStatus.OK);
     }
 
     @PutMapping
@@ -53,7 +41,6 @@ public class KorisnikController {
 
         Korisnik korisnik = korisnikService.updateRole(userId, novaUloga);
         return ResponseEntity.ok(Map.of("id", korisnik.getId(), "uloga", korisnik.getOvlast().name()));
-
     }
 
     @DeleteMapping("/{userId}")
