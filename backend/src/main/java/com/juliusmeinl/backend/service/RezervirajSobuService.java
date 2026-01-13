@@ -1,10 +1,7 @@
 package com.juliusmeinl.backend.service;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.juliusmeinl.backend.model.Rezervacija;
-import com.juliusmeinl.backend.model.RezervirajSadrzaj;
-import com.juliusmeinl.backend.model.RezervirajSobu;
-import com.juliusmeinl.backend.model.VrstaSobe;
+import com.juliusmeinl.backend.model.*;
 import com.juliusmeinl.backend.repository.RezervacijaRepository;
 import com.juliusmeinl.backend.repository.RezervirajSadrzajRepository;
 import com.juliusmeinl.backend.repository.RezervirajSobuRepository;
@@ -85,8 +82,21 @@ public class RezervirajSobuService {
         for (RezervirajSobu rs : rezervacije) {
             if (rs.getRezervacija() == null || rs.getSoba() == null) continue;
 
-            String drzava = rs.getRezervacija().getKorisnik().getMjesto().getDrzava().getNazivDrzave();
-            String zupanija = rs.getRezervacija().getKorisnik().getMjesto().getId().getNazMjesto();
+            String drzava = "";
+            String zupanija = "";
+
+            if (rs.getRezervacija().getKorisnik().getMjesto() != null) {
+                Mjesto mjesto = rs.getRezervacija().getKorisnik().getMjesto();
+
+                if (mjesto.getDrzava() != null) {
+                    drzava = mjesto.getDrzava().getNazivDrzave();
+                }
+
+                if (mjesto.getNazMjesto() != null) {
+                    zupanija = mjesto.getNazMjesto();
+                }
+            }
+
 
             country.merge(drzava, 1L, Long::sum);
             county.merge(zupanija, 1L, Long::sum);

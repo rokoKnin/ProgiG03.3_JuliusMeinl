@@ -5,7 +5,7 @@ import com.itextpdf.text.Font;
 import com.juliusmeinl.backend.model.Drzava;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.Mjesto;
-import com.juliusmeinl.backend.model.MjestoId;
+//import com.juliusmeinl.backend.model.MjestoId;
 import com.juliusmeinl.backend.repository.DrzavaRepository;
 import com.juliusmeinl.backend.repository.KorisnikRepository;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +85,9 @@ public class KorisnikService {
             String[] columns = {"Ime","Prezime","Email","Telefon","Uloga","Drzava","Mjesto","PostanskiBroj"};
             for(int i=0;i<columns.length;i++) header.createCell(i).setCellValue(columns[i]);
 
-            List<Korisnik> users = korisnikRepository.findAll();
+            Iterable<Korisnik> iterableUsers = korisnikRepository.findAll();
+            List<Korisnik> users = new ArrayList<>();
+            iterableUsers.forEach(users::add);
             int rowIdx=1;
             for(Korisnik k : users){
                 Row row = sheet.createRow(rowIdx++);
@@ -94,9 +96,22 @@ public class KorisnikService {
                 row.createCell(2).setCellValue(k.getEmail());
                 row.createCell(3).setCellValue(k.getTelefon());
                 row.createCell(4).setCellValue(k.getOvlast().name());
-                row.createCell(5).setCellValue(k.getMjesto().getDrzava().getNazivDrzave());
-                row.createCell(6).setCellValue(k.getMjesto().getId().getNazMjesto());
-                row.createCell(7).setCellValue(k.getMjesto().getId().getPostBr());
+
+                if (k.getMjesto() != null) {
+                    row.createCell(5).setCellValue(k.getMjesto().getDrzava() != null
+                            ? k.getMjesto().getDrzava().getNazivDrzave()
+                            : "");
+                    row.createCell(6).setCellValue(k.getMjesto().getNazMjesto() != null
+                            ? k.getMjesto().getNazMjesto()
+                            : "");
+                    row.createCell(7).setCellValue(k.getMjesto().getPostBr() != null
+                            ? k.getMjesto().getPostBr()
+                            : "");
+                } else {
+                    row.createCell(5).setCellValue("");
+                    row.createCell(6).setCellValue("");
+                    row.createCell(7).setCellValue("");
+                }
             }
 
             workbook.write(out);
@@ -106,11 +121,12 @@ public class KorisnikService {
         }
     }
 
-    // XML
     @Transactional
     public ByteArrayResource exportUsersXML() {
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            List<Korisnik> users = korisnikRepository.findAll();
+            Iterable<Korisnik> iterableUsers = korisnikRepository.findAll();
+            List<Korisnik> users = new ArrayList<>();
+            iterableUsers.forEach(users::add);
             out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<users>\n".getBytes());
 
             for(Korisnik k : users){
@@ -120,9 +136,20 @@ public class KorisnikService {
                 out.write(("    <email>"+k.getEmail()+"</email>\n").getBytes());
                 out.write(("    <telefon>"+k.getTelefon()+"</telefon>\n").getBytes());
                 out.write(("    <uloga>"+k.getOvlast().name()+"</uloga>\n").getBytes());
-                out.write(("    <drzava>"+k.getMjesto().getDrzava().getNazivDrzave()+"</drzava>\n").getBytes());
-                out.write(("    <mjesto>"+k.getMjesto().getId().getNazMjesto()+"</mjesto>\n").getBytes());
-                out.write(("    <postanskiBroj>"+k.getMjesto().getId().getPostBr()+"</postanskiBroj>\n").getBytes());
+
+                if (k.getMjesto() != null) {
+                    out.write(("    <drzava>"+(k.getMjesto().getDrzava() != null
+                            ? k.getMjesto().getDrzava().getNazivDrzave() : "")+"</drzava>\n").getBytes());
+                    out.write(("    <mjesto>"+(k.getMjesto().getNazMjesto() != null
+                            ? k.getMjesto().getNazMjesto() : "")+"</mjesto>\n").getBytes());
+                    out.write(("    <postanskiBroj>"+(k.getMjesto().getPostBr() != null
+                            ? k.getMjesto().getPostBr() : "")+"</postanskiBroj>\n").getBytes());
+                } else {
+                    out.write(("    <drzava></drzava>\n").getBytes());
+                    out.write(("    <mjesto></mjesto>\n").getBytes());
+                    out.write(("    <postanskiBroj></postanskiBroj>\n").getBytes());
+                }
+
                 out.write(("  </user>\n").getBytes());
             }
 
@@ -133,7 +160,6 @@ public class KorisnikService {
         }
     }
 
-    // PDF
     @Transactional
     public ByteArrayResource exportUsersPDF() {
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -155,16 +181,26 @@ public class KorisnikService {
                 table.addCell(cell);
             }
 
-            List<Korisnik> users = korisnikRepository.findAll();
+            Iterable<Korisnik> iterableUsers = korisnikRepository.findAll();
+            List<Korisnik> users = new ArrayList<>();
+            iterableUsers.forEach(users::add);
             for(Korisnik k : users){
                 table.addCell(new Phrase(k.getIme(), cellFont));
                 table.addCell(new Phrase(k.getPrezime(), cellFont));
                 table.addCell(new Phrase(k.getEmail(), cellFont));
                 table.addCell(new Phrase(k.getTelefon(), cellFont));
                 table.addCell(new Phrase(k.getOvlast().name(), cellFont));
-                table.addCell(new Phrase(k.getMjesto().getDrzava().getNazivDrzave(), cellFont));
-                table.addCell(new Phrase(k.getMjesto().getId().getNazMjesto(), cellFont));
-                table.addCell(new Phrase(k.getMjesto().getId().getPostBr(), cellFont));
+
+                String drzava = (k.getMjesto() != null && k.getMjesto().getDrzava() != null)
+                        ? k.getMjesto().getDrzava().getNazivDrzave() : "";
+                String mjesto = (k.getMjesto() != null && k.getMjesto().getNazMjesto() != null)
+                        ? k.getMjesto().getNazMjesto() : "";
+                String postBr = (k.getMjesto() != null && k.getMjesto().getPostBr() != null)
+                        ? k.getMjesto().getPostBr() : "";
+
+                table.addCell(new Phrase(drzava, cellFont));
+                table.addCell(new Phrase(mjesto, cellFont));
+                table.addCell(new Phrase(postBr, cellFont));
             }
 
             document.add(table);
@@ -176,8 +212,11 @@ public class KorisnikService {
         }
     }
 
+
     public List<Map<String, Object>> getAllUsersForFrontend() {
-        List<Korisnik> users = korisnikRepository.findAll();
+        Iterable<Korisnik> iterableUsers = korisnikRepository.findAll();
+        List<Korisnik> users = new ArrayList<>();
+        iterableUsers.forEach(users::add);
         List<Map<String, Object>> result = new ArrayList<>();
 
         for (Korisnik k : users) {
@@ -197,8 +236,18 @@ public class KorisnikService {
                     drzava = k.getMjesto().getDrzava().getNazivDrzave();
                 }
                 if (k.getMjesto().getId() != null) {
-                    mjesto = k.getMjesto().getId().getNazMjesto();
-                    postanskiBroj = k.getMjesto().getId().getPostBr();
+                    if (k.getMjesto() != null) {
+                        if (k.getMjesto().getDrzava() != null) {
+                            drzava = k.getMjesto().getDrzava().getNazivDrzave();
+                        }
+                        if (k.getMjesto().getNazMjesto() != null) {
+                            mjesto = k.getMjesto().getNazMjesto();
+                        }
+                        if (k.getMjesto().getPostBr() != null) {
+                            postanskiBroj = k.getMjesto().getPostBr();
+                        }
+                    }
+
                 }
             }
 
@@ -217,22 +266,15 @@ public class KorisnikService {
     private String normalizeUloga(UlogaKorisnika uloga) {
         if (uloga == null) return "GOST";
 
-        switch (uloga) {
-            case VLASNIK:
-                return "VLASNIK";
-            case ZAPOSLENIK:
-                return "ZAPOSLENIK";
-            case ADMIN:
-                return "ADMIN";
-            case KORISNIK:
-                return "KORISNIK";
-            case RECEPCIONIST:
-                return "RECEPCIONIST";
-            case GOST:
-            default:
-                return "GOST";
-        }
+        return switch (uloga) {
+            case VLASNIK -> "KORISNIK";      // ako želiš da vlasnik bude "Korisnik" frontend label
+            case ZAPOSLENIK -> "RECEPCIONIST";
+            case REGISTRIRAN -> "KORISNIK";
+            case NEREGISTRIRAN -> "GOST";
+        };
     }
+
+
 
 
 
@@ -255,17 +297,16 @@ public class KorisnikService {
     }
 
     private UlogaKorisnika parseUloga(String uloga) {
-        if (uloga == null) return UlogaKorisnika.GOST;
+        if (uloga == null) return UlogaKorisnika.NEREGISTRIRAN;
 
         return switch (uloga.toUpperCase()) {
-            case "VLASNIK" -> UlogaKorisnika.VLASNIK;
-            case "ZAPOSLENIK" -> UlogaKorisnika.ZAPOSLENIK;
-            case "RECEPCIONIST" -> UlogaKorisnika.ZAPOSLENIK; // mapiranje
-            case "KORISNIK" -> UlogaKorisnika.KORISNIK;
-            case "ADMIN" -> UlogaKorisnika.ADMIN;
-            default -> UlogaKorisnika.GOST;
+            case "KORISNIK" -> UlogaKorisnika.REGISTRIRAN;
+            case "RECEPCIONIST" -> UlogaKorisnika.ZAPOSLENIK;
+            case "ADMIN" -> UlogaKorisnika.VLASNIK;  // mapiranje frontend "ADMIN" na backend VLASNIK
+            default -> UlogaKorisnika.NEREGISTRIRAN;
         };
     }
+
 
 
 }
