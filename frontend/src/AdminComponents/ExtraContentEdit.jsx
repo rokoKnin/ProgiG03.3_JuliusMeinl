@@ -15,7 +15,7 @@ export default function ExtraContentEdit( { setExportHandler}) {
     useEffect(() => {
         setLoading(true);
         axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}` + `/extraContentEdit`, { withCredentials: true })
+            .get(`${import.meta.env.VITE_API_URL}}` + `/extraContentEdit`, { withCredentials: true })
             .then((response) => {
                 setExtraContent(response.data);
                 setError(null);
@@ -35,7 +35,7 @@ export default function ExtraContentEdit( { setExportHandler}) {
     const exportExtraContent = async (format) => {
         try {
             const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/extraContentEdit/export?format=${format}`,
+                `${import.meta.env.VITE_API_URL}}/extraContentEdit/export?format=${format}`,
                 { withCredentials: true, responseType: "blob", }
             );
             downloadFile(response.data, `extraContent.${format}`);

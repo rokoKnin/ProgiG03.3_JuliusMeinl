@@ -99,4 +99,55 @@ public class RezervacijaService {
         rezervacijaRepository.save(rezervacija);
     }
 
+
+    @Transactional(readOnly = true)
+    public List<Rezervacija> dohvatiSveRezervacije() {
+        return rezervacijaRepository.findAll();
+    }
+
+    @Transactional
+    public Rezervacija azurirajRezervaciju(Integer rezervacijaId, Rezervacija input) {
+        Rezervacija rezervacija = rezervacijaRepository.findById(rezervacijaId)
+                .orElseThrow(() -> new IllegalArgumentException("Rezervacija ne postoji"));
+
+        // Update polja rezervacije
+        rezervacija.setPlaceno(input.isPlaceno());
+        rezervacija.setDatumRezerviranja(input.getDatumRezerviranja());
+
+        // Update soba
+        if (input.getSobe() != null) {
+            rezervirajSobuRepository.deleteAll(rezervacija.getSobe());
+            for (RezervirajSobu rs : input.getSobe()) {
+                rs.setRezervacija(rezervacija);
+                rezervirajSobuRepository.save(rs);
+            }
+        }
+
+        // Update dodatni sadržaj
+        if (input.getSadrzaji() != null) {
+            rezervirajSadrzajRepository.deleteAll(rezervacija.getSadrzaji());
+            for (RezervirajSadrzaj rs : input.getSadrzaji()) {
+                rs.setRezervacija(rezervacija);
+                rezervirajSadrzajRepository.save(rs);
+            }
+        }
+
+        // Update ukupnog iznosa rezervacije (sobe + dodatni sadržaj)
+        BigDecimal iznos = BigDecimal.ZERO;
+        if (rezervacija.getSobe() != null) {
+            for (RezervirajSobu rs : rezervacija.getSobe()) {
+                long brojNocenja = ChronoUnit.DAYS.between(rs.getDatumOd(), rs.getDatumDo());
+                iznos = iznos.add(rs.getSoba().getCijena().multiply(BigDecimal.valueOf(brojNocenja)));
+            }
+        }
+        if (rezervacija.getSadrzaji() != null) {
+            for (RezervirajSadrzaj rs : rezervacija.getSadrzaji()) {
+                iznos = iznos.add(rs.getDodatniSadrzaj().getCijena());
+            }
+        }
+        rezervacija.setIznosRezervacije(iznos);
+
+        return rezervacijaRepository.save(rezervacija);
+    }
+
 }

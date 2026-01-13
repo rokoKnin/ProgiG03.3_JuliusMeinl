@@ -4,6 +4,7 @@ import com.juliusmeinl.backend.dto.DodatniSadrzajResponseDTO;
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.service.DodatniSadrzajService;
+import com.juliusmeinl.backend.model.Rezervacija;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
 import com.juliusmeinl.backend.service.SobaService;
@@ -46,6 +47,20 @@ public class RezervacijaController {
     public List<DodatniSadrzajResponseDTO> rezervacijaSadrzajInformacije() {
         return sadrzajService.informacijeSadrzaj();
     }
+    @GetMapping("/all")
+    public List<Rezervacija> sveRezervacije() {
+        List<Rezervacija> lista = rezervirajService.dohvatiSveRezervacije();
+        // inicijaliziraj lazy kolekcije
+        lista.forEach(r -> {
+            r.getSobe().size();     // pokreće dohvat soba
+            r.getSadrzaji().size(); // pokreće dohvat dodatnog sadržaja
+        });
+        return lista;
+    }
 
 
+    @PutMapping("/{id}")
+    public Rezervacija azurirajRezervaciju(@PathVariable Integer id, @RequestBody Rezervacija rezervacijaInput) {
+        return rezervirajService.azurirajRezervaciju(id, rezervacijaInput);
+    }
 }
