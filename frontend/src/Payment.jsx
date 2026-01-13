@@ -9,8 +9,16 @@ import axios from 'axios' ;
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useState } from 'react';
 function Payment() {
     const navigate=useNavigate();
+    const [email,setEmail]=React.useState();
+      useEffect(()=>{
+        
+      const privemail = localStorage.getItem('email');
+      setEmail(privemail);
+      },[])
     const handleSubmit=async(event)=>{
         event.preventDefault();
         const uspjeh=await postpay();
@@ -21,7 +29,7 @@ function Payment() {
     async function postpay(){
       console.log(sadrzaj);
       try {
-                   const response= await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
+                   const response= await axios.post(`${import.meta.env.VITE_API_URL}`+'/api/reservations/' + `${email}`, sadrzaj,  {withCredentials: true} )
                   
                    return true;
                 

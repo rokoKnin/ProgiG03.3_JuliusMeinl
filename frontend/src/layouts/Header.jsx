@@ -83,8 +83,11 @@ function Header() {
             <MenuItem onClick={handleClose} component={Link} to="/reservation">
               Rezervacija soba
             </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/reservation">
+            <MenuItem onClick={handleClose} component={Link} to="/reservationAdditionalServices">
               Rezervacija dodatnog sadržaja
+            </MenuItem>
+             <MenuItem onClick={handleClose} component={Link} to="/reviews">
+              Recenzije
             </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/contact">
               Kontakt
