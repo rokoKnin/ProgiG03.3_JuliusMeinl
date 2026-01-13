@@ -5,9 +5,9 @@ import { styled } from "@mui/system";
 import axios from 'axios';
 
 const IMAGE_MAPPING = {
-    'Bazen': '../public/pool2.jpg',
-    'Restoran': '../public/restaurant.jpg',
-    'Teretana': '../public/gym.jpg'
+    'Bazen': '/pool2.jpg',
+    'Restoran': '/restaurant.jpg',
+    'Teretana': '/gym.jpg'
 }
 
 
@@ -15,6 +15,7 @@ export default function ExtraContentEdit( { setExportHandler}) {
     const [extraContent, setExtraContent] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [saving, setSaving] = useState(false);
 
     // Function to get image path based on content name
     const getImagePath = (contentName) => {
@@ -71,32 +72,66 @@ export default function ExtraContentEdit( { setExportHandler}) {
         }
     };
 
+    const handleSave = async (id) => {
+        const contentToSave = extraContent.find(content => content.id === id);
+        if (!contentToSave) return;
+        setSaving(true);
+        try {
+            await axios.put(
+                `${import.meta.env.VITE_API_URL}/api/extraContentEdit/${id}`,
+                contentToSave,
+                { withCredentials: true }
+            );
+        } catch (error) {
+            console.error("Error saving extra content:", error);
+            alert("Greška prilikom ažuriranja dodatnog sadržaja.");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handlePriceChange = (id, newPrice) => {
+        setExtraContent(prev =>
+            prev.map(content => 
+                content.id === id ? { ...content, price: newPrice } : content
+            )
+        );
+    };
+
+    const handleStatusChange = (id, selectedStatus) => {
+        setExtraContent(prev =>
+            prev.map(content => 
+                content.id === id ? { ...content, status: selectedStatus } : content
+            )
+        );
+    };
+
     if (loading) return <div style={{ textAlign: 'center', marginTop: '2rem' }}><CircularProgress /></div>;
     if (error) return <Alert severity="error">{error}</Alert>;
 
     return (
-        <div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'flex-start' }}>
             {extraContent.map((content) => (
-                <div key={content.id} className="dataCard">
+                <div key={content.id} className="dataCard" style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px',flex: '0 0 auto', marginBottom: '16px', width: '280px' }}>
                     <h3>{content.name}</h3>
-                    <img src={content.image} alt={content.name} style={{ width: '200px', height: 'auto' }}/>
-                    <div>Cijena: <NumberInput
-                                    value={content.price}
-                                    onChange={(e, val) => setPrice(val)}
+                    <img src={content.image} alt={content.name} style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '5px'}}/>
+                    <div><strong>Cijena:</strong> <NumberInput
+                                    value={content.price || 1}
+                                    onChange={(e, val) => handlePriceChange(content.id, val)}
                                     min={1}
                                     max={999}
                                 />
                     </div>
-                    <div><Select
-                            value={extraContent.status}
-                            onChange={(e) => setStatus(extraContent.id, e.target.value)}
+                    <div><strong>Status:</strong><Select
+                            value={content.status}
+                            onChange={(e) => handleStatusChange(content.id, e.target.value)}
                             size="small"
                             disabled={saving}
                         >
-                            <MenuItem value="ENABLED">Enable</MenuItem>
-                            <MenuItem value="DISABLED">Disable</MenuItem>
+                            <MenuItem value="ENABLED">Omogući</MenuItem>
+                            <MenuItem value="DISABLED">Onemogući</MenuItem>
                         </Select></div>
-                    <Button variant="contained" onClick={() => handleSave(extraContent.id)}>Spremi</Button>
+                    <Button variant="contained" onClick={() => handleSave(content.id)}>Spremi</Button>
                 </div>
             ))}
         </div>
