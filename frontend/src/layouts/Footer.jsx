@@ -29,6 +29,9 @@ export default function Footer(){
             </Link>
                     <Link style={{all:'unset',color: 'white', size: 'small', cursor: 'pointer'}} to="/gallery">
               Galerija
+            </Link>
+             <Link style={{all:'unset',color: 'white', size: 'small', cursor: 'pointer'}} to="/reviews">
+              Recenzije
             </Link></div>
                 </div>
             </div>

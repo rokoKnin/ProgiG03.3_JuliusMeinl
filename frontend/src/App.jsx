@@ -15,6 +15,7 @@ import Gallery from './Gallery.jsx';
 import Footer from "./layouts/Footer.jsx";
 import ReservationAdditionalServices from "./ReservationAdditionalServices.jsx";
 import Payment from "./Payment.jsx"
+import Review from "./Review.jsx";
 export default function App() {
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -38,6 +39,8 @@ export default function App() {
         <Route path="/adminStart" element={<AdminStart/>} />
         <Route path="/gallery" element={<Gallery/>} />
         <Route path="/payment" element={<Payment/>} />
+        
+        <Route path="/reviews" element={<Review/>} />
         <Route path="/reservationAdditionalServices" element={<ReservationAdditionalServices showNext={true}/>}/>
       </Routes>
       </div>

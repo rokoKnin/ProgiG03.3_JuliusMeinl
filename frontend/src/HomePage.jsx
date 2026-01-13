@@ -7,8 +7,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 function HomePage() {
   const [user,setUser]=React.useState();
-
-  const email = localStorage.getItem('email');
+  const [email,setEmail]=React.useState();
+  useEffect(()=>{
+    
+  const privemail = localStorage.getItem('email');
+  setEmail(privemail);
+  },[])
   // useEffect(() => {
    //          axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
    //          { setUser(response.data);
