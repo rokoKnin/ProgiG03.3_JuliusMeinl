@@ -37,6 +37,7 @@ public class RezervacijaController {
     private final KorisnikService korisnikService;
     private final SobaService sobaService;
     private final DodatniSadrzajService sadrzajService;
+    private final EmailService emailService;
 
 
 
@@ -53,6 +54,7 @@ public class RezervacijaController {
         }
         rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
 
+        emailService.posaljiRezervacijuMail(rezervacijaId, rezervacijaRequestDTO);
     }
 
     @GetMapping("/additional-services")
