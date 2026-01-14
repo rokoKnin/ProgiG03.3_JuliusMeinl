@@ -35,7 +35,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: juliusmeinlt3.3@gmail.com
-    password: piwklhugkeeknwyhj #maknio sam razmake, hoce li to radit, stavit u .env!!!
+    password: nzejohfzdihgzpky
     protocol: smtp
     properties:
       mail:
