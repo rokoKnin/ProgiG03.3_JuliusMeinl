@@ -128,8 +128,8 @@ export default function ExtraContentEdit( { setExportHandler}) {
                             size="small"
                             disabled={saving}
                         >
-                            <MenuItem value="ENABLED">Omogući</MenuItem>
-                            <MenuItem value="DISABLED">Onemogući</MenuItem>
+                            <MenuItem value="dostupan">Omogući</MenuItem>
+                            <MenuItem value="nedostupan">Onemogući</MenuItem>
                         </Select></div>
                     <Button variant="contained" onClick={() => handleSave(content.id)}>Spremi</Button>
                 </div>
