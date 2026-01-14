@@ -10,36 +10,36 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 function Modal({ isOpen, onClose, children,onConfirm,onOdustani }) {
-  if (!isOpen.open) return null;
+    if (!isOpen.open) return null;
 
-  return createPortal(
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      <div style={{
-        background: 'white',
-        padding: '20px',
-        borderRadius: '8px'
-      }}>
-        {children}
-         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="outlined" onClick={()=>{onOdustani();onClose();}}>Odustani</Button>
-         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="contained" onClick={()=>{onConfirm(); onClose();}}>Spremi</Button>
-      </div>
-    </div>,
-    document.body
-  );
+    return createPortal(
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        }}>
+            <div style={{
+                background: 'white',
+                padding: '20px',
+                borderRadius: '8px'
+            }}>
+                {children}
+                <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="outlined" onClick={()=>{onOdustani();onClose();}}>Odustani</Button>
+                <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="contained" onClick={()=>{onConfirm(); onClose();}}>Spremi</Button>
+            </div>
+        </div>,
+        document.body
+    );
 }
 
 export default function ReservationAdditionalServices({showNext,onUpdate}) {
-    
+
     const[datum,setDatum]=React.useState(dayjs().startOf('day'));
     const[datumDanas,setDatumDanas]=React.useState(dayjs().startOf('day'));
     const [isOpen, setIsOpen] = useState({open:false,name:null});
@@ -49,82 +49,82 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
     const navigate=useNavigate();
     const [sadrzaj,setSadrzaj]=React.useState([]);
     useEffect(() => {
-         axios.get(`${import.meta.env.VITE_API_URL}` + '/api/reservations/additional-services', {withCredentials: true}).then(response =>
-         { setSadrzaj(response.data);
-         })
-             .catch(error => console.error('Error ocurred', error))
-     }, []);
+        axios.get(`${import.meta.env.VITE_API_URL}` + '/api/reservations/additional-services', {withCredentials: true}).then(response =>
+        { setSadrzaj(response.data);
+        })
+            .catch(error => console.error('Error ocurred', error))
+    }, []);
 
-  {/*async function postDodatniSadrzaj(odabraneSobe,odabraniDodatniSadrzaj){
+    {/*async function postDodatniSadrzaj(odabraneSobe,odabraniDodatniSadrzaj){
       const sadrzaj={
         odabraneSobe,
         odabraniDodatniSadrzaj
       }
       try {
                    const response= await axios.post(`${import.meta.env.VITE_API_URL}` + '/api/reservations', sadrzaj,  {withCredentials: true} )
-                  
+
                    return true;
-                
+
                 } catch (error) {
-                  
+
                   console.log(sadrzaj)
                     console.error('Error: nije se poslao post zbog necega', error.response?.data)
                    console.log(error.response.headers)
                    console.log(error.response.status)
                     return false;
                   }
-            
+
     }*/}
     const vrste={
-      "bazen":"Bazen",
-      "restoran":"Restoran",
-      "teretana":"Teretana"
+        "bazen":"Bazen",
+        "restoran":"Restoran",
+        "teretana":"Teretana"
     }
     const handleAdd=()=>{
-     
-      const rez= {
-        vrstaDodatnogSadrzaja: name,
-        datum: datum
-      }
-      let index=0;
-      if(name==="bazen"){
-        index=0;
-      }
-      else if (name==="restoran"){
-        index=1;
-      }
-      else{
-       index=2;
-      }
-      const postoji=dodatniSadrzaj[index].some((obj)=>obj.datum.isSame(datum,'day'))
-    
-      if(!postoji){
-      SetdodatniSadrzaj((prev) => {
-        return prev.map((kategorija, i) => {
-            if (i === index) {
-                return [...kategorija, rez];
-            }
-            return kategorija;
-        });
-    });
-    }   
+
+        const rez= {
+            vrstaDodatnogSadrzaja: name,
+            datum: datum
+        }
+        let index=0;
+        if(name==="bazen"){
+            index=0;
+        }
+        else if (name==="restoran"){
+            index=1;
+        }
+        else{
+            index=2;
+        }
+        const postoji=dodatniSadrzaj[index].some((obj)=>obj.datum.isSame(datum,'day'))
+
+        if(!postoji){
+            SetdodatniSadrzaj((prev) => {
+                return prev.map((kategorija, i) => {
+                    if (i === index) {
+                        return [...kategorija, rez];
+                    }
+                    return kategorija;
+                });
+            });
+        }
     }
     function handleDelete(ind,datum){
-      SetdodatniSadrzaj((prev)=>{
-        return prev.map((kat,i)=> {if(i===ind){
-          return kat.filter(objekt=>!objekt.datum.isSame(datum,'day'))
-      }
-    return kat;
-    })
-      })
+        SetdodatniSadrzaj((prev)=>{
+            return prev.map((kat,i)=> {if(i===ind){
+                return kat.filter(objekt=>!objekt.datum.isSame(datum,'day'))
+            }
+                return kat;
+            })
+        })
     }
-    
+
     const slanje=()=>{
-      if(!showNext){
-       if(onUpdate){
-        
-        onUpdate(dodatniSadrzaj);
-       } }
+        if(!showNext){
+            if(onUpdate){
+
+                onUpdate(dodatniSadrzaj);
+            } }
     }
     {/*const handleNextAlone=async()=>{
       const formatirano=dodatniSadrzaj.flat().map((kat)=>({
@@ -132,70 +132,70 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
           })
         );
         const uspjeh=await postDodatniSadrzaj(odabraneSobe,formatirano);
-        
+
 }*/}
     const handleNextPayment=()=>
-      {
-      const formatirano=dodatniSadrzaj.flat().map((kat)=>({
-            ...kat,datum:kat.datum.format('YYYY-MM-DD')
-          })
+    {
+        const formatirano=dodatniSadrzaj.flat().map((kat)=>({
+                ...kat,datum:kat.datum.format('YYYY-MM-DD')
+            })
         );
-      const saljem={
-        odabraneSobe,
-        odabraniDodatniSadrzaj:formatirano
-      }
-      navigate('/payment',{state:saljem});
+        const saljem={
+            odabraneSobe,
+            odabraniDodatniSadrzaj:formatirano
+        }
+        navigate('/payment',{state:saljem});
 
     }
     const handleOdustani=(name)=>{
-       let index=0;
-      if(name==="bazen"){
-        index=0;
-      }
-      else if (name==="restoran"){
-        index=1;
-      }
-      else{
-       index=2;
-      }
-      
-      SetdodatniSadrzaj((prev)=> {return prev.map((kat,i)=>{
-        if(i===index){
-          return [];
+        let index=0;
+        if(name==="bazen"){
+            index=0;
         }
-        return kat;
-      })});
-      if(!showNext){
-      slanje();}
+        else if (name==="restoran"){
+            index=1;
+        }
+        else{
+            index=2;
+        }
+
+        SetdodatniSadrzaj((prev)=> {return prev.map((kat,i)=>{
+            if(i===index){
+                return [];
+            }
+            return kat;
+        })});
+        if(!showNext){
+            slanje();}
     }
-    
-      let ind=0;
-      if(name==="bazen"){
+
+    let ind=0;
+    if(name==="bazen"){
         ind=0;
-      }
-      else if (name==="restoran"){
+    }
+    else if (name==="restoran"){
         ind=1;
-      }
-      else{
-       ind=2;
-      }
+    }
+    else{
+        ind=2;
+    }
     return(
         <div style={{display:'flex',flexDirection:"column",justifyContent:"space-around",gap:"2rem"}}>
-        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
-        {sadrzaj.map((objekt,index)=>
-        (
-          objekt.dostupan&&
-          <Box key={index}component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
-            borderColor:"#007fff"},
-          borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:objekt.vrsta})}>
-        <img src={`./${objekt.vrsta}.jpg`} style={{width:"50%", borderRadius:"5px"}}></img>
-        <Typography sx={{color:"#e0e0e0"}}>{vrste[objekt.vrsta]}</Typography>
-        <Typography sx={{color:"#e0e0e0"}}>Cijena po danu: {objekt.cijena} eura</Typography>
-    </Box>
-        )
-        
-        )}
-   {/*} <Box component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
+                {sadrzaj.map((objekt,index)=>
+                    (
+                        objekt.dostupan&&
+                        <Box key={index}component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
+                                borderColor:"#007fff"},
+                            borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:objekt.vrsta})}>
+                            <img src={`./${objekt.vrsta}.jpg`} style={{width:"50%", borderRadius:"5px"}}></img>
+                            <Typography sx={{color:"#e0e0e0"}}>{vrste[objekt.vrsta]}</Typography>
+                            <Typography sx={{color:"#e0e0e0"}}>Cijena po danu: {objekt.cijena} eura</Typography>
+                        </Box>
+                    )
+
+                )}
+                {/*} <Box component="button" sx={{display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center",width:"30%",minheight:"350px", padding:"2rem",backgroundColor:'#66b2ff',border: '2px solid #e0e0e0','&:hover': {
             borderColor:"#007fff"},
           borderRadius: '12px'}} onClick={() => setIsOpen({open:true,name:"bazen"})}>
         <img src="./pool2.jpg" style={{width:"50%", borderRadius:"5px"}}></img>
@@ -213,34 +213,34 @@ export default function ReservationAdditionalServices({showNext,onUpdate}) {
         <img src="./gym.jpg" style={{width:"50%",borderRadius:"5px",}}></img>
         <Typography sx={{color:"#e0e0e0"}}>teretana</Typography>
     </Box>*/}
-    </div>
-    {showNext&&(<Box style={{display:"flex", justifyContent:"flex-end"}}>
-      <Button variant="contained" onClick={handleNextPayment}>Next</Button></Box>)
-    }
-    
-    <Modal isOpen={isOpen} onConfirm={slanje} onOdustani={()=>{handleOdustani(isOpen.name)}} onClose={() => setIsOpen({open:false,name:null})}>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box sx={{width:"100%",display:"flex",flexDirection:"column", gap:"1rem"}}>
-            
-              <Typography variant="h5"color="primary">{name}</Typography>
-              <Box sx={{width:"100%",display:"flex",flexDirection:"row", justifyContent:"space-around"}}>
-            <DatePicker sx={{width:"70%"}}label="Datum" name="datum" minDate={datumDanas}value={datum} onChange={(newValue) => setDatum(newValue)} format="DD.MM.YYYY" />
-            <Button variant="contained" color="primary" onClick={handleAdd}>+</Button>
-             </Box>
-             
-             
-          
-                {name && dodatniSadrzaj.at(ind).map((kategorija,index)=>(
-                  
-                 <Box key={index}>
-                  <Box sx={{display:"flex",justifyContent:"space-around",alignItems:"center"}}>{kategorija.datum.format("DD.MM.YYYY")}
-                    <Button sx={{color:"white",backgroundColor:"red",borderRadius:"15px"} }onClick={()=>handleDelete(ind,kategorija.datum)}>x</Button></Box>
-                   </Box>
-                   )
-)}
-            
-            </Box>
-        </LocalizationProvider>
-    </Modal>
-    </div>)
+            </div>
+            {showNext&&(<Box style={{display:"flex", justifyContent:"flex-end"}}>
+                <Button variant="contained" onClick={handleNextPayment}>Next</Button></Box>)
+            }
+
+            <Modal isOpen={isOpen} onConfirm={slanje} onOdustani={()=>{handleOdustani(isOpen.name)}} onClose={() => setIsOpen({open:false,name:null})}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Box sx={{width:"100%",display:"flex",flexDirection:"column", gap:"1rem"}}>
+
+                        <Typography variant="h5"color="primary">{name}</Typography>
+                        <Box sx={{width:"100%",display:"flex",flexDirection:"row", justifyContent:"space-around"}}>
+                            <DatePicker sx={{width:"70%"}}label="Datum" name="datum" minDate={datumDanas}value={datum} onChange={(newValue) => setDatum(newValue)} format="DD.MM.YYYY" />
+                            <Button variant="contained" color="primary" onClick={handleAdd}>+</Button>
+                        </Box>
+
+
+
+                        {name && dodatniSadrzaj.at(ind).map((kategorija,index)=>(
+
+                                <Box key={index}>
+                                    <Box sx={{display:"flex",justifyContent:"space-around",alignItems:"center"}}>{kategorija.datum.format("DD.MM.YYYY")}
+                                        <Button sx={{color:"white",backgroundColor:"red",borderRadius:"15px"} }onClick={()=>handleDelete(ind,kategorija.datum)}>x</Button></Box>
+                                </Box>
+                            )
+                        )}
+
+                    </Box>
+                </LocalizationProvider>
+            </Modal>
+        </div>)
 }

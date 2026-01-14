@@ -5,6 +5,7 @@ import com.juliusmeinl.backend.dto.DodatniSadrzajResponseDTO;
 import com.juliusmeinl.backend.model.DodatniSadrzaj;
 import com.juliusmeinl.backend.model.StatusDodatniSadrzaj;
 import com.juliusmeinl.backend.repository.DodatniSadrzajRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ByteArrayResource;
@@ -19,24 +20,32 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class DodatniSadrzajService {
     private final DodatniSadrzajRepository sadrzajRepository;
 
-    public  DodatniSadrzajService(DodatniSadrzajRepository sadrzajRepository) {
-        this.sadrzajRepository = sadrzajRepository;
-    private final DodatniSadrzajRepository repository;
+    public List<DodatniSadrzajResponseDTO> informacijeSadrzaj() {
+        List<DodatniSadrzaj> sadrzaji = sadrzajRepository.findAll();
+        List<DodatniSadrzajResponseDTO> response = new ArrayList<>();
 
-    public DodatniSadrzajService(DodatniSadrzajRepository repository) {
-        this.repository = repository;
+        for(DodatniSadrzaj sadrzaj : sadrzaji){
+            DodatniSadrzajResponseDTO sadrzajResponseDTO = new DodatniSadrzajResponseDTO();
+            sadrzajResponseDTO.setVrsta(sadrzaj.getVrsta());
+            sadrzajResponseDTO.setCijena(sadrzaj.getCijena());
+            sadrzajResponseDTO.setDostupan(sadrzaj.getStatus() == StatusDodatniSadrzaj.dostupan);
+
+            response.add(sadrzajResponseDTO);
+        }
+        return response;
     }
 
     public List<DodatniSadrzaj> getAll() {
-        return repository.findAll();
+        return sadrzajRepository.findAll();
     }
 
     public DodatniSadrzaj update(Integer id, BigDecimal price, String statusStr) {
-        DodatniSadrzaj content = repository.findById(id)
+        DodatniSadrzaj content = sadrzajRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Sadržaj nije pronađen"));
         content.setCijena(price);
         switch(statusStr) {
@@ -49,29 +58,17 @@ public class DodatniSadrzajService {
             default:
                 throw new RuntimeException("Krivi status dodatnog sadržaja");
         }
-        return repository.save(content);
+        return sadrzajRepository.save(content);
     }
 
-    public List<DodatniSadrzajResponseDTO> informacijeSadrzaj() {
-        List<DodatniSadrzaj> sadrzaji = sadrzajRepository.findAll();
-        List<DodatniSadrzajResponseDTO> response = new ArrayList<>();
     //XLSX
     @Transactional
     public ByteArrayResource exportXLSX() {
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-        for(DodatniSadrzaj sadrzaj : sadrzaji){
-            DodatniSadrzajResponseDTO sadrzajResponseDTO = new DodatniSadrzajResponseDTO();
-            sadrzajResponseDTO.setVrsta(sadrzaj.getVrsta());
-            sadrzajResponseDTO.setCijena(sadrzaj.getCijena());
-            sadrzajResponseDTO.setDostupan(sadrzaj.getStatus() == StatusDodatniSadrzaj.dostupan);
             Sheet sheet = workbook.createSheet("Dodatni sadržaj");
 
-            response.add(sadrzajResponseDTO);
-        }
-        return response;
-    }
             String[] columns = {
                     "ID", "Vrsta", "Status", "Cijena"
             };
@@ -81,7 +78,7 @@ public class DodatniSadrzajService {
                 header.createCell(i).setCellValue(columns[i]);
             }
 
-            List<DodatniSadrzaj> lista = repository.findAll();
+            List<DodatniSadrzaj> lista = sadrzajRepository.findAll();
             int rowIdx = 1;
 
             for (DodatniSadrzaj ds : lista) {
@@ -105,7 +102,7 @@ public class DodatniSadrzajService {
     public ByteArrayResource exportXML() {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-            List<DodatniSadrzaj> lista = repository.findAll();
+            List<DodatniSadrzaj> lista = sadrzajRepository.findAll();
 
             out.write("""
                 <?xml version="1.0" encoding="UTF-8"?>
@@ -159,7 +156,7 @@ public class DodatniSadrzajService {
                 table.addCell(cell);
             }
 
-            for (DodatniSadrzaj ds : repository.findAll()) {
+            for (DodatniSadrzaj ds : sadrzajRepository.findAll()) {
                 table.addCell(new Phrase(String.valueOf(ds.getId()), cellFont));
                 table.addCell(new Phrase(ds.getVrsta(), cellFont));
                 table.addCell(new Phrase(ds.getStatus().name(), cellFont));
@@ -175,5 +172,4 @@ public class DodatniSadrzajService {
             throw new RuntimeException("Greška pri PDF izvozu dodatnog sadržaja", e);
         }
     }
-
 }
