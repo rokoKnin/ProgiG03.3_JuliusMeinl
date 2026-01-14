@@ -22,14 +22,16 @@ public class RezervacijaService {
     private final KorisnikRepository korisnikRepository;
     private final DodatniSadrzajRepository dodatniSadrzajRepository;
     private final RezervirajSadrzajRepository rezervirajSadrzajRepository;
+    private final EmailService emailService;
 
-    public RezervacijaService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository, RezervacijaRepository rezervacijaRepository, KorisnikRepository korisnikRepository, DodatniSadrzajRepository dodatniSadrzajRepository, RezervirajSadrzajRepository rezervirajSadrzajRepository) {
+    public RezervacijaService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository, RezervacijaRepository rezervacijaRepository, KorisnikRepository korisnikRepository, DodatniSadrzajRepository dodatniSadrzajRepository, RezervirajSadrzajRepository rezervirajSadrzajRepository, EmailService emailService) {
         this.sobaRepository = sobaRepository;
         this.rezervirajSobuRepository = rezervirajSobuRepository;
         this.rezervacijaRepository = rezervacijaRepository;
         this.korisnikRepository = korisnikRepository;
         this.dodatniSadrzajRepository = dodatniSadrzajRepository;
         this.rezervirajSadrzajRepository = rezervirajSadrzajRepository;
+        this.emailService = emailService;
     }
 
 

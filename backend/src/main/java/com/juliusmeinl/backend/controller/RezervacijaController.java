@@ -5,11 +5,8 @@ import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.dto.RezervacijaResponseDTO;
 import com.juliusmeinl.backend.model.Korisnik;
-import com.juliusmeinl.backend.service.DodatniSadrzajService;
+import com.juliusmeinl.backend.service.*;
 import com.juliusmeinl.backend.model.Rezervacija;
-import com.juliusmeinl.backend.service.KorisnikService;
-import com.juliusmeinl.backend.service.RezervacijaService;
-import com.juliusmeinl.backend.service.SobaService;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +26,7 @@ public class RezervacijaController {
     private final KorisnikService korisnikService;
     private final SobaService sobaService;
     private final DodatniSadrzajService sadrzajService;
+    private final EmailService emailService;
 
 
     @PostMapping("/{korisnikEmail}")
@@ -44,6 +42,7 @@ public class RezervacijaController {
         }
         rezervirajService.rezervirajSadrzaj(rezervacijaId, rezervacijaRequestDTO);
 
+        emailService.posaljiRezervacijuMail(rezervacijaId, rezervacijaRequestDTO);
     }
 
     @GetMapping("/additional-services")
