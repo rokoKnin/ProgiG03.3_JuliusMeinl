@@ -2,6 +2,7 @@ package com.juliusmeinl.backend.controller;
 import com.juliusmeinl.backend.service.SobaService;
 import com.juliusmeinl.backend.model.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -25,16 +26,19 @@ public class SobaController {
         this.sobaService = sobaService;
     }
 
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping
     public ResponseEntity<List<Soba>> getSobe() {
         return ResponseEntity.ok(sobaService.getSobe());
     }
 
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping("/{id}")
     public ResponseEntity<Soba> getSobaById(@PathVariable Integer id) {
         return ResponseEntity.ok(sobaService.getSobaById(id));
     }
 
+    @PreAuthorize("hasAuthority('admin:create')")
     @PostMapping
     public Soba dodajSobu(@RequestBody Map<String, String> sobaMap) {
         Soba soba = new Soba();
@@ -142,11 +146,14 @@ public class SobaController {
         return  sobaService.spremiSobu(soba);
     }
 
+    @PreAuthorize("hasAuthority('admin:delete')")
     @DeleteMapping("/{id}")
         public ResponseEntity<Void> obrisiSobu(@PathVariable Integer id) {
             sobaService.obrisiSobu(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PreAuthorize("hasAuthority('admin:update')")
     @PutMapping("/{id}")
     public ResponseEntity<Soba> azurirajSobu(
             @PathVariable Integer id,
@@ -189,6 +196,7 @@ public class SobaController {
         return sobaService.dostupneSobe(datumOd, datumDo);
     }
 
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping("/export")
     public ResponseEntity<ByteArrayResource> exportRooms(@RequestParam String format) {
 

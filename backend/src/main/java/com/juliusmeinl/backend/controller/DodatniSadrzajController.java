@@ -1,9 +1,10 @@
 package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.model.DodatniSadrzaj;
-import com.juliusmeinl.backend.model.StatusDodatniSadrzaj;
 import com.juliusmeinl.backend.service.DodatniSadrzajService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.core.io.ByteArrayResource;
@@ -15,21 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/extraContentEdit")
 @CrossOrigin(origins = "*")
 public class DodatniSadrzajController{
 
     private final DodatniSadrzajService dodatniSadrzajService;
 
-    public DodatniSadrzajController(DodatniSadrzajService dodatniSadrzajService) {
-        this.dodatniSadrzajService = dodatniSadrzajService;
-    }
-
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping
     public ResponseEntity<List<DodatniSadrzaj>> getAll() {
         return ResponseEntity.ok(dodatniSadrzajService.getAll());
     }
 
+    @PreAuthorize("hasAuthority('admin:update')")
     @PutMapping("/{id}")
     public ResponseEntity<DodatniSadrzaj> update(@PathVariable Integer id, @RequestBody Map<String, Object> payload) {
         // Frontend šalje cijeli objekt, izvlačimo samo cijenu i status
@@ -39,6 +39,7 @@ public class DodatniSadrzajController{
         return ResponseEntity.ok(dodatniSadrzajService.update(id, price, statusStr));
     }
 
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping("/export")
     public ResponseEntity<ByteArrayResource> export(@RequestParam String format) {
         ByteArrayResource file;
