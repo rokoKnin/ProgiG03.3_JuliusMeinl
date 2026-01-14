@@ -1,5 +1,6 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class DodatniSadrzaj {
     @Column(name = "cijena_sadrzaj", nullable = false)
     private BigDecimal cijena;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "dodatniSadrzaj")
     private List<RezervirajSadrzaj> rezervacijeSadrzaja;
 

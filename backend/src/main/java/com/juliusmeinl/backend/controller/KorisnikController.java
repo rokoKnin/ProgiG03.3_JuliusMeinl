@@ -56,6 +56,12 @@ public class KorisnikController {
 
     }
 
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Integer userId) {
+        korisnikService.deleteUser(userId);
+        return new ResponseEntity<>("Uspjesno obrisan user", HttpStatus.OK);
+    }
+
 
     @GetMapping("/check-vlasnik")
     public boolean provjeriVlasnika(@RequestParam String email) {

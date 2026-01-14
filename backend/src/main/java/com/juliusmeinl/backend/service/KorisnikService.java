@@ -289,8 +289,10 @@ public class KorisnikService {
     }
 
 
-
-
-
-
+    public void deleteUser(Integer korisnikId) {
+        Korisnik korisnik = korisnikRepository.findById(korisnikId).orElseThrow(
+                () -> new RuntimeException("krivi userId poslan\n")
+        );
+        korisnikRepository.delete(korisnik);
+    }
 }
