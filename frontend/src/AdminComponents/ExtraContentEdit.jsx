@@ -42,7 +42,7 @@ export default function ExtraContentEdit( { setExportHandler}) {
             .then((response) => {
                 const ImgExtraContent = response.data.map(content => ({
                     ...content, 
-                    image: getImagePath(content.name) 
+                    image: getImagePath(content.vrsta)
                 }));
                 setExtraContent(ImgExtraContent);
                 setError(null);
@@ -93,7 +93,7 @@ export default function ExtraContentEdit( { setExportHandler}) {
     const handlePriceChange = (id, newPrice) => {
         setExtraContent(prev =>
             prev.map(content => 
-                content.id === id ? { ...content, price: newPrice } : content
+                content.id === id ? { ...content, cijena: newPrice } : content
             )
         );
     };
@@ -113,10 +113,10 @@ export default function ExtraContentEdit( { setExportHandler}) {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'flex-start' }}>
             {extraContent.map((content) => (
                 <div key={content.id} className="dataCard" style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px',flex: '0 0 auto', marginBottom: '16px', width: '280px' }}>
-                    <h3>{content.name}</h3>
-                    <img src={content.image} alt={content.name} style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '5px'}}/>
+                    <h3>{content.vrsta}</h3>
+                    <img src={content.image} alt={content.vrsta} style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '5px'}}/>
                     <div><strong>Cijena:</strong> <NumberInput
-                                    value={content.price || 1}
+                                    value={content.cijena || 1}
                                     onChange={(e, val) => handlePriceChange(content.id, val)}
                                     min={1}
                                     max={999}

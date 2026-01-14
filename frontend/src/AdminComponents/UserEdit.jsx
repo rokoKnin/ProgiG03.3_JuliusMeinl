@@ -148,7 +148,7 @@ export default function UserEdit({ setExportHandler }) {
                             <div>Mjesto: {user.mjesto}</div>
                             <div>Poštanski broj: {user.postanskiBroj}</div>
                             <div>
-                                Uloga korisnika: {editingId === user.id ? (
+                                {editingId === user.id ? (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px' }}>
                                     <Select
                                         value={editedRoles[user.id] ?? user.uloga}
