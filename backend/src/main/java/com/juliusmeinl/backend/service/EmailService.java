@@ -32,7 +32,7 @@ public class EmailService {
                 Datum rezervacije: %s
                 Ukupan iznos: %s €
 
-                Lijep pozdrav,
+                Radujemo se Vašem dolasku!
                 Modrila Hotel
                 """.formatted(
                 rezervacija.getDatumRezerviranja(),  // datum kada je rezervacija napravljena
