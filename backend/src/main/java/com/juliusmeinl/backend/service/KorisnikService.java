@@ -64,7 +64,7 @@ public class KorisnikService {
                 });
 
 
-        if (korisnik.getEmail().equals(adminEmail)){
+        if (korisnik.getEmail().trim().equalsIgnoreCase(adminEmail.trim())){
             korisnik.setOvlast(UlogaKorisnika.VLASNIK);
         }else{
             korisnik.setOvlast(UlogaKorisnika.REGISTRIRAN);
