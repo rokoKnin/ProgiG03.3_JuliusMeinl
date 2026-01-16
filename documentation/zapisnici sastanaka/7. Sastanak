@@ -1,0 +1,32 @@
+Sedmi sastanak: 8.1.2026.
+prisutni: svi
+
+>Stanje s deplojanjem:
+	>prosao je OAuth2
+	>zapinje na preuzimanju podataka s GET …/api/users/info
+
+>Sto je napravljeno:
+	>Frontend:
+        napravljena statistika
+        napravljen dio s rezervacijama
+        micemo kolicinu dodatnog sadrzaja
+	>Backend
+        radio na rezervaciji soba
+        rezervacija se dogada na kraju sobe
+
+
+	>Dokumentacija
+        dijagram stanja rijesen
+
+
+>Sto treba jos raditi: (paziti pritom na stvari koje pisu u pdf-u)
+	>Frontend
+        uredivanje profila
+        uvid u prijasnje rezervacije
+        recenziranje
+        recepcionist rezervacija
+        responzivan dizajn
+        mapa
+	>Povezivanje Frontenda i baze
+        CRUD: /api/{nouns}
+
