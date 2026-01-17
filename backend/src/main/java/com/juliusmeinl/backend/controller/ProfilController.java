@@ -1,13 +1,11 @@
 package com.juliusmeinl.backend.controller;
 
 
+import com.juliusmeinl.backend.dto.KorisnikRequestDTO;
 import com.juliusmeinl.backend.dto.KorisnikResponseDTO;
 import com.juliusmeinl.backend.service.KorisnikService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -23,9 +21,9 @@ public class ProfilController {
        return korisnikService.ispisiKorisnika(email);
     }
 
-    @PostMapping("/edit/{email}")  // ovo nije dobro
-    public void izmjeniKorisnika(@PathVariable String email) {
-
+    @PutMapping("/edit")
+    public KorisnikResponseDTO izmjeniKorisnika(@RequestBody KorisnikRequestDTO korisnikRequestDTO) {
+        return korisnikService.izmjeniKorisnika(korisnikRequestDTO);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.juliusmeinl.backend.dto;
 
-public class KorisnikResponseDTO {
+public class KorisnikRequestDTO {
     private String name;
     private String prezime;
     private String email;
