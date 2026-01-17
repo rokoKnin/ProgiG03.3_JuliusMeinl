@@ -33,7 +33,7 @@ public class Korisnik {
     @Enumerated(EnumType.STRING)
     private UlogaKorisnika ovlast;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "mjesto_id",referencedColumnName = "id", nullable = false)
     private Mjesto mjesto;

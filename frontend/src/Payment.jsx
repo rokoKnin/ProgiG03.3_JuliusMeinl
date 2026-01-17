@@ -16,16 +16,50 @@ import { useState } from 'react';
 function Payment() {
     const navigate=useNavigate();
     const [email,setEmail]=React.useState();
+    const[datumIsteka,setDatumIsteka]=useState();
+    const [cvv,setCvv]=useState();
+    const [brojKartice,setBrojKartice]=useState("");
       useEffect(()=>{
         
       const privemail = localStorage.getItem('email');
       setEmail(privemail);
       },[])
     const handleSubmit=async(event)=>{
-        event.preventDefault();
+      event.preventDefault();
+      
+    if(cvv.length!=3){
+      alert("Pogrešan format cvv-a.")
+    }
+    if(brojKartice.length!=16){
+      
+      alert("Pogrešan format broja kartice.")
+    }
+      if(datumIsteka.length!=7){
+       
+        alert("Pogrešan format datuma isteka kartice");
+        return ;
+      }
+      else{
+         if(datumIsteka.substring(2,3)!=='/'){
+        alert("Pogrešan format datuma isteka kartice");
+      return ;
+      }
+        const mjesec = parseInt(datumIsteka.substring(0, 2));
+        const godina = parseInt( datumIsteka.substring(3, 7));
+        let datumDanas=new Date();
+        console.log(datumDanas)
+        console.log(datumDanas.getFullYear()) 
+        console.log(godina)
+        if((mjesec<1 || mjesec>12)||parseInt(datumDanas.getFullYear())>godina||(datumDanas.getMonth()<mjesec&&datumDanas.getFullYear===godina)){
+        
+        alert("Pogrešan datum");
+        return ;
+        }
+      }
         const uspjeh=await postpay();
         if(uspjeh){navigate('/profil')}
     }
+
     const location=useLocation();
     const sadrzaj=location.state;
     async function postpay(){
@@ -53,16 +87,50 @@ function Payment() {
           id="brojKartice"
           label="Broj kartice"
           variant="outlined"
+          type="number"
+          helperText="Isključivo brojevi"
+          onChange={(e)=>{setBrojKartice(e.target.value)}}
+         sx={{ 
+    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+      display: 'none',
+      margin: 0,
+    },
+    '& input[type=number]': {
+      MozAppearance: 'textfield',
+    }}}
         /><TextField
           required
           id="cvv"
           label="CVV"
           variant="outlined"
+          type="number"
+          helperText="Isključivo brojevi"
+          
+          onChange={(e)=>{setCvv(e.target.value)}}
+          sx={{ 
+    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+      display: 'none',
+      margin: 0,
+    },
+    '& input[type=number]': {
+      MozAppearance: 'textfield',
+    }}}
         /><TextField
           required
           id="datumIsteka"
           label="Datum isteka"
           variant="outlined"
+          type="tel"          
+          onChange={(e)=>{setDatumIsteka(e.target.value)}}
+          helperText="Format MM/YYYY"
+          sx={{ 
+    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+      display: 'none',
+      margin: 0,
+    },
+    '& input[type=number]': {
+      MozAppearance: 'textfield',
+    }}}
         />
         </Box>
         <Box>
