@@ -1,6 +1,8 @@
 package com.juliusmeinl.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -8,8 +10,10 @@ import java.time.LocalDate;
 public class RezervirajSadrzaj {
 
     @EmbeddedId
+    @JsonIgnore
     private RezervirajSadrzajId id;
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("rezervacijaId")
     @JoinColumn(name = "rezervacija_id")
