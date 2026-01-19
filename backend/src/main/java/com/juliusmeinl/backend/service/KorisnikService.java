@@ -51,8 +51,9 @@ public class KorisnikService {
        korisnikResponseDTO.setPrezime(korisnik.getPrezime());
        korisnikResponseDTO.setEmail(korisnik.getEmail());
        korisnikResponseDTO.setTelefon(korisnik.getTelefon());
-       korisnikResponseDTO.setDrzava(korisnik.getMjesto().getDrzava().getNazivDrzave());
+       korisnikResponseDTO.setDrzava(korisnik.getMjesto().getDrzava().getNazivDrzave().substring(0,1).toUpperCase() + korisnik.getMjesto().getDrzava().getNazivDrzave().substring(1));
        korisnikResponseDTO.setGrad(korisnik.getMjesto().getNazMjesto());
+       korisnikResponseDTO.setPostBr(korisnik.getMjesto().getPostBr());
 
        return korisnikResponseDTO;
     }
@@ -67,14 +68,14 @@ public class KorisnikService {
         korisnik.setTelefon(korisnikRequestDTO.getTelefon());
 
         //provjera jel mjesto uopce postoji prije setanja, ako ne postoji moram stavit novo u bazu
-        Optional<Mjesto> mjestoOpt = mjestoRepository.findByPostBrAndNazMjesto(korisnikRequestDTO.getPostBr(), korisnikRequestDTO.getGrad().trim().toLowerCase().replace(" ", ""));
+        Optional<Mjesto> mjestoOpt = mjestoRepository.findByPostBrAndNazMjesto(korisnikRequestDTO.getPostBr(), korisnikRequestDTO.getGrad().trim().toLowerCase());
 
         Mjesto mjesto;
         if (mjestoOpt.isPresent()) {
             mjesto = mjestoOpt.get();
         } else {
             mjesto = new Mjesto();
-            mjesto.setNazMjesto(korisnikRequestDTO.getGrad().trim().toLowerCase().replace(" ", ""));
+            mjesto.setNazMjesto(korisnikRequestDTO.getGrad().trim().toLowerCase());
             mjesto.setPostBr(korisnikRequestDTO.getPostBr());
             mjesto.setDrzava(drzavaRepository.findByNazivDrzave(korisnikRequestDTO.getDrzava()));
             mjestoRepository.save(mjesto);
