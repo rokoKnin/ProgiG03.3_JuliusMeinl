@@ -48,7 +48,7 @@ public class KorisnikService {
        Korisnik korisnik =  korisnikRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("Korisnik ne postoji u bazi"));
 
        korisnikResponseDTO.setName(korisnik.getIme());
-       korisnikResponseDTO.setEmail(korisnik.getEmail());
+       korisnikResponseDTO.setPrezime(korisnik.getPrezime());
        korisnikResponseDTO.setEmail(korisnik.getEmail());
        korisnikResponseDTO.setTelefon(korisnik.getTelefon());
        korisnikResponseDTO.setDrzava(korisnik.getMjesto().getDrzava().getNazivDrzave());
