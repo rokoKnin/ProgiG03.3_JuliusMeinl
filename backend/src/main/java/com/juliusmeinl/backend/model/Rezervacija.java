@@ -27,10 +27,11 @@ public class Rezervacija {
     @JoinColumn(name = "korisnik_id", nullable = false)
     private Korisnik korisnik;
 
-    @OneToMany(mappedBy = "rezervacija")
+
+    @OneToMany(mappedBy = "rezervacija", cascade = CascadeType.ALL)
     private List<RezervirajSadrzaj> sadrzaji;
 
-    @OneToMany(mappedBy = "rezervacija")
+    @OneToMany(mappedBy = "rezervacija", cascade = CascadeType.ALL)
     private List<RezervirajSobu> sobe;
 
     public Integer getId() {

@@ -15,7 +15,7 @@ public class RezervirajSadrzaj {
     @JoinColumn(name = "rezervacija_id")
     private Rezervacija rezervacija;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("dodatniSadrzajId")
     @JoinColumn(name = "dodatnisadrzaj_id")
     private DodatniSadrzaj dodatniSadrzaj;
