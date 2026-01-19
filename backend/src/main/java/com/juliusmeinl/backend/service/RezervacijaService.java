@@ -3,6 +3,7 @@ package com.juliusmeinl.backend.service;
 import com.juliusmeinl.backend.dto.*;
 import com.juliusmeinl.backend.model.*;
 import com.juliusmeinl.backend.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 
 
 @Service
+@RequiredArgsConstructor
 public class RezervacijaService {
     private final SobaRepository sobaRepository;
     private final RezervirajSobuRepository rezervirajSobuRepository;
@@ -22,15 +24,6 @@ public class RezervacijaService {
     private final KorisnikRepository korisnikRepository;
     private final DodatniSadrzajRepository dodatniSadrzajRepository;
     private final RezervirajSadrzajRepository rezervirajSadrzajRepository;
-
-    public RezervacijaService(SobaRepository sobaRepository, RezervirajSobuRepository rezervirajSobuRepository, RezervacijaRepository rezervacijaRepository, KorisnikRepository korisnikRepository, DodatniSadrzajRepository dodatniSadrzajRepository, RezervirajSadrzajRepository rezervirajSadrzajRepository) {
-        this.sobaRepository = sobaRepository;
-        this.rezervirajSobuRepository = rezervirajSobuRepository;
-        this.rezervacijaRepository = rezervacijaRepository;
-        this.korisnikRepository = korisnikRepository;
-        this.dodatniSadrzajRepository = dodatniSadrzajRepository;
-        this.rezervirajSadrzajRepository = rezervirajSadrzajRepository;
-    }
 
 
 
@@ -46,16 +39,26 @@ public class RezervacijaService {
     }
 
     @Transactional
-    public ProfilResponseDTO dohvatiProsleRezervacijen(String korisnikEmail) {
-        ProfilResponseDTO profilResponseDTO = new ProfilResponseDTO();
+    public List<ProfilRezervacijeResponseDTO> dohvatiProsleRezervacijen(String email) {
+        List<ProfilRezervacijeResponseDTO> responseLista = new ArrayList<>();
 
-        Korisnik korisnik = korisnikRepository.findByEmail(korisnikEmail).orElseThrow(()-> new RuntimeException("Korisnik ne postoji u bazi"));
+        Korisnik korisnik = korisnikRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("ne postoji korisnik s tim mailom!"));
 
-        List<Rezervacija> prosleRezervacije = rezervacijaRepository.findByKorisnikIdAndDatumDoBefore(korisnik.getId(), LocalDate.now());
+        List<Rezervacija> rezervacije = korisnik.getRezervacije();
 
-        for (Rezervacija r : prosleRezervacije) {
+        rezervacije.forEach(
+                r -> responseLista.add(new ProfilRezervacijeResponseDTO(
+                        r.getId(),
+                        r.getDatumRezerviranja(),
+                        r.isPlaceno(),
+                        r.getIznosRezervacije(),
+                        r.getKorisnik().getEmail(),
+                        r.getSadrzaji(),
+                        r.getSobe()
+                        )));
 
-        }
+        return responseLista;
     }
 
     @Transactional
