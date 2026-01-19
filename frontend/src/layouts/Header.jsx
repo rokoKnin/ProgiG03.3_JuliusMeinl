@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [email, setEmail] = React.useState(localStorage.getItem("email"));
+  //const [email, setEmail] = React.useState(localStorage.getItem("email"));
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -26,17 +26,30 @@ function Header() {
     const handleLoginClick = () => {
         window.location.href = `${import.meta.env.VITE_API_URL}` + '/oauth2/authorization/google';
     };
-  //const email = localStorage.getItem("email");
-  console.log("ovo je mail")
-  console.log(email)
-  let accessToken = localStorage.getItem("access_token");
-  if (!accessToken) {
-      const urlParams = new URLSearchParams(window.location.search);
-      accessToken = urlParams.get("access_token");
-      if (accessToken) {
-          localStorage.setItem("access_token", accessToken);
+    //const email = localStorage.getItem("email");
+
+    //  console.log(window.location.hash)
+    const hash = window.location.hash;
+    const queryString = hash.split("?")[1];
+    const params = new URLSearchParams(queryString);
+
+    let ovlast =localStorage.getItem("ovlast");
+    if (!ovlast) {
+      ovlast = params.get("ovlast");
+      if (ovlast) {
+        localStorage.setItem("ovlast", ovlast);
       }
-  }
+    }
+    let email =localStorage.getItem("email");
+    if (!email) {
+      email = params.get("email");
+      if (email) {
+        localStorage.setItem("email", email);
+      }
+    }
+
+    // console.log("ovo je mail")
+    // console.log(email)
 
   // useEffect(() => {
   //       axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
@@ -110,25 +123,25 @@ function Header() {
             Modrila
           </Typography>
           
-          {email && (
+          {ovlast && (
   <div>
 
-    {email === "juliusmeinlt3.3@gmail.com" && (
+    {ovlast === "VLASNIK" && (
       <Button color="inherit" component={Link} to="/adminStart">
             Admin
           </Button>
     )}
   </div>
-        )}{email && (
+        )}{ovlast && (
   <div>
 
-    {email && (
+    {ovlast && (
       <Button color="inherit" component={Link} to="/profil">
             profil
           </Button>
     )}
   </div>
-        )} {!email && (
+        )} {!ovlast && (
   
   <div>
 
