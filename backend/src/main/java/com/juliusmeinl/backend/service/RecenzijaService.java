@@ -45,7 +45,9 @@ public class RecenzijaService {
         } else {
             List<Recenzija> randomRecenzije = new ArrayList<>();
             for (int i = 0; i < 5; i++) {
-                randomRecenzije.add(recenzije.get(random.nextInt(recenzije.size())));
+                int j = random.nextInt(recenzije.size());
+                randomRecenzije.add(recenzije.get(j));
+                recenzije.remove(j);
             }
             return randomRecenzije;
         }
