@@ -1,6 +1,7 @@
 package com.juliusmeinl.backend.config;
 
 import com.juliusmeinl.backend.model.Korisnik;
+import com.juliusmeinl.backend.model.UlogaKorisnika;
 import com.juliusmeinl.backend.service.KorisnikService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,19 +59,26 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         List<Korisnik> vlasnici = korisnikService.getByRole(VLASNIK);
         List<Korisnik> recepcionisti = korisnikService.getByRole(ZAPOSLENIK);
 
+        UlogaKorisnika ovlast;
+
         if (email != null && email.equals(adminEmail)) {
             authorities = VLASNIK.getAuthorities();
+            ovlast = VLASNIK;
         } else if (email != null && vlasnici.stream().anyMatch(u -> u.getEmail().equals(email))) {
             authorities = VLASNIK.getAuthorities();
+            ovlast = VLASNIK;
         } else if (email != null && recepcionisti.stream().anyMatch(u -> u.getEmail().equals(email))) {
             authorities = ZAPOSLENIK.getAuthorities();
+            ovlast = ZAPOSLENIK;
         } else {
-            authorities = NEREGISTRIRAN.getAuthorities();;
+            authorities = NEREGISTRIRAN.getAuthorities();
+            ovlast = NEREGISTRIRAN;
         }
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(oauthUser, null, authorities);
 
         SecurityContextHolder.getContext().setAuthentication(newAuth);
+
 
         String ime = oauthUser.getAttribute("given_name");
         String prezime  = oauthUser.getAttribute("last_name");
@@ -78,14 +86,14 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         //TODO: osigurati da se localstorage updatea sa svim potrebnim informacijama i onda kada korisnik vec postoji u bazi
         if (korisnikService.existsByEmail(email)) {
-            response.sendRedirect(frontendUrl + "/#/?access_token=" + accessToken);
+            response.sendRedirect(frontendUrl + "/#/?ovlast=" + ovlast + "&email=" + email);
         } else {
             String sufix = ime != null ? "&ime=" + ime : "";
             sufix += prezime != null ? "&prezime=" + prezime : "";
             sufix += telefon != null ? "&telefon=" + telefon : "";
             sufix += "&email=" + email;
             // novi korisnik → preusmjeri na dashboard
-            response.sendRedirect( frontendUrl + "/#/dashboard" + "?access_token=" + accessToken + sufix);
+            response.sendRedirect( frontendUrl + "/#/dashboard" + "?ovlast=" + ovlast + sufix);
         }
     }
 }
