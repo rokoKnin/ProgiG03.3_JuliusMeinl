@@ -66,8 +66,8 @@ julius:
   admin:
     email: juliusmeinlt3.3@gmail.com
   frontend:
-#    url: http://localhost:5173
-    url: https://bluedilla.onrender.com
+    url: http://localhost:5173
+#    url: https://bluedilla.onrender.com
 
 
 
