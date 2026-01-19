@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 function Payment() {
     const navigate=useNavigate();
-    const [email,setEmail]=React.useState();
+    const [email,setEmail]=React.useState(localStorage.getItem("email"));
     const[datumIsteka,setDatumIsteka]=useState();
     const [cvv,setCvv]=useState();
     const [brojKartice,setBrojKartice]=useState("");
