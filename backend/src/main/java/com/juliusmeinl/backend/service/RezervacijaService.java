@@ -46,6 +46,19 @@ public class RezervacijaService {
     }
 
     @Transactional
+    public ProfilResponseDTO dohvatiProsleRezervacijen(String korisnikEmail) {
+        ProfilResponseDTO profilResponseDTO = new ProfilResponseDTO();
+
+        Korisnik korisnik = korisnikRepository.findByEmail(korisnikEmail).orElseThrow(()-> new RuntimeException("Korisnik ne postoji u bazi"));
+
+        List<Rezervacija> prosleRezervacije = rezervacijaRepository.findByKorisnikIdAndDatumDoBefore(korisnik.getId(), LocalDate.now());
+
+        for (Rezervacija r : prosleRezervacije) {
+
+        }
+    }
+
+    @Transactional
     public void rezervirajSobe(Integer rezervacijaId, List<Integer> dodijeljeneSobeId, LocalDate datumOd, LocalDate datumDo) {
         BigDecimal rezervacijaSobeCijena = BigDecimal.ZERO;
         long brojNocenja = ChronoUnit.DAYS.between(datumOd, datumDo);

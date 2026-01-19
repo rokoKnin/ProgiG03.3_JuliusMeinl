@@ -22,7 +22,7 @@ public class RezervirajSobu {
     @JoinColumn(name = "rezervacija_id")
     private Rezervacija rezervacija;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("sobaId")
     @JoinColumn(name = "soba_id")
     @JsonBackReference
