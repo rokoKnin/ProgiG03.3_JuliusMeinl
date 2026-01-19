@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [email, setEmail] = React.useState(localStorage.getItem("email"));
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -25,8 +26,9 @@ function Header() {
     const handleLoginClick = () => {
         window.location.href = `${import.meta.env.VITE_API_URL}` + '/oauth2/authorization/google';
     };
-  const email = localStorage.getItem("email");
-
+  //const email = localStorage.getItem("email");
+  console.log("ovo je mail")
+  console.log(email)
   let accessToken = localStorage.getItem("access_token");
   if (!accessToken) {
       const urlParams = new URLSearchParams(window.location.search);
@@ -88,6 +90,12 @@ function Header() {
             </MenuItem>
              <MenuItem onClick={handleClose} component={Link} to="/reviews">
               Recenzije
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/gallery">
+              Galerija
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/faq">
+              FAQ
             </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/contact">
               Kontakt
