@@ -4,10 +4,12 @@ import com.juliusmeinl.backend.dto.*;
 import com.juliusmeinl.backend.model.*;
 import com.juliusmeinl.backend.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.formula.atp.Switch;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -39,7 +41,7 @@ public class RezervacijaService {
     }
 
     @Transactional
-    public List<ProfilRezervacijeResponseDTO> dohvatiProsleRezervacijen(String email) {
+    public List<ProfilRezervacijeResponseDTO> dohvatiRezervacije(String email) {
         List<ProfilRezervacijeResponseDTO> responseLista = new ArrayList<>();
 
         Korisnik korisnik = korisnikRepository.findByEmail(email)
@@ -57,7 +59,6 @@ public class RezervacijaService {
                         r.getSadrzaji(),
                         r.getSobe()
                         )));
-
         return responseLista;
     }
 
