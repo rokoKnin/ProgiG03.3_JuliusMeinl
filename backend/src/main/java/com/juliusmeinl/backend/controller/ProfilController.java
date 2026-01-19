@@ -3,12 +3,14 @@ package com.juliusmeinl.backend.controller;
 
 import com.juliusmeinl.backend.dto.KorisnikRequestDTO;
 import com.juliusmeinl.backend.dto.KorisnikResponseDTO;
-import com.juliusmeinl.backend.dto.ProfilResponseDTO;
-import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
+import com.juliusmeinl.backend.dto.ProfilRezervacijeResponseDTO;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -32,8 +34,8 @@ public class ProfilController {
     }
 
     @PostMapping("/reservationsPassed/{korisnik_email}")
-    public ProfilResponseDTO prosleRezervacije(@PathVariable String korisnikEmail) {
-        return rezervacijaService.dohvatiProsleRezervacijen(korisnikEmail);
+    public ResponseEntity<List<ProfilRezervacijeResponseDTO>> prosleRezervacije(@PathVariable String korisnikEmail) {
+        return new ResponseEntity<>(rezervacijaService.dohvatiProsleRezervacijen(korisnikEmail), HttpStatus.OK);
     }
 
 }
