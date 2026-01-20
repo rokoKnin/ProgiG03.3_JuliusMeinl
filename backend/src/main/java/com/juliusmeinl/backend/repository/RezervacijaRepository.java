@@ -18,6 +18,6 @@ LEFT JOIN FETCH r.sadrzaji d
 """)
     List<Rezervacija> findAllWithRoomsAndContents();
 
-//    List<Rezervacija> findByKorisnikIdAndDatumDoBefore(Integer korisnikId, LocalDate datum);
+    List<Rezervacija> findByKorisnikIdAndDatumDoBefore(Integer korisnikId, LocalDate datum);
 
 }

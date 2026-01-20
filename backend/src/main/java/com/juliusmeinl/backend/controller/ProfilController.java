@@ -33,7 +33,7 @@ public class ProfilController {
         return korisnikService.izmjeniKorisnika(korisnikRequestDTO);
     }
 
-    @GetMapping("/reservationsPassed/{korisnik_email}")
+    @PostMapping("/reservationsPassed/{korisnik_email}")
     public ResponseEntity<List<ProfilRezervacijeResponseDTO>> prosleRezervacije(@PathVariable String korisnikEmail) {
         return new ResponseEntity<>(rezervacijaService.dohvatiProsleRezervacijen(korisnikEmail), HttpStatus.OK);
     }
