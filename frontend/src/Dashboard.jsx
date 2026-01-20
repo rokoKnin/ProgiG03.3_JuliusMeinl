@@ -53,15 +53,13 @@ const Dashboard = () => {
             mjesto
         }
 
-        //console.log(userData)
+        localStorage.setItem("email", email);
+        localStorage.setItem("prezime", prezime);
+        localStorage.setItem("telefon", telefon);
+        console.log(userData)
         try {
             const response = await axios.put(`${import.meta.env.VITE_API_URL}` + '/api/users', userData,  {withCredentials: true} )
-            console.log('Success: Poslalo se sve', response.data);   
-            localStorage.setItem("email", response.data.email);
-            localStorage.setItem("ime", response.data.ime);
-            localStorage.setItem("prezime", response.data.prezime);
-            localStorage.setItem("telefon", response.data.telefon);
-            localStorage.setItem("ovlast", response.data.ovlast);
+            console.log('Success: Poslalo se sve', response.data)
             navigate('/')
         } catch (error) {
             alert('Niste ispunili sve podatke u potrebnom formatu!')
