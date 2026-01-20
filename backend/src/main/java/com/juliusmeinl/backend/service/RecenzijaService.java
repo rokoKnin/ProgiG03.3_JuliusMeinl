@@ -37,6 +37,10 @@ public class RecenzijaService {
        return recenzijaRepository.save(recenzija);
     }
 
+    public Double dohvatiAverage() {
+        return recenzijaRepository.findProsjecna();
+    }
+
     public List<Recenzija> generateRandom() {
         List<Recenzija> recenzije = recenzijaRepository.findAll();
 

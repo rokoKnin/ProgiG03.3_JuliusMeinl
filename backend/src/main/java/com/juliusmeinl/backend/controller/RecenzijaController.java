@@ -33,13 +33,16 @@ public class RecenzijaController {
         Korisnik korisnik = korisnikRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Ne postoji korisnik s tim emailom!"));
 
-        //Rokov komentar, obecajem da nije chatGPT komentar
-        //ovdje vraca prvi iz liste jer je kasnije odluceno da samo jednu recenziju moze korisnik napravit, a meni se nije dalo mijenjati vezu u modelu
         return new ResponseEntity<>(korisnik.getRecenzije().getFirst(), HttpStatus.OK);
     }
 
     @GetMapping("/random-reviews")
     public ResponseEntity<List<Recenzija>> getRandomReviews() {
         return new ResponseEntity<>(recenzijaService.generateRandom(), HttpStatus.OK);
+    }
+
+    @GetMapping("/average")
+    public ResponseEntity<Double> getAverage() {
+        return new ResponseEntity<>(recenzijaService.dohvatiAverage(), HttpStatus.OK);
     }
 }
