@@ -26,5 +26,4 @@ public class ProfilController {
         return korisnikService.izmjeniKorisnika(korisnikRequestDTO);
     }
 
-
 }
