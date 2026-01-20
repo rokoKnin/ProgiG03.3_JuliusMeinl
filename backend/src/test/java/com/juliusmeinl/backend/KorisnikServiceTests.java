@@ -85,7 +85,7 @@ public class KorisnikServiceTests {
         Mockito.when(korisnikRepository.save(any(Korisnik.class))).thenAnswer(i -> i.getArguments()[0]); // prvo dodano u bazu
 
         Korisnik rez= korisnikService.spremiKorisnika(korisnik);
-        assertEquals(UlogaKorisnika.REGISTRIRAN, rez.getOvlast());
+        assertEquals(UlogaKorisnika.KORISNIK, rez.getOvlast());
         assertEquals("cres", rez.getMjesto().getNazMjesto());
         assertEquals("51557", rez.getMjesto().getPostBr());
     }

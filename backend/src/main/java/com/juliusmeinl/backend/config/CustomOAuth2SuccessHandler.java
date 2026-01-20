@@ -1,18 +1,15 @@
 package com.juliusmeinl.backend.config;
 
-import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.model.UlogaKorisnika;
+import com.juliusmeinl.backend.repository.KorisnikRepository;
+import com.juliusmeinl.backend.security.OAuth2Utils;
 import com.juliusmeinl.backend.service.KorisnikService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -20,23 +17,18 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
-import static com.juliusmeinl.backend.model.UlogaKorisnika.*;
-
 @Component
 @RequiredArgsConstructor
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
+
+    private final KorisnikRepository korisnikRepository;
+    private final KorisnikService korisnikService;
 
     @Value("${julius.frontend.url}")
     private String frontendUrl;
 
     @Value("${julius.admin.email}")
     private String adminEmail;
-
-    private final OAuth2AuthorizedClientService authorizedClientService;
-    private final KorisnikService korisnikService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -48,37 +40,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         String email = oauthUser.getAttribute("email");
 
-
-        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
-                oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
-
-        String accessToken = authorizedClient.getAccessToken().getTokenValue();
-
-        List<SimpleGrantedAuthority> authorities;
-
-        List<Korisnik> vlasnici = korisnikService.getByRole(VLASNIK);
-        List<Korisnik> recepcionisti = korisnikService.getByRole(ZAPOSLENIK);
-
-        UlogaKorisnika ovlast;
-
-        if (email != null && email.equals(adminEmail)) {
-            authorities = VLASNIK.getAuthorities();
-            ovlast = VLASNIK;
-        } else if (email != null && vlasnici.stream().anyMatch(u -> u.getEmail().equals(email))) {
-            authorities = VLASNIK.getAuthorities();
-            ovlast = VLASNIK;
-        } else if (email != null && recepcionisti.stream().anyMatch(u -> u.getEmail().equals(email))) {
-            authorities = ZAPOSLENIK.getAuthorities();
-            ovlast = ZAPOSLENIK;
-        } else {
-            authorities = NEREGISTRIRAN.getAuthorities();
-            ovlast = NEREGISTRIRAN;
-        }
-
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(oauthUser, null, authorities);
-
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
-
+        UlogaKorisnika ovlast = OAuth2Utils.odrediUlogu(email, adminEmail, korisnikRepository);
 
         String ime = oauthUser.getAttribute("given_name");
         String prezime  = oauthUser.getAttribute("last_name");

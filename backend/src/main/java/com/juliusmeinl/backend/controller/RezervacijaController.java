@@ -13,6 +13,7 @@ import com.juliusmeinl.backend.model.Rezervacija;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
 import com.juliusmeinl.backend.service.SobaService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.juliusmeinl.backend.dto.RoomAvailabilityRequest;
 import com.juliusmeinl.backend.dto.UpdateRoomRequest;
 import com.juliusmeinl.backend.dto.AvailableRoomDTO;
@@ -38,6 +39,7 @@ public class RezervacijaController {
     private final DodatniSadrzajService sadrzajService;
 
 
+
     @PostMapping("/{korisnikEmail}")
     public void napraviRezervaciju(@RequestBody RezervacijaRequestDTO rezervacijaRequestDTO, @PathVariable String korisnikEmail) {
         Korisnik korisnik = korisnikService.findByEmail(korisnikEmail).orElseThrow(() -> new RuntimeException("email ne postoji"));
@@ -58,16 +60,19 @@ public class RezervacijaController {
         return sadrzajService.informacijeSadrzaj();
     }
 
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping("/all")
     public List<RezervacijaResponseDTO> sveRezervacije() {
         return rezervirajService.dohvatiSveRezervacijeDTO();
     }
 
+    @PreAuthorize("hasAuthority('admin:update')")
     @PutMapping("/{id}")
     public Rezervacija azurirajRezervaciju(@PathVariable Integer id, @RequestBody Rezervacija rezervacijaInput) {
         return rezervirajService.azurirajRezervaciju(id, rezervacijaInput);
     }
 
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping("/export")
     public ResponseEntity<InputStreamResource> exportReservations(@RequestParam String format) {
         try {
@@ -109,8 +114,8 @@ public class RezervacijaController {
         try {
             // Get available rooms from service
             List<AvailableRoomDTO> availableRooms = rezervirajService.getAvailableRooms(
-                request.getDateFrom(), 
-                request.getDateTo(), 
+                request.getDateFrom(),
+                request.getDateTo(),
                 request.getCurrentRoomId()
             );
             return ResponseEntity.ok(availableRooms);
@@ -132,7 +137,7 @@ public class RezervacijaController {
                 request.getNewRoomNumber(),
                 request.getNewRoomType()
             );
-            
+
             if (success) {
                 return ResponseEntity.ok().build();
             } else {
