@@ -7,7 +7,6 @@ public class KorisnikResponseDTO {
     private String telefon;
     private String drzava;
     private String grad;
-    private String postBr;
 
     public String getName() {
         return name;
@@ -45,10 +44,5 @@ public class KorisnikResponseDTO {
     public void setGrad(String grad) {
         this.grad = grad;
     }
-    public String getPostBr() {
-        return postBr;
-    }
-    public void setPostBr(String postBr) {
-        this.postBr = postBr;
-    }
+
 }

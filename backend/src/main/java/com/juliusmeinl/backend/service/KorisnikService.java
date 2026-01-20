@@ -1,6 +1,5 @@
 package com.juliusmeinl.backend.service;
 
-import com.juliusmeinl.backend.dto.KorisnikRequestDTO;
 import com.juliusmeinl.backend.dto.KorisnikResponseDTO;
 import com.juliusmeinl.backend.model.*;
 import com.itextpdf.text.Font;
@@ -42,7 +41,6 @@ public class KorisnikService {
     private final MjestoRepository mjestoRepository;
     private final DrzavaRepository drzavaRepository;
 
-    @Transactional
     public KorisnikResponseDTO ispisiKorisnika(String email) {
        KorisnikResponseDTO korisnikResponseDTO = new KorisnikResponseDTO();
        Korisnik korisnik =  korisnikRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("Korisnik ne postoji u bazi"));
@@ -55,43 +53,6 @@ public class KorisnikService {
        korisnikResponseDTO.setGrad(korisnik.getMjesto().getNazMjesto());
 
        return korisnikResponseDTO;
-    }
-
-    @Transactional
-    public KorisnikResponseDTO izmjeniKorisnika(KorisnikRequestDTO korisnikRequestDTO) {
-        KorisnikResponseDTO korisnikResponseDTO = new KorisnikResponseDTO();
-        Korisnik korisnik = korisnikRepository.findByEmail(korisnikRequestDTO.getEmail()).orElseThrow(()-> new RuntimeException("Korisnik ne postoji u bazi"));
-
-        korisnik.setIme(korisnikRequestDTO.getName());
-        korisnik.setPrezime(korisnikRequestDTO.getPrezime());
-        korisnik.setTelefon(korisnikRequestDTO.getTelefon());
-
-        //provjera jel mjesto uopce postoji prije setanja, ako ne postoji moram stavit novo u bazu
-        Optional<Mjesto> mjestoOpt = mjestoRepository.findByPostBrAndNazMjesto(korisnikRequestDTO.getPostBr(), korisnikRequestDTO.getGrad().trim().toLowerCase().replace(" ", ""));
-
-        Mjesto mjesto;
-        if (mjestoOpt.isPresent()) {
-            mjesto = mjestoOpt.get();
-        } else {
-            mjesto = new Mjesto();
-            mjesto.setNazMjesto(korisnikRequestDTO.getGrad().trim().toLowerCase().replace(" ", ""));
-            mjesto.setPostBr(korisnikRequestDTO.getPostBr());
-            mjesto.setDrzava(drzavaRepository.findByNazivDrzave(korisnikRequestDTO.getDrzava()));
-            mjestoRepository.save(mjesto);
-        }
-
-        korisnik.setMjesto(mjesto);
-
-        korisnikRepository.save(korisnik);
-
-        korisnikResponseDTO.setName(korisnik.getIme());
-        korisnikResponseDTO.setPrezime(korisnik.getPrezime());
-        korisnikResponseDTO.setTelefon(korisnik.getTelefon());
-        korisnikResponseDTO.setEmail(korisnik.getEmail());
-        korisnikResponseDTO.setGrad(korisnik.getMjesto().getNazMjesto());
-        korisnikResponseDTO.setDrzava(korisnik.getMjesto().getDrzava().getNazivDrzave());
-
-        return korisnikResponseDTO;
     }
 
     @Transactional
