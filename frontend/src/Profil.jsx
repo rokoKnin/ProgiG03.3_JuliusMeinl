@@ -5,19 +5,7 @@ import axios from 'axios' ;
 function Profil() {
     const [email,setEmail]=React.useState(localStorage.getItem("email"));
     const [user,setUser]=React.useState("");
-    const [before,setBefore]=React.useState([]);
-     useEffect(()=>{
-      
-        const before=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/profile/reservationsPassed/' + `${email}`, {withCredentials: true})
-        .then(before =>
-         { 
-          setBefore(before.data);
-            console.log(before.data);
-         })
-             .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
-            console.error(error.response?.status)
-            console.error(error.response)})
-     }, []); 
+    
    
      async function postUser(){
       try {

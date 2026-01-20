@@ -31,11 +31,10 @@ export default function Review() {
     
     useEffect(()=>{
       
-        const randomL=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/reviews/random-reviews', {withCredentials: true})
-        .then(randomL =>
+        const randomL= axios.get(`${import.meta.env.VITE_API_URL}`+'/api/reviews/random-reviews', {withCredentials: true}).then(randomL =>
          { 
           setRandom(randomL.data);
-            console.log(randomL.data);
+          console.log("randomL.data", randomL.data);
          })
              .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
             console.error(error.response?.status)
@@ -90,7 +89,12 @@ export default function Review() {
     </Box>
     
     <Box>
-
+      {random&&random.map((rev)=>(
+        <Box key={rev.id} sx={{border:"1px solid gray", marginTop:"10px", padding:"10px", borderRadius:"5px", width:"50%"}}>
+          <Rating name="read-only" value={rev.ocjena} readOnly precision={0.5} emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />} />  
+          <Box>{rev.komentar}</Box>
+        </Box>  
+     ))}
     </Box>
     </Box>
   );
