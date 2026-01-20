@@ -88,7 +88,7 @@ function Payment() {
           label="Broj kartice"
           variant="outlined"
           type="number"
-          helperText="Isključivo brojevi"
+          helperText="Isključivo 16 brojeva sa kartice"
           onChange={(e)=>{setBrojKartice(e.target.value)}}
          sx={{ 
     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
@@ -104,7 +104,7 @@ function Payment() {
           label="CVV"
           variant="outlined"
           type="number"
-          helperText="Isključivo brojevi"
+          helperText="Isključivo 3 broja"
           
           onChange={(e)=>{setCvv(e.target.value)}}
           sx={{ 

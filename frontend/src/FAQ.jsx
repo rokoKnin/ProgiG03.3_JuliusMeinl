@@ -7,7 +7,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 export default function FAQ() {
   return (
    <div>
-  <Accordion sx={{backgroundColor:"#66b2ff"}}>
+  <Accordion sx={{backgroundColor:"#0059B2", color:"white"}}>
     <AccordionSummary expandIcon={<ArrowDownwardIcon />}>
       <Typography component="span">Koje je vrijeme prijave i odjave?</Typography>
     </AccordionSummary>
@@ -18,7 +18,7 @@ export default function FAQ() {
     </AccordionDetails>
   </Accordion>
 
-  <Accordion sx={{backgroundColor:"#66b2ff"}}>
+  <Accordion sx={{backgroundColor:"#0059B2", color:"white"}}>
     <AccordionSummary expandIcon={<ArrowDownwardIcon />}>
       <Typography component="span">Je li doručak uključen u cijenu?</Typography>
     </AccordionSummary>
@@ -29,7 +29,7 @@ export default function FAQ() {
     </AccordionDetails>
   </Accordion>
 
-  <Accordion sx={{backgroundColor:"#66b2ff"}}>
+  <Accordion sx={{backgroundColor:"#0059B2", color:"white"}}>
     <AccordionSummary expandIcon={<ArrowDownwardIcon />}>
       <Typography component="span">Imate li osiguran parking?</Typography>
     </AccordionSummary>
@@ -40,7 +40,7 @@ export default function FAQ() {
     </AccordionDetails>
   </Accordion>
 
-  <Accordion sx={{backgroundColor:"#66b2ff"}}>
+  <Accordion sx={{backgroundColor:"#0059B2", color:"white"}}>
     <AccordionSummary expandIcon={<ArrowDownwardIcon />}>
       <Typography component="span">Jesu li kućni ljubimci dopušteni?</Typography>
     </AccordionSummary>
@@ -51,7 +51,7 @@ export default function FAQ() {
     </AccordionDetails>
   </Accordion>
 
-  <Accordion sx={{backgroundColor:"#66b2ff"}}>
+  <Accordion sx={{backgroundColor:"#0059B2", color:"white"}}>
     <AccordionSummary expandIcon={<ArrowDownwardIcon />}>
       <Typography component="span">Nudite li uslugu prijevoza iz zračne luke?</Typography>
     </AccordionSummary>
