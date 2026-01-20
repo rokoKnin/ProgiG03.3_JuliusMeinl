@@ -23,7 +23,7 @@ function Header() {
     setAnchorEl(null);
   };
     const handleLoginClick = () => {
-        window.location.href = `${import.meta.env.VITE_API_URL}` + '/oauth2/authorization/google';
+        window.location.href = `${import.meta.env.VITE_API_URL}` + '/api/oauth2/authorization/google';
     };
   const email = localStorage.getItem("email");
 
