@@ -170,7 +170,6 @@ public class RezervacijaService {
                     r.getKorisnik().getIme(),
                     r.getKorisnik().getPrezime(),
                     r.getKorisnik().getEmail()
-                   // r.getKorisnik().getKorisnikId()
             );
 
             // dodaj sobe

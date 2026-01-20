@@ -15,13 +15,12 @@ public class RezervacijaResponseDTO {
     private String ime;
     private String prezime;
     private String email;
-   // private Integer korisnikId;
 
     private List<SobaDTO> sobe = new ArrayList<>();
     private List<DodatakDTO> sadrzaji = new ArrayList<>();
 
     public RezervacijaResponseDTO(Integer id, LocalDate datumRezerviranja, boolean placeno, BigDecimal iznos,
-                                  String ime, String prezime, String email/*, Integer korisnikId*/) {
+                                  String ime, String prezime, String email) {
         this.id = id;
         this.datumRezerviranja = datumRezerviranja;
         this.placeno = placeno;
@@ -29,7 +28,6 @@ public class RezervacijaResponseDTO {
         this.ime = ime;
         this.prezime = prezime;
         this.email = email;
-        //this.korisnikId = korisnikId;
     }
 
     public Integer getId() {
@@ -87,10 +85,6 @@ public class RezervacijaResponseDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-
-//    public Integer getKorisnikId() { return korisnikId; }
-
-//    public void setKorisnikId(Integer korisnikId) { this.korisnikId = korisnikId; }
 
     public List<SobaDTO> getSobe() {
         return sobe;

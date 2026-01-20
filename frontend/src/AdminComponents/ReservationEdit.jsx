@@ -31,15 +31,14 @@ export default function ReservationEdit( { setExportHandler}) {
                     user: {
                         name: r.ime,
                         surname: r.prezime,
-                        email: r.email,
-                        userId: r.korisnikId  // ← dodaj ovo
+                        email: r.email
                     },
                     rooms: (r.sobe && r.sobe.length)
                         ? r.sobe
                         : [{ roomNumber: "N/A", roomType: "N/A", roomId: "N/A", datumOd: null, datumDo: null }],  // ← fallback
                     additionalContents: (r.sadrzaji && r.sadrzaji.length)
                         ? r.sadrzaji
-                        : [{ content: "N/A", contentId: "N/A" }],  // ← fallback
+                        : [{ vrsta: "N/A", contentId: "N/A" }],  // ← fallback
                     paymentStatus: r.placeno ? "PAID" : "UNPAID",
                     dateFrom: (r.sobe && r.sobe.length) ? r.sobe[0].datumOd : null,
                     dateTo: (r.sobe && r.sobe.length) ? r.sobe[0].datumDo : null
@@ -267,7 +266,6 @@ export default function ReservationEdit( { setExportHandler}) {
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>ID</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Ime korisnika</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Prezime korisnika</th>
-                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>ID korisnika</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Datum od</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Datum do</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Broj sobe</th>
@@ -290,7 +288,6 @@ export default function ReservationEdit( { setExportHandler}) {
                                         <td>{reservation.reservationId}</td>
                                         <td>{reservation.user.name || "N/A"}</td>
                                         <td>{reservation.user.surname || "N/A"}</td>
-                                        <td>{reservation.user.userId || "N/A"}</td>
                                         <td>{room.datumOd ? new Date(room.datumOd).toLocaleDateString() : "N/A"}</td>
                                         <td>{room.datumDo ? new Date(room.datumDo).toLocaleDateString() : "N/A"}</td>
                                         <td>{isEditing ? (
@@ -324,7 +321,7 @@ export default function ReservationEdit( { setExportHandler}) {
                                         )}</td>
                                         <td>{room.roomType || "N/A"}</td>
                                         <td>{room.roomId || "N/A"}</td>
-                                        <td>{additional.content}</td>
+                                        <td>{additional.vrsta}</td>
                                         <td>{additional.contentId}</td>
                                         <td>{reservation.paymentStatus || "N/A"}</td>
                                     </tr>
