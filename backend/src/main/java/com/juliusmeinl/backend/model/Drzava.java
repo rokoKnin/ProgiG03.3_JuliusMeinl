@@ -1,7 +1,6 @@
 package com.juliusmeinl.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,7 +22,7 @@ public class Drzava {
     private String nazivDrzave;
 
     @ToString.Exclude
-    @JsonIgnoreProperties({"mjesta"})
+    @JsonIgnore
     @OneToMany(mappedBy = "drzava")
     private List<Mjesto> mjesta;
 }

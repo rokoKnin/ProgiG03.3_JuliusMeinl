@@ -32,7 +32,7 @@ public class Mjesto {
     private Drzava drzava;
 
     @ToString.Exclude
-    @JsonIgnoreProperties({"korisnici"})
+    @JsonIgnore
     @OneToMany(mappedBy = "mjesto")
     private List<Korisnik> korisnici;
 

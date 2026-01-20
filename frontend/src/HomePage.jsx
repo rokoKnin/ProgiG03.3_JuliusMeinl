@@ -38,8 +38,7 @@ function HomePage() {
           !email&&
           <div>
            {console.log("nema")}
-    
-          <Button variant="h6" sx={{color:'#0072e5'}} onClick={handleLoginClick}>
+          <Button variant="h6" onClick={handleLoginClick}>
             
      Rezervirajte odmah!
      </Button>

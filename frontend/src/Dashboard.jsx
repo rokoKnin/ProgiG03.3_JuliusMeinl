@@ -44,7 +44,7 @@ const Dashboard = () => {
             postBr,
             drzava
         }
-        
+
         const userData = {
             ime,
             prezime,
@@ -56,11 +56,12 @@ const Dashboard = () => {
         localStorage.setItem("email", email);
         localStorage.setItem("prezime", prezime);
         localStorage.setItem("telefon", telefon);
-        console.log(userData)
+
         try {
             const response = await axios.put(`${import.meta.env.VITE_API_URL}` + '/api/users', userData,  {withCredentials: true} )
             console.log('Success: Poslalo se sve', response.data)
-            navigate('/')
+
+            navigate("/").then(window.location.reload)
         } catch (error) {
             alert('Niste ispunili sve podatke u potrebnom formatu!')
             console.error('Error: nije se poslao post zbog necega', error.response?.data)

@@ -349,7 +349,11 @@ export default function HorizontalLinearStepper() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        
+                        {isStepOptional(activeStep) && (
+                            <Button style={{color: "#070c10ff"}} onClick={handleSkip} sx={{ mr: 1 }}>
+                                Skip
+                            </Button>
+                        )}
                         {activeStep === steps.length - 1 &&
                             <Button  variant="contained" style={{color: "#e4e8ecff"}} onClick={handleFinish} >Finish</Button>
                         }
