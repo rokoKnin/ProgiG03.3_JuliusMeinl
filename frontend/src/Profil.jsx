@@ -5,6 +5,7 @@ import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import { createPortal } from 'react-dom';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 function Modal({ isOpen, onClose, children }) {
     if (!isOpen) return null;
@@ -72,26 +73,39 @@ function Profil() {
     const [editUser,setEditUser]=React.useState({})
     const [refresh,setRefresh]=React.useState(0);
     const [odabranaRez,setOdabranaRez]=React.useState(null);
-    const navigate=React.useNavigate;
+    const [lista,setLista]=React.useState([]);
+    const navigate=useNavigate();
+     useEffect(()=>{
+     const listaDrz=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/profile/countries-list', {withCredentials: true})
+             .then(listaDrz =>
+              { 
+               setLista(listaDrz.data);
+                 //console.log("drzave",listaDrz.data);
+              })
+                  .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
+                 console.error(error.response?.status)
+                 console.error(error.response)})
+          }, []);
      useEffect(()=>{
       
         const korisnikRec=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/reviews/'+`${email}`, {withCredentials: true})
         .then(korisnikRec =>
          { 
           setKorisnikovaRecenzija(korisnikRec.data);
-            console.log(korisnikRec.data);
+           // console.log(korisnikRec.data);
          })
              .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
             console.error(error.response?.status)
             console.error(error.response)})
      }, []);
+     
      useEffect(()=>{
       
         const before=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/profile/reservations/' + `${email}`, {withCredentials: true})
         .then(before =>
          { 
           setdata(before.data);
-            console.log(before.data);
+            //console.log(before.data);
          })
              .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
             console.error(error.response?.status)
@@ -102,7 +116,7 @@ function Profil() {
       try {
                    const response= await axios.post(`${import.meta.env.VITE_API_URL}`+'/api/profile/' + `${email}`, email,  {withCredentials: true} )
                   setUser(response.data);
-                  console.log(response.data);
+                  //console.log(response.data);
                    return true;
                 
                 } catch (error) {
@@ -123,6 +137,7 @@ function Profil() {
 
 const handleChange = (e) => {
     setEditUser({ ...editUser, [e.target.name]: e.target.value });
+    console.log(editUser)
 };
 const handleSave=async()=>{
           try {
@@ -153,6 +168,11 @@ const handleSave=async()=>{
         "Pogled na more":{label:"Pogled na more"}
 
     }
+    const handleLogout=()=>{
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = '/';
+    }
     return(
         <Box >
             <Box 
@@ -170,9 +190,12 @@ const handleSave=async()=>{
             <Box>Email: {user.email}</Box>
             <Box>Država: {user.drzava}</Box>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "center", minWidth: "100px" }}>
+        <Box sx={{ display: "flex", flexDirection:"column",justifyContent: "center", minWidth: "100px" }}>
             <Button variant='contained' color="primary" onClick={()=>{setIsOpen(true); setEditUser(user)}}>
             Uredi
+            </Button>
+            <Button variant='contained' color="error" onClick={()=>handleLogout()}>
+            Log out
             </Button>
         </Box>
         </Box>
@@ -249,8 +272,26 @@ const handleSave=async()=>{
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1, flex: 1 }}>
             <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}>Prezime:  <TextField name="prezime" onChange={handleChange} defaultValue={user.prezime}/></Box>
             <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}>Email:  <TextField disabled defaultValue={user.email}/></Box>
-            <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}>Država:  <TextField name="drzava" onChange={handleChange} defaultValue={user.drzava}/></Box>
-        </Box>
+           <select 
+  name="drzava" 
+  onChange={handleChange} 
+  value={editUser.drzava || ""}
+  style={{ 
+    padding: '12px', 
+    borderRadius: '4px', 
+    border: '1px solid #ccc',
+    width: '100%',
+    marginTop: '5px' 
+  }}
+>
+  <option value="" disabled>Odaberi državu</option>
+  
+  {lista.map((drzava) => (
+    <option key={drzava} value={drzava}>
+      {drzava}
+    </option>
+  ))}
+</select> </Box>
         </Box>
         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="outlined" onClick={()=>{setIsOpen(false)}}>Odustani</Button>
         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="contained" onClick={()=>{handleSave();setIsOpen(false);}}>Spremi</Button>

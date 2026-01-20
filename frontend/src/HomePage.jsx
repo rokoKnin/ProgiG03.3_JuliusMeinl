@@ -13,15 +13,10 @@ function HomePage() {
   const privemail = localStorage.getItem('email');
   setEmail(privemail);
   },[])
-  // useEffect(() => {
-   //          axios.get(`${import.meta.env.VITE_API_URL}` + '/api/users/info', {withCredentials: true}).then(response =>
-   //          { setUser(response.data);
-   //          })
-   //              .catch(error => console.error('Error ocurred', error))
-   //      }, []);
+  console.log("ovo je email",email);
 
     const handleLoginClick = () => {
-        window.location.href = `${import.meta.env.VITE_API_URL}` + '/api/oauth2/authorization/google';
+        window.location.href = `${import.meta.env.VITE_API_URL}` + '/oauth2/authorization/google';
     };
 
   return (
@@ -37,12 +32,8 @@ function HomePage() {
      </Typography>
         }
           {
-          
           !email&&
-          
-    
           <Button variant="h6" sx={{color:'#0072e5'}} onClick={handleLoginClick}>
-            
      Rezervirajte odmah!
      </Button>
      

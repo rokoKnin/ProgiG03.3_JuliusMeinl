@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import axios from "axios";
 import { Button} from "@mui/material";
 
@@ -21,13 +21,9 @@ const Dashboard = () => {
     const [ime, setIme] = useState(urlParams.get("ime"));
     const [prezime, setPrezime] = useState(urlParams.get("prezime"));
     const [telefon, setTelefon] = useState(urlParams.get("telefon"));
-
+    const [lista,setLista]=useState([]);
     const navigate = useNavigate();
-
-
-
-
-    async function handleAddUser(){
+ async function handleAddUser(){
         const ime = document.getElementById("firstname_id").value
         const prezime = document.getElementById("lastname_id").value
         const telefon = document.getElementById("phone_id").value
@@ -52,6 +48,18 @@ const Dashboard = () => {
             telefon,
             mjesto
         }
+        useEffect(()=>{
+      
+        const listaDrz=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/profile/countries-list', {withCredentials: true})
+        .then(listaDrz =>
+         { 
+          setLista(listaDrz.data);
+            console.log(listaDrz.data);
+         })
+             .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
+            console.error(error.response?.status)
+            console.error(error.response)})
+     }, []);
 
         //console.log(userData)
         try {
@@ -81,12 +89,12 @@ const Dashboard = () => {
                 {/*<p> <strong>Email: </strong> {user.email}</p>*/}
                 {/*<input type="text" value={email} placeholder="example@gmail.com" id="email_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>*/}
                 <div>
-                <input type="text" value={telefon != null ? telefon : ""} onChange={(e) => setTelefon(e.target.value)} placeholder="Phone number" id="phone_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>
+                <input type="number" value={telefon != null ? telefon : ""} onChange={(e) => setTelefon(e.target.value)} placeholder="Phone number" id="phone_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>
                 <input type="text" placeholder="Drzava" id="country_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>
                 </div>
                 <div>
                     <input type="text" placeholder="Mjesto" id="place_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>
-                    <input type="text" placeholder="Poštanski broj" id="zipcode_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px"}}></input>
+                    <input type="number" placeholder="Poštanski broj" id="zipcode_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px"}}></input>
                 </div>
                 <Button color="primary" variant="contained" sx={{marginTop: "10px"}} onClick={handleAddUser} > Confirm </Button>
             </div>

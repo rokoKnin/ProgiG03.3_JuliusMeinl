@@ -30,7 +30,19 @@ export default function Review() {
     const [korisnikovaRecenzija,setKorisnikovaRecenzija]=React.useState({ocjena:null});
     const [imaPravo,setImaPravo]=React.useState(true);
     const email = localStorage.getItem('email')
-    
+    const [average,setAverage]=useState(0);
+       useEffect(()=>{
+      
+        const aveRec=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/reviews/average', {withCredentials: true})
+        .then(aveRec =>
+         { 
+          setAverage(aveRec.data);
+          console.log("average",aveRec.data)
+         })
+             .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
+            console.error(error.response?.status)
+            console.error(error.response)})
+     }, []);
    useEffect(()=>{
       
         const korisnikRec=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/reviews/'+`${email}`, {withCredentials: true})
@@ -128,12 +140,15 @@ export default function Review() {
 
       }
       { random.length!==0  && (
-       <Typography sx={{paddingTop:"2%"}}>Ovo su drugi rekli o nama</Typography> )}
+        <Box sx={{paddingTop:"0.5%",display:"flex",justifyContent:"space-around",flexDirection:"column",gap:"15px"}}>
+        <Box sx={{display:"flex", flexDirection:"row",gap:"2%"}}><Typography>Prosječna ocjena</Typography><Rating value={average} precision={0.5} readOnly/></Box>
+       <Typography >Ovo su drugi rekli o nama</Typography> 
+       </Box>)}
       { random.length!==0  &&
        
         random.map((val,ind)=>
           (
-              <Box key={ind} >
+              <Box key={ind} sx={{border: '1.5px solid #ddd',borderRadius:"10px"}} >
                 <Box><Rating value={val.ocjena} precision={0.5} readOnly/></Box>
                 <Box>{val.komentar}</Box>
               </Box>

@@ -11,12 +11,13 @@ import {
 } from '@mui/material';
 import "../index.css"
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   //const [email, setEmail] = React.useState(localStorage.getItem("email"));
   const open = Boolean(anchorEl);
+  const navigate=useNavigate();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -26,6 +27,15 @@ function Header() {
     const handleLoginClick = () => {
         window.location.href = `${import.meta.env.VITE_API_URL}` + '/oauth2/authorization/google';
     };
+  const handler=(vari)=>{
+    if(!email){
+       window.location.href = `${import.meta.env.VITE_API_URL}` + '/oauth2/authorization/google';
+      handleClose();
+    }else{
+      navigate(vari);
+      handleClose();
+    }
+  }
     //const email = localStorage.getItem("email");
 
     //  console.log(window.location.hash)
@@ -95,10 +105,10 @@ function Header() {
             <MenuItem onClick={handleClose} component={Link} to="/about">
               O nama
             </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/reservation">
+            <MenuItem onClick={()=>handler("/reservation")} >
               Rezervacija soba
             </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/reservationAdditionalServices">
+            <MenuItem onClick={()=>handler("/reservationAdditionalServices")}>
               Rezervacija dodatnog sadržaja
             </MenuItem>
              <MenuItem onClick={handleClose} component={Link} to="/reviews">
