@@ -6,7 +6,6 @@ import com.juliusmeinl.backend.model.Rezervacija;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface RezervacijaRepository extends JpaRepository<Rezervacija, Integer> {
@@ -18,6 +17,5 @@ LEFT JOIN FETCH r.sadrzaji d
 """)
     List<Rezervacija> findAllWithRoomsAndContents();
 
-    List<Rezervacija> findByKorisnikIdAndDatumDoBefore(Integer korisnikId, LocalDate datum);
 
 }
