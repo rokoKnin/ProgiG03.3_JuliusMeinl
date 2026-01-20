@@ -9,7 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.*;import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import java.io.ByteArrayOutputStream;
 
@@ -359,7 +362,129 @@ public class RezervacijaService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<AvailableRoomDTO> getAvailableRooms(LocalDate dateFrom, LocalDate dateTo, Integer currentRoomId) {
+        try {
+            // Get all rooms
+            List<Soba> allRooms = sobaRepository.findAll();
+            
+            // Filter available rooms for the given dates
+            List<Soba> availableRooms = allRooms.stream()
+                .filter(room -> isRoomAvailable(room, dateFrom, dateTo))
+                .collect(Collectors.toList());
+            
+            // Include current room if specified (so user can keep the same room)
+            if (currentRoomId != null) {
+                Soba currentRoom = sobaRepository.findById(currentRoomId).orElse(null);
+                if (currentRoom != null && !availableRooms.contains(currentRoom)) {
+                    availableRooms.add(currentRoom);
+                }
+            }
+            
+            // Convert to DTOs
+            return availableRooms.stream()
+                .map(room -> new AvailableRoomDTO(
+                    room.getId(),
+                    room.getBrojSobe(),
+                    room.getVrsta(),
+                    room.getCijena()
+                ))
+                .collect(Collectors.toList());
+                
+        } catch (Exception e) {
+            throw new RuntimeException("Greška prilikom dohvaćanja dostupnih soba", e);
+        }
+    }
 
+    private boolean isRoomAvailable(Soba room, LocalDate dateFrom, LocalDate dateTo) {
+        try {
+            // Get all reservations for this room
+            List<RezervirajSobu> roomReservations = rezervirajSobuRepository.findBySobaId(room.getId());
+            
+            // Check if room is available for the given dates
+            return roomReservations.stream()
+                .noneMatch(reservation -> 
+                    !(dateTo.isBefore(reservation.getDatumOd()) || 
+                    dateFrom.isAfter(reservation.getDatumDo()))
+                );
+        } catch (Exception e) {
+            // If there's an error, assume room is available
+            return true;
+        }
+    }
+
+    @Transactional
+    public boolean updateReservationRoom(Integer reservationId, int roomIndex, Integer newRoomId, 
+                                        String newRoomNumber, String newRoomType) {
+        try {
+            // Get the reservation
+            Rezervacija reservation = rezervacijaRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("Rezervacija ne postoji"));
+            
+            // Get all room reservations for this reservation
+            List<RezervirajSobu> roomReservations = new ArrayList<>(reservation.getSobe());
+            
+            if (roomIndex >= roomReservations.size()) {
+                throw new IllegalArgumentException("Neispravan indeks sobe");
+            }
+            
+            // Get the specific room reservation to update
+            RezervirajSobu roomToUpdate = roomReservations.get(roomIndex);
+            
+            // Get the new room
+            Soba newRoom = sobaRepository.findById(newRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("Nova soba ne postoji"));
+            
+            // Check if the new room is available for these dates
+            if (!isRoomAvailable(newRoom, roomToUpdate.getDatumOd(), roomToUpdate.getDatumDo())) {
+                throw new IllegalArgumentException("Soba nije dostupna za odabrane datume");
+            }
+            
+            // Delete the old room reservation
+            rezervirajSobuRepository.delete(roomToUpdate);
+            
+            // Create new room reservation
+            RezervirajSobu newRoomReservation = new RezervirajSobu();
+            RezervirajSobuId newId = new RezervirajSobuId(reservationId, newRoomId);
+            newRoomReservation.setId(newId);
+            newRoomReservation.setRezervacija(reservation);
+            newRoomReservation.setSoba(newRoom);
+            newRoomReservation.setDatumOd(roomToUpdate.getDatumOd());
+            newRoomReservation.setDatumDo(roomToUpdate.getDatumDo());
+            
+            // Save the new room reservation
+            rezervirajSobuRepository.save(newRoomReservation);
+            
+            // Recalculate total price
+            recalculateReservationPrice(reservationId);
+            
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException("Greška pri ažuriranju sobe: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    public void recalculateReservationPrice(Integer reservationId) {
+        Rezervacija reservation = rezervacijaRepository.findById(reservationId)
+            .orElseThrow(() -> new IllegalArgumentException("Rezervacija ne postoji"));
+        
+        BigDecimal total = BigDecimal.ZERO;
+        
+        // Calculate room prices
+        for (RezervirajSobu rs : reservation.getSobe()) {
+            long brojNocenja = ChronoUnit.DAYS.between(rs.getDatumOd(), rs.getDatumDo());
+            total = total.add(rs.getSoba().getCijena().multiply(BigDecimal.valueOf(brojNocenja)));
+        }
+        
+        // Calculate additional content prices
+        for (RezervirajSadrzaj rs : reservation.getSadrzaji()) {
+            total = total.add(rs.getDodatniSadrzaj().getCijena());
+        }
+        
+        reservation.setIznosRezervacije(total);
+        rezervacijaRepository.save(reservation);
+    }
 
 
 

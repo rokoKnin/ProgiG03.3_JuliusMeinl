@@ -1,15 +1,21 @@
 package com.juliusmeinl.backend.controller;
 
+import com.juliusmeinl.backend.dto.AvailableRoomDTO;
 import com.juliusmeinl.backend.dto.DodatniSadrzajResponseDTO;
 import com.juliusmeinl.backend.dto.RezervacijaRequestDTO;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.dto.RezervacijaResponseDTO;
+import com.juliusmeinl.backend.dto.RoomAvailabilityRequest;
+import com.juliusmeinl.backend.dto.UpdateRoomRequest;
 import com.juliusmeinl.backend.model.Korisnik;
 import com.juliusmeinl.backend.service.DodatniSadrzajService;
 import com.juliusmeinl.backend.model.Rezervacija;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
 import com.juliusmeinl.backend.service.SobaService;
+import com.juliusmeinl.backend.dto.RoomAvailabilityRequest;
+import com.juliusmeinl.backend.dto.UpdateRoomRequest;
+import com.juliusmeinl.backend.dto.AvailableRoomDTO;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -94,6 +101,46 @@ public class RezervacijaController {
                     .body(new InputStreamResource(new java.io.ByteArrayInputStream(data)));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("/available-rooms")
+    public ResponseEntity<List<AvailableRoomDTO>> getAvailableRooms(@RequestBody RoomAvailabilityRequest request) {
+        try {
+            // Get available rooms from service
+            List<AvailableRoomDTO> availableRooms = rezervirajService.getAvailableRooms(
+                request.getDateFrom(), 
+                request.getDateTo(), 
+                request.getCurrentRoomId()
+            );
+            return ResponseEntity.ok(availableRooms);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/{reservationId}/room")
+    public ResponseEntity<?> updateReservationRoom(
+        @PathVariable Integer reservationId,
+        @RequestBody UpdateRoomRequest request
+    ) {
+        try {
+            boolean success = rezervirajService.updateReservationRoom(
+                reservationId,
+                request.getRoomIndex(),
+                request.getNewRoomId(),
+                request.getNewRoomNumber(),
+                request.getNewRoomType()
+            );
+            
+            if (success) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().body("Greška pri ažuriranju sobe");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Greška: " + e.getMessage());
         }
     }
 }
