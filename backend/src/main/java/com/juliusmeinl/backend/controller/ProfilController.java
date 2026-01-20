@@ -6,6 +6,7 @@ import com.juliusmeinl.backend.dto.KorisnikResponseDTO;
 import com.juliusmeinl.backend.dto.ProfilRezervacijeResponseDTO;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/profile")
 public class ProfilController {
     private final KorisnikService korisnikService;
     private final RezervacijaService rezervacijaService;
 
-    public ProfilController(KorisnikService korisnikService, RezervacijaService rezervacijaService) {
-        this.korisnikService = korisnikService;
-        this.rezervacijaService = rezervacijaService;
-    }
 
     @PostMapping("/{email}")
     public KorisnikResponseDTO prikaziKorisnika(@PathVariable String email) {

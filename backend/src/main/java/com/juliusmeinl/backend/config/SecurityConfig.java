@@ -1,18 +1,16 @@
 package com.juliusmeinl.backend.config;
 
 
-import com.juliusmeinl.backend.service.CustomOAuth2UserService;
+import com.juliusmeinl.backend.repository.KorisnikRepository;
+import com.juliusmeinl.backend.security.OAuth2Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -30,22 +28,23 @@ public class SecurityConfig {
     @Value("${julius.frontend.url}")
     private String frontendUrl;
 
+    @Value("${julius.admin.email}")
+    private String adminEmail;
 
-    private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SuccessHandler successHandler;
+    private final KorisnikRepository korisnikRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .cors(cors-> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 ->
-                        oauth2
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/**")
+//                        .anyRequest().authenticated()
+//                )
+                .oauth2Login(oauth2 -> oauth2
                                 .userInfoEndpoint(userInfoEndpoint ->
-                                        userInfoEndpoint.userService(customOAuth2UserService)
+                                        userInfoEndpoint.userAuthoritiesMapper(OAuth2Utils.authoritiesMapper(adminEmail, korisnikRepository))
                                 )
                                 .successHandler(successHandler)
                 );
