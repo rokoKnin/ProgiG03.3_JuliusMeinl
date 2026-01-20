@@ -41,16 +41,16 @@ public class KorisnikService {
     private final MjestoRepository mjestoRepository;
     private final DrzavaRepository drzavaRepository;
 
-    public KorisnikResponseDTO ispisiKorisnika(String email) {
+    public KorisnikResponseDTO ispisiKorisnika(@PathVariable String email) {
        KorisnikResponseDTO korisnikResponseDTO = new KorisnikResponseDTO();
-       Korisnik korisnik =  korisnikRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("Korisnik ne postoji u bazi"));
+       Optional<Korisnik> korisnik =  korisnikRepository.findByEmail(email);
 
-       korisnikResponseDTO.setName(korisnik.getIme());
-       korisnikResponseDTO.setEmail(korisnik.getEmail());
-       korisnikResponseDTO.setEmail(korisnik.getEmail());
-       korisnikResponseDTO.setTelefon(korisnik.getTelefon());
-       korisnikResponseDTO.setDrzava(korisnik.getMjesto().getDrzava().getNazivDrzave());
-       korisnikResponseDTO.setGrad(korisnik.getMjesto().getNazMjesto());
+       korisnikResponseDTO.setName(korisnik.get().getIme());
+       korisnikResponseDTO.setEmail(korisnik.get().getEmail());
+       korisnikResponseDTO.setEmail(korisnik.get().getEmail());
+       korisnikResponseDTO.setTelefon(korisnik.get().getTelefon());
+       korisnikResponseDTO.setDrzava(korisnik.get().getMjesto().getDrzava().getNazivDrzave());
+       korisnikResponseDTO.setGrad(korisnik.get().getMjesto().getNazMjesto());
 
        return korisnikResponseDTO;
     }
