@@ -51,8 +51,8 @@ public class KorisnikService {
        korisnikResponseDTO.setPrezime(korisnik.getPrezime());
        korisnikResponseDTO.setEmail(korisnik.getEmail());
        korisnikResponseDTO.setTelefon(korisnik.getTelefon());
-       korisnikResponseDTO.setDrzava(korisnik.getMjesto().getDrzava().getNazivDrzave());
-       korisnikResponseDTO.setGrad(korisnik.getMjesto().getNazMjesto().substring(0,1).toUpperCase() + korisnik.getMjesto().getNazMjesto().substring(1));
+       korisnikResponseDTO.setDrzava(korisnik.getMjesto().getDrzava().getNazivDrzave().substring(0,1).toUpperCase() + korisnik.getMjesto().getDrzava().getNazivDrzave().substring(1));
+       korisnikResponseDTO.setGrad(korisnik.getMjesto().getNazMjesto());
        korisnikResponseDTO.setPostBr(korisnik.getMjesto().getPostBr());
 
        return korisnikResponseDTO;
