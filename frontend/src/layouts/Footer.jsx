@@ -10,7 +10,7 @@ export default function Footer(){
                 <div >
                     <h3>Kontakt</h3>
                     <div>
-                        <p>Adresa: Izmišljenaadr 5, Moregrad</p>
+                        <p>Posjetite nas na adresi: Izmišljenaadr 5, Moregrad</p>
                         <p>Telefon: 011 244 5xx</p>
                         </div></div>
                 <div style={{display:'flex',width:'10%',height:'200px',flexDirection:'column', gap: '0.5rem'}}><h3>Lokacija</h3><APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
@@ -32,9 +32,6 @@ export default function Footer(){
             </Link>
              <Link style={{all:'unset',color: 'white', size: 'small', cursor: 'pointer'}} to="/reviews">
               Recenzije
-            </Link>
-            <Link style={{all:'unset',color: 'white', size: 'small', cursor: 'pointer'}} to="/faq">
-              FAQ
             </Link></div>
                 </div>
             </div>
