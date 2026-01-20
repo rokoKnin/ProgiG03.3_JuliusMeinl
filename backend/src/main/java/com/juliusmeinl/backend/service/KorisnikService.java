@@ -1,6 +1,5 @@
 package com.juliusmeinl.backend.service;
 
-import com.juliusmeinl.backend.dto.KorisnikResponseDTO;
 import com.juliusmeinl.backend.model.*;
 import com.itextpdf.text.Font;
 import com.juliusmeinl.backend.model.Drzava;
@@ -24,7 +23,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -40,20 +38,6 @@ public class KorisnikService {
     private final KorisnikRepository korisnikRepository;
     private final MjestoRepository mjestoRepository;
     private final DrzavaRepository drzavaRepository;
-
-    public KorisnikResponseDTO ispisiKorisnika(@PathVariable String email) {
-       KorisnikResponseDTO korisnikResponseDTO = new KorisnikResponseDTO();
-       Optional<Korisnik> korisnik =  korisnikRepository.findByEmail(email);
-
-       korisnikResponseDTO.setName(korisnik.get().getIme());
-       korisnikResponseDTO.setEmail(korisnik.get().getEmail());
-       korisnikResponseDTO.setEmail(korisnik.get().getEmail());
-       korisnikResponseDTO.setTelefon(korisnik.get().getTelefon());
-       korisnikResponseDTO.setDrzava(korisnik.get().getMjesto().getDrzava().getNazivDrzave());
-       korisnikResponseDTO.setGrad(korisnik.get().getMjesto().getNazMjesto());
-
-       return korisnikResponseDTO;
-    }
 
     @Transactional
     public Korisnik spremiKorisnika(Korisnik korisnik) {
