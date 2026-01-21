@@ -2,6 +2,7 @@ package com.juliusmeinl.backend.config;
 
 
 import com.juliusmeinl.backend.repository.KorisnikRepository;
+import com.juliusmeinl.backend.security.CustomOAuth2SuccessHandler;
 import com.juliusmeinl.backend.security.OAuth2Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -47,6 +49,12 @@ public class SecurityConfig {
                                         userInfoEndpoint.userAuthoritiesMapper(OAuth2Utils.authoritiesMapper(adminEmail, korisnikRepository))
                                 )
                                 .successHandler(successHandler)
+                ).logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
                 );
 
         return http.build();
