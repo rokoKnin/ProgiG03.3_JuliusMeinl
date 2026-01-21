@@ -1,16 +1,23 @@
 package com.juliusmeinl.backend.service;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.property.TextAlignment;
 import com.juliusmeinl.backend.dto.*;
 import com.juliusmeinl.backend.model.*;
 import com.juliusmeinl.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.atp.Switch;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -503,6 +510,48 @@ public class RezervacijaService {
         rezervacijaRepository.save(reservation);
     }
 
+    public ByteArrayResource exportDanasnjeRezervacijePdf() {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            PdfWriter writer = new PdfWriter(out);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
 
+            // Naslov sa današnjim datumom
+            LocalDate danas = LocalDate.now();
+            String datumString = danas.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            document.add(new Paragraph("Današnje rezervacije - " + datumString)
+                    .setBold()
+                    .setFontSize(16)
+                    .setTextAlignment(TextAlignment.CENTER)
+            );
+
+            // Dohvati sve rezervirane sobe za danas
+            List<RezervirajSobu> rezervacijeDanas = rezervirajSobuRepository.findAllRezervacijeZaDanas(danas);
+
+            if (rezervacijeDanas.isEmpty()) {
+                document.add(new Paragraph("Nema rezervacija za danas."));
+            } else {
+                com.itextpdf.layout.element.Table table = new com.itextpdf.layout.element.Table(3); // Redni broj | Broj sobe | Vrsta sobe
+                table.addHeaderCell("Redni broj");
+                table.addHeaderCell("Broj sobe");
+                table.addHeaderCell("Vrsta sobe");
+
+                int rb = 1;
+                for (RezervirajSobu rs : rezervacijeDanas) {
+                    table.addCell(String.valueOf(rb++));
+                    table.addCell(rs.getSoba().getBrojSobe());
+                    table.addCell(rs.getSoba().getVrsta().name());
+                }
+
+                document.add(table);
+            }
+
+            document.close();
+            return new ByteArrayResource(out.toByteArray());
+
+        } catch (Exception e) {
+            throw new RuntimeException("Greška pri generiranju PDF-a današnjih rezervacija", e);
+        }
+    }
 
 }
