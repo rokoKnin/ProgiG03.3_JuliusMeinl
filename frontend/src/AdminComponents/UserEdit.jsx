@@ -12,7 +12,7 @@ export default function UserEdit({ setExportHandler }) {
 
     // Mapa za prikaz uloga (frontend-friendly)
     const ulogaDisplayMap = {
-        REGISTRIRAN: "Korisnik",
+        KORISNIK: "Korisnik",
         ZAPOSLENIK: "Recepcionist",
         VLASNIK: "Administrator",
         NEREGISTRIRAN: "Gost"
@@ -156,7 +156,7 @@ export default function UserEdit({ setExportHandler }) {
                                         size="small"
                                         disabled={saving}
                                     >
-                                        <MenuItem value="REGISTRIRAN">Korisnik</MenuItem>
+                                        <MenuItem value="KORISNIK">Korisnik</MenuItem>
                                         <MenuItem value="VLASNIK">Administrator</MenuItem>
                                         <MenuItem value="ZAPOSLENIK">Recepcionist</MenuItem>
                                     </Select>

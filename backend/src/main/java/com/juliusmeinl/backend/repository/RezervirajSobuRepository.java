@@ -25,4 +25,13 @@ public interface RezervirajSobuRepository extends JpaRepository<RezervirajSobu, 
             "JOIN FETCH rs.soba s")
     List<RezervirajSobu> findAllWithDetails();
     List<RezervirajSobu> findBySobaId(Integer sobaId);
+
+
+    @Query("""
+    SELECT rs 
+    FROM RezervirajSobu rs
+    JOIN FETCH rs.soba s
+    WHERE :danas BETWEEN rs.datumOd AND rs.datumDo
+""")
+    List<RezervirajSobu> findAllRezervacijeZaDanas(LocalDate danas);
 }
