@@ -116,7 +116,7 @@ function Profil() {
       try {
                    const response= await axios.post(`${import.meta.env.VITE_API_URL}`+'/api/profile/' + `${email}`, email,  {withCredentials: true} )
                   setUser(response.data);
-                  //console.log(response.data);
+                  console.log(response.data);
                    return true;
                 
                 } catch (error) {
@@ -136,6 +136,8 @@ function Profil() {
 [refresh])
 
 const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(`Promjena na polju ${name}:`, value);
     setEditUser({ ...editUser, [e.target.name]: e.target.value });
     console.log(editUser)
 };
@@ -143,6 +145,8 @@ const handleSave=async()=>{
           try {
                    const response= await axios.put(`${import.meta.env.VITE_API_URL}`+'/api/profile/edit' , editUser,  {withCredentials: true} )
                    setRefresh(prev=>prev+1)
+                   
+                   console.log("editUser promijenjen:", editUser);
                    return true;
                 
                 } catch (error) {
@@ -184,6 +188,7 @@ const handleSave=async()=>{
             <Box>Ime: {user.name}</Box>
             <Box>Broj telefona: {user.telefon}</Box>
             <Box>Grad: {user.grad}</Box>
+            <Box>Poštanski broj: {user.postBr}</Box>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1, flex: 1 }}>
             <Box>Prezime: {user.prezime}</Box>
@@ -268,30 +273,30 @@ const handleSave=async()=>{
             <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}>Ime: <TextField name="name" onChange={handleChange} defaultValue={user.name}/></Box>
             <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}>Broj telefona:  <TextField type="number" name="telefon" onChange={handleChange} defaultValue={user.telefon}/></Box>
             <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}>Grad:  <TextField name="grad" onChange={handleChange} defaultValue={user.grad}/></Box>
+            <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}><TextField name="postBr" onChange={handleChange} defaultValue={user.postBr}/></Box>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1, flex: 1 }}>
             <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}>Prezime:  <TextField name="prezime" onChange={handleChange} defaultValue={user.prezime}/></Box>
             <Box sx={{ display: "flex",flexDirection:"row", gap :"2%", alignItems:"center"}}>Email:  <TextField disabled defaultValue={user.email}/></Box>
-           <select 
-  name="drzava" 
-  onChange={handleChange} 
-  value={editUser.drzava || ""}
-  style={{ 
-    padding: '12px', 
-    borderRadius: '4px', 
-    border: '1px solid #ccc',
-    width: '100%',
-    marginTop: '5px' 
-  }}
->
-  <option value="" disabled>Odaberi državu</option>
-  
-  {lista.map((drzava) => (
-    <option key={drzava} value={drzava}>
-      {drzava}
-    </option>
-  ))}
-</select> </Box>
+           <Box> <select name="drzava" onChange={handleChange} 
+            value={editUser.drzava || ""}
+            style={{ 
+                padding: '12px', 
+                borderRadius: '4px', 
+                border: '1px solid #ccc',
+                width: '100%',
+                marginTop: '5px' 
+            }}
+            >
+            <option value="" disabled>Odaberi državu</option>
+            
+            {lista.map((drzava) => (
+                <option key={drzava} value={drzava}>
+                {drzava}
+                </option>
+            ))}
+            </select>   </Box>
+            </Box>
         </Box>
         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="outlined" onClick={()=>{setIsOpen(false)}}>Odustani</Button>
         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="contained" onClick={()=>{handleSave();setIsOpen(false);}}>Spremi</Button>

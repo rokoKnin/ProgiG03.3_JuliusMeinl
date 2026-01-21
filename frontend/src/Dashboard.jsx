@@ -22,7 +22,20 @@ const Dashboard = () => {
     const [prezime, setPrezime] = useState(urlParams.get("prezime"));
     const [telefon, setTelefon] = useState(urlParams.get("telefon"));
     const [lista,setLista]=useState([]);
+    const[listaDrzava,setListaDrzava]=useState([]);
     const navigate = useNavigate();
+    
+useEffect(()=>{
+     const listaDrz=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/profile/countries-list', {withCredentials: true})
+             .then(listaDrz =>
+              { 
+               setListaDrzava(listaDrz.data);
+                 //console.log("drzave",listaDrz.data);
+              })
+                  .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
+                 console.error(error.response?.status)
+                 console.error(error.response)})
+          }, []);
  async function handleAddUser(){
         const ime = document.getElementById("firstname_id").value
         const prezime = document.getElementById("lastname_id").value
@@ -48,18 +61,7 @@ const Dashboard = () => {
             telefon,
             mjesto
         }
-        useEffect(()=>{
-      
-        const listaDrz=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/profile/countries-list', {withCredentials: true})
-        .then(listaDrz =>
-         { 
-          setLista(listaDrz.data);
-            console.log(listaDrz.data);
-         })
-             .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
-            console.error(error.response?.status)
-            console.error(error.response)})
-     }, []);
+       
 
         //console.log(userData)
         try {
@@ -70,7 +72,7 @@ const Dashboard = () => {
             localStorage.setItem("prezime", response.data.prezime);
             localStorage.setItem("telefon", response.data.telefon);
             localStorage.setItem("ovlast", response.data.ovlast);
-            navigate('/')
+            window.location.href = '/';
         } catch (error) {
             alert('Niste ispunili sve podatke u potrebnom formatu!')
             console.error('Error: nije se poslao post zbog necega', error.response?.data)
@@ -90,8 +92,19 @@ const Dashboard = () => {
                 {/*<input type="text" value={email} placeholder="example@gmail.com" id="email_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>*/}
                 <div>
                 <input type="number" value={telefon != null ? telefon : ""} onChange={(e) => setTelefon(e.target.value)} placeholder="Phone number" id="phone_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>
-                <input type="text" placeholder="Drzava" id="country_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>
-                </div>
+                 <select name="drzava" 
+            placeholder="Država"
+            id="country_id"
+            style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}
+            >
+            <option  disabled>Odaberi državu</option>
+            
+            {listaDrzava.map((drzava) => (
+                <option key={drzava} value={drzava}>
+                {drzava}
+                </option>
+            ))}
+            </select> </div>
                 <div>
                     <input type="text" placeholder="Mjesto" id="place_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px",marginRight:"10px"}}></input>
                     <input type="number" placeholder="Poštanski broj" id="zipcode_id" style={{width:"200px",height:"30px",borderRadius:"10px",backgroundColor:"#b2c5e0ff",marginTop:"10px"}}></input>
