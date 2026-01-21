@@ -24,4 +24,5 @@ public interface RezervirajSobuRepository extends JpaRepository<RezervirajSobu, 
             "JOIN FETCH m.drzava d " +
             "JOIN FETCH rs.soba s")
     List<RezervirajSobu> findAllWithDetails();
+    List<RezervirajSobu> findBySobaId(Integer sobaId);
 }

@@ -16,7 +16,7 @@ import { useState } from 'react';
 function Payment() {
     const navigate=useNavigate();
     const [email,setEmail]=React.useState(localStorage.getItem("email"));
-    const[datumIsteka,setDatumIsteka]=useState();
+    const[datumIsteka,setDatumIsteka]=useState("");
     const [cvv,setCvv]=useState();
     const [brojKartice,setBrojKartice]=useState("");
       useEffect(()=>{
@@ -28,11 +28,13 @@ function Payment() {
       event.preventDefault();
       
     if(cvv.length!=3){
-      alert("Pogrešan format cvv-a.")
+      alert("Pogrešan format cvv-a.");
+      return;
     }
     if(brojKartice.length!=16){
       
-      alert("Pogrešan format broja kartice.")
+      alert("Pogrešan format broja kartice.");
+      return;
     }
       if(datumIsteka.length!=7){
        
@@ -50,7 +52,7 @@ function Payment() {
         console.log(datumDanas)
         console.log(datumDanas.getFullYear()) 
         console.log(godina)
-        if((mjesec<1 || mjesec>12)||parseInt(datumDanas.getFullYear())>godina||(datumDanas.getMonth()<mjesec&&datumDanas.getFullYear===godina)){
+        if((mjesec<1 || mjesec>12)||parseInt(datumDanas.getFullYear())>godina||(datumDanas.getMonth()<mjesec&&datumDanas.getFullYear()===godina)){
         
         alert("Pogrešan datum");
         return ;

@@ -1,5 +1,6 @@
+import { Button } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 
 export default function ReservationEdit( { setExportHandler}) {
@@ -12,6 +13,9 @@ export default function ReservationEdit( { setExportHandler}) {
         dateTo: "",
         payment: "ALL"
     });
+    const [editingRoom, setEditingRoom] = useState(null);
+    const [availableRooms, setAvailableRooms] = useState([]);
+    const [loadingRooms, setLoadingRooms] = useState(false);
 
     useEffect(() =>  {
         setLoading(true);
@@ -27,15 +31,14 @@ export default function ReservationEdit( { setExportHandler}) {
                     user: {
                         name: r.ime,
                         surname: r.prezime,
-                        email: r.email,
-                        userId: r.korisnikId  // ← dodaj ovo
+                        email: r.email
                     },
                     rooms: (r.sobe && r.sobe.length)
                         ? r.sobe
                         : [{ roomNumber: "N/A", roomType: "N/A", roomId: "N/A", datumOd: null, datumDo: null }],  // ← fallback
                     additionalContents: (r.sadrzaji && r.sadrzaji.length)
                         ? r.sadrzaji
-                        : [{ content: "N/A", contentId: "N/A" }],  // ← fallback
+                        : [{ vrsta: "N/A", contentId: "N/A" }],  // ← fallback
                     paymentStatus: r.placeno ? "PAID" : "UNPAID",
                     dateFrom: (r.sobe && r.sobe.length) ? r.sobe[0].datumOd : null,
                     dateTo: (r.sobe && r.sobe.length) ? r.sobe[0].datumDo : null
@@ -75,6 +78,95 @@ export default function ReservationEdit( { setExportHandler}) {
             alert("Greška prilikom izvoza rezervacija.");
         }
     };
+
+    const fetchAvailableRooms = useCallback(async (dateFrom, dateTo, currentRoomId = null) => {
+        setLoadingRooms(true);
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/reservations/available-rooms`,
+                {
+                    dateFrom,
+                    dateTo,
+                    currentRoomId 
+                },
+                { withCredentials: true }
+            );
+            
+            setAvailableRooms(response.data || []);
+        } catch (error) {
+            console.error("Error fetching available rooms:", error);
+            setAvailableRooms([]);
+        } finally {
+            setLoadingRooms(false);
+        }
+    }, []);
+
+    const startEditRoom = useCallback((reservationId, roomId) => {
+        const reservation = reservations.find(r => r.reservationId === reservationId);
+        if (!reservation || !reservation.rooms[roomId]) return;
+
+        const room = reservation.rooms[roomId];
+        setEditingRoom({ reservationId, roomId });
+
+        // Fetch available rooms for these dates
+        if (room.datumOd && room.datumDo) {
+            fetchAvailableRooms(room.datumOd, room.datumDo, room.roomId);
+        }
+    }, [reservations, fetchAvailableRooms]);
+
+    const saveRoomChange = useCallback(async (reservationId, roomId, newRoomNumber) => {
+        if (!newRoomNumber || newRoomNumber === "N/A") return;
+
+        const selectedRoom = availableRooms.find(room =>
+            room.roomNumber === newRoomNumber ||
+            room.brojSobe === newRoomNumber
+        );
+        if (!selectedRoom) {
+            alert("Odabrana soba nije pronađena");;
+            return;
+        }
+
+        try {
+            const response = await axios.put(
+                `${import.meta.env.VITE_API_URL}/api/reservations/${reservationId}/room`,
+                {
+                    roomId,
+                    newRoomId: selectedRoom.id || selectedRoom.sobaId,
+                    newRoomNumber: selectedRoom.roomNumber || selectedRoom.brojSobe,
+                    newRoomType: selectedRoom.roomType || selectedRoom.vrstaSobe || selectedRoom.vrsta
+                },
+                { withCredentials: true }
+            );
+            if (response.status === 200) {
+                // Update local state
+                setReservations(prevReservations => prevReservations.map(r => {
+                    if (r.reservationId === reservationId) {
+                        const updatedRooms = [...r.rooms];
+                        updatedRooms[roomId] = {
+                            ...updatedRooms[roomId],
+                            roomNumber: selectedRoom.roomNumber || selectedRoom.brojSobe,
+                            roomType: selectedRoom.roomType || selectedRoom.vrstaSobe || selectedRoom.vrsta,
+                            roomId: selectedRoom.id || selectedRoom.sobaId
+                        };
+                        return { ...r, rooms: updatedRooms };
+                    }
+                    return r;
+                }));
+
+                setEditingRoom(null);
+                setAvailableRooms([]);
+                alert("Soba je uspešno izmenjena.");
+            }
+        } catch (error) {
+            console.error("Error updating room:", error);
+            alert("Greška prilikom promjene sobe.");
+        }
+    }, [availableRooms]);
+
+    const cancelRoomEdit = useCallback(() => {
+        setEditingRoom(null);
+        setAvailableRooms([]);
+    }, []);
 
     const filteredReservations = Array.isArray(reservations) ? reservations.filter((reservation) => {
         if (!reservation) return false;
@@ -174,7 +266,6 @@ export default function ReservationEdit( { setExportHandler}) {
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>ID</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Ime korisnika</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Prezime korisnika</th>
-                            <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>ID korisnika</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Datum od</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Datum do</th>
                             <th style={{border: "2px solid #1976d2", padding: "0px 10px"}}>Broj sobe</th>
@@ -190,18 +281,47 @@ export default function ReservationEdit( { setExportHandler}) {
                         reservation.rooms.length
                             ? reservation.rooms.map((room, idx) => {
                                 const additional = reservation.additionalContents[idx] || { content: "N/A", contentId: "N/A" };
+                                const isEditing = editingRoom?.reservationId === reservation.reservationId 
+                                                && editingRoom?.roomId === idx; 
                                 return (
                                     <tr key={`${reservation.reservationId}-${idx}`} style={{ border: "1px solid #1976d2" }}>
                                         <td>{reservation.reservationId}</td>
                                         <td>{reservation.user.name || "N/A"}</td>
                                         <td>{reservation.user.surname || "N/A"}</td>
-                                        <td>{reservation.user.userId || "N/A"}</td>
                                         <td>{room.datumOd ? new Date(room.datumOd).toLocaleDateString() : "N/A"}</td>
                                         <td>{room.datumDo ? new Date(room.datumDo).toLocaleDateString() : "N/A"}</td>
-                                        <td>{room.roomNumber || "N/A"}</td>
+                                        <td>{isEditing ? (
+                                            <div style={{ display: "flex", flexDirection: "column" }}>
+                                                <select style={{ width: "100%", borderRadius: "5px", padding: "5px", fontFamily: "inherit" , minWidth: "100px"}}
+                                                    disabled={loadingRooms}
+                                                    onChange={(e) => {
+                                                        if (e.target.value) {
+                                                            saveRoomChange(reservation.reservationId, idx, e.target.value);
+                                                        }
+                                                    }
+                                                }>
+                                                    <option value="">Odaberi sobu</option>
+                                                    {loadingRooms ? (
+                                                        <option disabled>Učitavanje...</option>
+                                                    ) : (
+                                                        availableRooms.map((room) => (
+                                                            <option key={room.id || room.sobaId} value={room.roomNumber || room.brojSobe}>
+                                                                {room.roomNumber || room.brojSobe} - {room.roomType || room.vrstaSobe || room.vrsta}
+                                                            </option>
+                                                        ))
+                                                    )}
+                                                </select>
+                                                <Button onClick={cancelRoomEdit}>Otkaži</Button>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                {room.roomNumber || "N/A"}
+                                                <Button style={{ marginLeft: "10px" }} onClick={() => startEditRoom(reservation.reservationId, idx)}>Edit</Button>
+                                            </div>
+                                        )}</td>
                                         <td>{room.roomType || "N/A"}</td>
                                         <td>{room.roomId || "N/A"}</td>
-                                        <td>{additional.content}</td>
+                                        <td>{additional.vrsta}</td>
                                         <td>{additional.contentId}</td>
                                         <td>{reservation.paymentStatus || "N/A"}</td>
                                     </tr>
@@ -235,3 +355,4 @@ function downloadFile(blob, filename) {
     a.click();
     window.URL.revokeObjectURL(url);
 }
+

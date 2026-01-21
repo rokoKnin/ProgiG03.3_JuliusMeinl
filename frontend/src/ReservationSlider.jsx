@@ -25,6 +25,8 @@ import BalconyOutlinedIcon from '@mui/icons-material/BalconyOutlined';
 import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_NumberInput';
 import TsunamiOutlinedIcon from '@mui/icons-material/TsunamiOutlined';
 const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
+    const { testid, ...rest } = props;
+
     return (
         <BaseNumberInput
             slots={{
@@ -36,13 +38,15 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
             slotProps={{
                 incrementButton: {
                     children: <AddIcon fontSize="small" />,
-                    className: 'increment'
+                    className: 'increment',
+                    'data-testid': testid ? `${testid}-inc` : undefined,
                 },
                 decrementButton: {
                     children: <RemoveIcon fontSize="small" />,
+                    'data-testid': testid ? `${testid}-dec` : undefined,
                 },
             }}
-            {...props}
+            {...rest}
             ref={ref}
         />
     );
@@ -252,7 +256,7 @@ export default function HorizontalLinearStepper() {
                                 {soba.pogledNaMore && <div style={{display:"flex",flexDirection:"row", gap:"5px"}}>{pogledNaMore.label}{pogledNaMore.icon}</div>}
                                 <div>Cijena: {soba.cijena} €</div></div>
                             <div>
-                                <NumberInput value={brojOdabranoSoba[i]||0} onChange={(event,val)=>{
+                                <NumberInput testid={`room-${i}`} value={brojOdabranoSoba[i]||0} onChange={(event,val)=>{
                                     const prethodna=brojOdabranoSoba[i]||0;
 
                                     if(val>soba.brojDostupnih){
