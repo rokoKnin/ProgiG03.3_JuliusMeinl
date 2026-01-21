@@ -175,6 +175,10 @@ const handleSave=async()=>{
     const handleLogout=()=>{
         localStorage.clear();
         sessionStorage.clear();
+        axios.get(`${import.meta.env.VITE_API_URL}`+'/logout', {withCredentials: true})
+            .catch(error => {
+                console.error('Logout neuspjesan, Error na Profil:179', error.response?.data);
+            });
         window.location.href = '/';
     }
     return(
