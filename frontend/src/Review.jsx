@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import { TextField } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import {Button} from '@mui/material';
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
@@ -27,6 +27,21 @@ export default function Review() {
   const [hover, setHover] = React.useState(-1);
     const [komentar,setKomentar]=React.useState("");
     const email = localStorage.getItem('email')
+    const [random,setRandom]=useState([]);
+    
+    useEffect(()=>{
+      
+        const randomL=axios.get(`${import.meta.env.VITE_API_URL}`+'/api/reviews/random-reviews', {withCredentials: true})
+        .then(randomL =>
+         { 
+          setRandom(randomL.data);
+            console.log(randomL.data);
+         })
+             .catch(error =>{console.error('Error: nije se poslao post zbog necega', error.response?.data)
+            console.error(error.response?.status)
+            console.error(error.response)})
+     }, []);
+
     const handleSubmit=async(event)=>{
         event.preventDefault();
         const data={
@@ -34,6 +49,7 @@ export default function Review() {
             komentar,
             email
         }
+        console.log(data);
          try {
                    const response= await axios.post(`${import.meta.env.VITE_API_URL}`+'/api/reviews/' + `${email}`, data,  {withCredentials: true} )
                    navigate("/").then(window.location.reload)
@@ -42,7 +58,8 @@ export default function Review() {
                 } catch (error) {
 
                     console.error('Error: nije se poslao post zbog necega', error.response?.data)
-
+            console.error(error.response?.status)
+            console.error(error.response)
                     return false;
                   }
     }
@@ -70,6 +87,10 @@ export default function Review() {
       <TextField value={komentar} onChange={(e)=>{setKomentar(e.target.value)}}
       sx={{width:"40%"}}required placeholder='Podijelite svoje mišljenje s nama'></TextField>
     <Button type="submit" variant="contained" color="primary">Spremi</Button>
+    </Box>
+    
+    <Box>
+
     </Box>
     </Box>
   );

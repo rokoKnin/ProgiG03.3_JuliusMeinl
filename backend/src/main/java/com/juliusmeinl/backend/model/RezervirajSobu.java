@@ -1,6 +1,7 @@
 package com.juliusmeinl.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 public class RezervirajSobu {
 
     @EmbeddedId
+    @JsonIgnore
     private RezervirajSobuId id;
 
     @Column(name = "datumodsoba", nullable = false)
@@ -18,14 +20,14 @@ public class RezervirajSobu {
     private LocalDate datumDo;
 
     @ManyToOne
+    @JsonIgnore
     @MapsId("rezervacijaId")
     @JoinColumn(name = "rezervacija_id")
     private Rezervacija rezervacija;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("sobaId")
     @JoinColumn(name = "soba_id")
-    @JsonBackReference
     private Soba soba;
 
     public RezervirajSobuId getId() {

@@ -35,12 +35,10 @@ public class SecurityConfig {
     private final CustomOAuth2SuccessHandler successHandler;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   CustomOAuth2SuccessHandler successHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .cors(cors-> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ovo je rijeslio error za preflight
                         .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -138,6 +138,7 @@ export default function RoomEdit( { setExportHandler} ) {
         <div>
           Broj sobe:
           <NumberInput
+              data-testid="room-number-input"
             value={broj_sobe}
             onChange={(e, val) => setBrojSobe(val)}
             min={1}
@@ -147,6 +148,7 @@ export default function RoomEdit( { setExportHandler} ) {
         <div>
           Broj kata:
           <NumberInput
+              data-testid="floor-input"
             value={kat}
             onChange={(e, val) => setKat(val)}
             min={1}
@@ -156,6 +158,7 @@ export default function RoomEdit( { setExportHandler} ) {
         <div>
           Broj kreveta u sobi:
           <NumberInput
+              data-testid="beds-input"
             value={brojKreveta}
             onChange={(e, val) => setBrojKreveta(val)}
             min={2}
@@ -302,7 +305,9 @@ function Modal({ isOpen, onClose, onSubmit, children }) {
 }
 
 const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
-  return (
+    const { 'data-testid': dataTestId, ...otherProps} = props;
+
+    return (
     <BaseNumberInput
       slots={{
         root: StyledInputRoot,
@@ -311,10 +316,11 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
         decrementButton: StyledButton,
       }}
       slotProps={{
+          root: dataTestId ? { 'data-testid' : dataTestId } : {},
         incrementButton: { children: "▴" },
         decrementButton: { children: "▾" },
       }}
-      {...props}
+      {...otherProps}
       ref={ref}
     />
   );

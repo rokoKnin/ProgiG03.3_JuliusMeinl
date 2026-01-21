@@ -40,7 +40,7 @@ public class RezervacijaController {
 
     @PostMapping("/{korisnikEmail}")
     public void napraviRezervaciju(@RequestBody RezervacijaRequestDTO rezervacijaRequestDTO, @PathVariable String korisnikEmail) {
-        Korisnik korisnik = korisnikService.findByEmail(korisnikEmail).orElseThrow(() -> new RuntimeException("Wrong email provided!\n"));
+        Korisnik korisnik = korisnikService.findByEmail(korisnikEmail).orElseThrow(() -> new RuntimeException("email ne postoji"));
 
         Integer rezervacijaId =  rezervirajService.kreirajRezervaciju(korisnik.getId());
 
