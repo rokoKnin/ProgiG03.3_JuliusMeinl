@@ -137,7 +137,7 @@ function Payment() {
         </Box>
         <Box>
             
-         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="outlined" onClick={()=>{}}component={Link} to="/home">Odustani</Button>
+         <Button sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="outlined" onClick={()=>{}}component={Link} to="/">Odustani</Button>
          <Button type="submit" sx={{marginTop:"10px",marginRight:"8px"}} color="primary" variant="contained">Spremi</Button>
         </Box>
         </Box>
