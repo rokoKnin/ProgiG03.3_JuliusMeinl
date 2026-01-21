@@ -116,6 +116,7 @@ export default function ExtraContentEdit( { setExportHandler}) {
                     <h3>{content.vrsta}</h3>
                     <img src={content.image} alt={content.vrsta} style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '5px'}}/>
                     <div><strong>Cijena:</strong> <NumberInput
+                                    testid={`extra-content-${content.id}`}
                                     value={content.cijena || 1}
                                     onChange={(e, val) => handlePriceChange(content.id, val)}
                                     min={1}
@@ -127,9 +128,10 @@ export default function ExtraContentEdit( { setExportHandler}) {
                             onChange={(e) => handleStatusChange(content.id, e.target.value)}
                             size="small"
                             disabled={saving}
+                            data-testid={`status-select-${content.id}`}
                         >
-                            <MenuItem value="dostupan">Omogući</MenuItem>
-                            <MenuItem value="nedostupan">Onemogući</MenuItem>
+                            <MenuItem value="dostupan" data-testid={`status-available-${content.id}`}>Omogući</MenuItem>
+                            <MenuItem value="nedostupan" data-testid={`status-unavailable-${content.id}`}>Onemogući</MenuItem>
                         </Select></div>
                     <Button variant="contained" onClick={() => handleSave(content.id)}>Spremi</Button>
                 </div>
@@ -148,7 +150,9 @@ function downloadFile(blob, filename) {
 }
 
 const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
-  return (
+    const { testid, ...otherProps } = props;
+
+    return (
     <BaseNumberInput
       slots={{
         root: StyledInputRoot,
@@ -157,10 +161,10 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
         decrementButton: StyledButton,
       }}
       slotProps={{
-        incrementButton: { children: "▴" },
-        decrementButton: { children: "▾" },
+        incrementButton: { children: "▴", 'data-testid':testid ? `${testid}-inc` : undefined},
+        decrementButton: { children: "▾", 'data-testid':testid ? `${testid}-dec` : undefined },
       }}
-      {...props}
+      {...otherProps}
       ref={ref}
     />
   );

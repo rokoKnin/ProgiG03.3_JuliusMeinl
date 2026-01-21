@@ -1,41 +1,32 @@
-Osmi sastankak: 15.1.2026.
-Prisutni: Luka, Roko, Gracia, Andrija, Leni, Nino
+Osmi sastanak: 8.1.2026.
+prisutni: svi
+
+>Stanje s deplojanjem:
+	>prosao je OAuth2
+	>zapinje na preuzimanju podataka s GET …/api/users/info
+
+>Sto je napravljeno:
+	>Frontend:
+        napravljena statistika
+        napravljen dio s rezervacijama
+        micemo kolicinu dodatnog sadrzaja
+	>Backend
+        radio na rezervaciji soba
+        rezervacija se dogada na kraju sobe
 
 
-Dokumentacija:
-    - dovrsiti:
-        - petu - preko vikenda
-        - sestu - cim se zavrsi testiranje
-        - sedmu - cim prije, nema tu puno jos
-        - devetu stranicu - nesto
-        - pred predaju treba proci sve i provjeriti da je sve u skladu s onim sto imamo
-        - Ja cu rijesiti A, B, C i 8. stranicu
+	>Dokumentacija
+        dijagram stanja rijesen
 
-Frontend:
-    - sto jos treba napraviti:
-    - popraviti na svakom mjestu da salje ne salje na /api/code/google/oauth2
-    vtreba filtirirat gumbe po ulozi
-        - frontend prima podatke o korisniku s backenda i sprema ih u localstorage
-    - dodati provjere na formse
-    - dashboard padajuci
-    - error handling treba
-    - snack barove treba napraviti
-    - rezervacija pregled u adminu trbea popraviti
-    - responzivnost
-    - RECEPCIONIST:
-        - isto ko admin, samo na drugom mjestu
-        - moraju se rezervacije moci urediti
-    - KORISNIK:
-        - promijeniti podatke
-        - sve osim maila da moze
-    - TESTING!!!
 
-Backend:
-    - sto jos treba napraviti
-        - TESTING
-        - recenzija mora biti one to one
-        - poslati sve drzave za dashboard
-        - uredivanje rezervacija
-        - ispis recenzija i ocjena od svih recenzija
-        - promjena podataka o korisnicima
-        - autentifiacija i autorizacija (roko ce rijesiti)
+>Sto treba jos raditi: (paziti pritom na stvari koje pisu u pdf-u)
+	>Frontend
+        uredivanje profila
+        uvid u prijasnje rezervacije
+        recenziranje
+        recepcionist rezervacija
+        responzivan dizajn
+        mapa
+	>Povezivanje Frontenda i baze
+        CRUD: /api/{nouns}
+

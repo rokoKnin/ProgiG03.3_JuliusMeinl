@@ -8,15 +8,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.juliusmeinl.backend.security.Permission.*;
 
 @RequiredArgsConstructor
 public enum UlogaKorisnika {
-    NEREGISTRIRAN(Collections.<Permission>emptySet()),
-
-    REGISTRIRAN(Collections.<Permission>emptySet()),
+    KORISNIK(Collections.<Permission>emptySet()),
 
     ZAPOSLENIK(
             Set.of(
@@ -48,7 +45,7 @@ public enum UlogaKorisnika {
                 new java.util.ArrayList<>(
                         getPermissionSet()
                             .stream()
-                            .map(perm -> new SimpleGrantedAuthority(perm.name()))
+                            .map(perm -> new SimpleGrantedAuthority(perm.getPermmision()))
                             .toList());
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return authorities;

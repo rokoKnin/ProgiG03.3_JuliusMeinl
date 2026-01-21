@@ -25,7 +25,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -123,7 +122,7 @@ public class KorisnikService {
         if (korisnik.getEmail().trim().equalsIgnoreCase(adminEmail.trim())){
             korisnik.setOvlast(UlogaKorisnika.VLASNIK);
         }else{
-            korisnik.setOvlast(UlogaKorisnika.REGISTRIRAN);
+            korisnik.setOvlast(UlogaKorisnika.KORISNIK);
         }
         return korisnikRepository.save(korisnik);
     }

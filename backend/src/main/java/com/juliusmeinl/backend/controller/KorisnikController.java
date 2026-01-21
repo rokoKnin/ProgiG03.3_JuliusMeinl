@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class KorisnikController {
 
     private final KorisnikService korisnikService;
 
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping
     public List<Map<String, Object>> getAllUsers() {
         // Ovo vraća korisnike spremne za frontend (bez parsiranja uloge)
@@ -33,7 +35,7 @@ public class KorisnikController {
         return new ResponseEntity<>(korisnikService.spremiKorisnika(korisnik), HttpStatus.CREATED);
     }
 
-
+    @PreAuthorize("hasAuthority('admin:update')")
     @PutMapping("/{userId}/role")
     public ResponseEntity<?> updateUserRole(@PathVariable Integer userId, @RequestBody Map<String, String> body) {
         String novaUloga = body.get("uloga");
@@ -43,19 +45,20 @@ public class KorisnikController {
         return ResponseEntity.ok(Map.of("id", korisnik.getId(), "uloga", korisnik.getOvlast().name()));
     }
 
+    @PreAuthorize("hasAuthority('admin:delete')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userId) {
         korisnikService.deleteUser(userId);
         return new ResponseEntity<>("Uspjesno obrisan user", HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping("/check-vlasnik")
     public boolean provjeriVlasnika(@RequestParam String email) {
         return korisnikService.korisnikJeVlasnik(email);
     }
 
-
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping("/export")
     public ResponseEntity<ByteArrayResource> exportUsers(@RequestParam String format) {
         ByteArrayResource file;

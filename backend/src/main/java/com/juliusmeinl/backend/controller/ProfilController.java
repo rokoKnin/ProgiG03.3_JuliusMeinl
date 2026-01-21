@@ -8,6 +8,7 @@ import com.juliusmeinl.backend.model.Drzava;
 import com.juliusmeinl.backend.repository.DrzavaRepository;
 import com.juliusmeinl.backend.service.KorisnikService;
 import com.juliusmeinl.backend.service.RezervacijaService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/profile")
 public class ProfilController {
     private final KorisnikService korisnikService;
     private final RezervacijaService rezervacijaService;
     private final DrzavaRepository drzavaRepository;
-
-    public ProfilController(KorisnikService korisnikService, RezervacijaService rezervacijaService, DrzavaRepository drzavaRepository) {
-        this.korisnikService = korisnikService;
-        this.rezervacijaService = rezervacijaService;
-        this.drzavaRepository = drzavaRepository;
-    }
 
 
     @PostMapping("/{email}")
