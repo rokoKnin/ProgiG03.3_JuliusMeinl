@@ -72,13 +72,13 @@
 # Plan rada
 - _Prvi ciklus:_
 
-    | Slika                                      |
-    |--------------------------------------------|
-    | Slika C.1 Prikaz plana rada za prvi ciklus |
+    | ![Slika C.1.jpg](../images/Slika%20C.1.jpg)                                 |
+    |-----------------------------------------------------------------------------|
+    | Slika C.1 Prikaz plana rada za prvi ciklus                                  |
 
 - _Drugi ciklus:_
 
-  | Slika                                       |
+  | ![Slika C.2.jpg](../images/Slika%20C.2.jpg) |
   |---------------------------------------------|
   | Slika C.2 Prikaz plana rada za drugi ciklus |
 
@@ -120,5 +120,19 @@
  
 # Dijagram pregleda promjena
 
+  | ![Slika C.3.jpg](../images/Slika%20C.3.jpg)   |
+  |-----------------------------------------------|
+  | Slika C.3 Prikaz ukupnih commitova na GitHubu |
+
+  | ![Slika C.4.jpg](../images/Slika%20C.4.jpg)        |
+  |----------------------------------------------------|
+  | Slika C.4 Prikaz pojedinačnih commitova na GitHubu |
 
 # Ključni izazovi i rješenja
+
+- Problem autentifikacije preko Googleovog OAuth2 -> Nismo na ispravan način pristupili upravljanjem cookiesa i sesija.
+  - Riješili detaljnijim proučavanjem Spring Securitya i načina na koji ti mehanizmi funkcioniraju
+- Problem ne pridržavanja istih standarda pisanja
+  - Na sastancima se trudilo svima ukazati standarda pisanja koji koristimo da bi sve bilo unificirano
+- Manjak iskustva članova, susretanje s ovakvim projektom prvi puta kao i timskim radom u ovakvom stilu
+  - problemi medu članovima se riješavali kroz komunikaciju, a nedostatke znanja kroz učenje s izvora ili međusobnim pokazivanjem

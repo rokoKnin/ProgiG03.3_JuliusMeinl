@@ -43,6 +43,13 @@ spring:
           auth: true
           starttls:
             enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+management:
+  health:
+    mail:
+      enabled: false
 
 
 # ========== SERVER CONFIGURATION ==========
@@ -79,8 +86,8 @@ julius:
   admin:
     email: juliusmeinlt3.3@gmail.com
   frontend:
-    url: http://localhost:5173
-#    url: https://bluedilla.onrender.com
+#    url: http://localhost:5173
+    url: https://bluedilla.onrender.com
 
 
 
