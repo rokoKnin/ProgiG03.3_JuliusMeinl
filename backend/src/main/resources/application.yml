@@ -60,12 +60,11 @@ server:
     include-message: always
     include-binding-errors: always
     include-stacktrace: always
-  servlet:
-    session:
-      cookie:
-        same-site: none
-        secure: true
-        http-only: true
+#  servlet:
+#    session:
+#      cookie:
+#        same-site: none
+#        secure: true
 
 
 
