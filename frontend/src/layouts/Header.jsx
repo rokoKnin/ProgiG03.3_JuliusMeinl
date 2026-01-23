@@ -135,16 +135,22 @@ function Header() {
           
           {ovlast && (
   <div>
-
     {ovlast === "VLASNIK" && (
       <Button color="inherit" component={Link} to="/adminStart">
             Admin
           </Button>
     )}
   </div>
+          )}{ovlast && (
+  <div>
+    {(ovlast === "ZAPOSLENIK" || ovlast === "VLASNIK") && (
+    <Button color="inherit" component={Link} to="/recepcionist">
+            Recepcionist
+           </Button>
+    )}
+  </div>
         )}{ovlast && (
   <div>
-
     {ovlast && (
       <Button color="inherit" component={Link} to="/profil">
             profil
@@ -152,14 +158,10 @@ function Header() {
     )}
   </div>
         )} {!ovlast && (
-  
   <div>
-
-    
       <Button color="inherit" onClick={handleLoginClick}>
             Login
           </Button>
-    
   </div>
         )}               
           

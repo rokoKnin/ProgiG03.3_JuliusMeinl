@@ -2,9 +2,16 @@ package com.juliusmeinl.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "recenzija")
 public class Recenzija {
 
@@ -26,38 +33,4 @@ public class Recenzija {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "korisnik_id", nullable = false)
     private Korisnik korisnik;
-
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public Integer getOcjena() {
-        return ocjena;
-    }
-    public void setOcjena(Integer ocjena) {
-        this.ocjena = ocjena;
-    }
-    public String getKomentar() {
-        return komentar;
-    }
-    public void setKomentar(String komentar) {
-        this.komentar = komentar;
-    }
-    public LocalDate getDatum() {
-        return datum;
-    }
-    public void setDatum(LocalDate datum) {
-        this.datum = datum;
-    }
-    public Korisnik getKorisnik() {
-        return korisnik;
-    }
-    public void setKorisnik(Korisnik korisnik) {
-        this.korisnik = korisnik;
-    }
-
-
-
 }

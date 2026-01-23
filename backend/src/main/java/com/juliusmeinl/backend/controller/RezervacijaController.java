@@ -8,11 +8,8 @@ import com.juliusmeinl.backend.dto.RezervacijaResponseDTO;
 import com.juliusmeinl.backend.dto.RoomAvailabilityRequest;
 import com.juliusmeinl.backend.dto.UpdateRoomRequest;
 import com.juliusmeinl.backend.model.Korisnik;
-import com.juliusmeinl.backend.service.DodatniSadrzajService;
+import com.juliusmeinl.backend.service.*;
 import com.juliusmeinl.backend.model.Rezervacija;
-import com.juliusmeinl.backend.service.KorisnikService;
-import com.juliusmeinl.backend.service.RezervacijaService;
-import com.juliusmeinl.backend.service.SobaService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.juliusmeinl.backend.dto.RoomAvailabilityRequest;
 import com.juliusmeinl.backend.dto.UpdateRoomRequest;
@@ -62,19 +59,19 @@ public class RezervacijaController {
         return sadrzajService.informacijeSadrzaj();
     }
 
-    @PreAuthorize("hasAuthority('admin:read')")
+    @PreAuthorize("hasAuthority('receptionist:read')")
     @GetMapping("/all")
     public List<RezervacijaResponseDTO> sveRezervacije() {
         return rezervirajService.dohvatiSveRezervacijeDTO();
     }
 
-    @PreAuthorize("hasAuthority('admin:update')")
+    @PreAuthorize("hasAuthority('receptionist:update')")
     @PutMapping("/{id}")
     public Rezervacija azurirajRezervaciju(@PathVariable Integer id, @RequestBody Rezervacija rezervacijaInput) {
         return rezervirajService.azurirajRezervaciju(id, rezervacijaInput);
     }
 
-    @PreAuthorize("hasAuthority('admin:read')")
+    @PreAuthorize("hasAuthority('receptionist:read')")
     @GetMapping("/export")
     public ResponseEntity<InputStreamResource> exportReservations(@RequestParam String format) {
         try {
@@ -111,6 +108,7 @@ public class RezervacijaController {
         }
     }
 
+    @PreAuthorize("hasAuthority('receptionist:read')")
     @PostMapping("/available-rooms")
     public ResponseEntity<List<AvailableRoomDTO>> getAvailableRooms(@RequestBody RoomAvailabilityRequest request) {
         try {
@@ -126,6 +124,7 @@ public class RezervacijaController {
         }
     }
 
+    @PreAuthorize("hasAuthority('receptionist:update')")
     @PutMapping("/{reservationId}/room")
     public ResponseEntity<?> updateReservationRoom(
         @PathVariable Integer reservationId,

@@ -29,13 +29,15 @@ public class EmailService {
 
                 Vaša rezervacija je uspješno zaprimljena.
 
-                Datum rezervacije: %s
+                Vaše rezervacije:\s
+                %s
+               \s
                 Ukupan iznos: %s €
 
                 Radujemo se Vašem dolasku!
                 Modrila Hotel
-                """.formatted(
-                rezervacija.getDatumRezerviranja(),  // datum kada je rezervacija napravljena
+               \s""".formatted(
+                rezervacijaRequestDTO.printForEmail(),
                 rezervacija.getIznosRezervacije()
         );
 

@@ -152,7 +152,7 @@ public class SobaController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('admin:update')")
+    @PreAuthorize("hasAuthority('receptionist:update')")
     @PutMapping("/{id}")
     public ResponseEntity<Soba> azurirajSobu(
             @PathVariable Integer id,
@@ -224,7 +224,4 @@ public class SobaController {
                 .contentType(mediaType)
                 .body(file);
     }
-
-
-
 }

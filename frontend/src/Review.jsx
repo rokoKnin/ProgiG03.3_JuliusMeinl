@@ -8,13 +8,9 @@ import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 const labels = {
   1: 'Nezadovoljavajuće',
-  1.5: 'Nezadovoljavajuće prema zadovoljavajućem',
   2: 'Zadovoljavajuće',
-  2.5: 'Zadovoljavajuće prema dobrom',
   3: 'Dobro',
-  3.5: 'Dobro prema vrlo dobrom',
   4: 'Vrlo dobro',
-  4.5: 'Vrlo dobro prema odličnom',
   5: 'Odlično',
 };
 function getLabelText(value) {
@@ -96,7 +92,7 @@ export default function Review() {
       <Rating
         name="hover-feedback"
         value={value}
-        precision={0.5}
+        precision={1}
        getLabelText={getLabelText}
         onChange={(event, newValue) => {
           setValue(newValue);

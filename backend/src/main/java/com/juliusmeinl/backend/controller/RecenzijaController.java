@@ -24,7 +24,6 @@ public class RecenzijaController {
             @PathVariable String email,
             @RequestBody RecenzijaRequestDTO recenzijaDTO) {
 
-
         return new ResponseEntity<>(recenzijaService.spremiRecenziju(email, recenzijaDTO), HttpStatus.CREATED);
     }
 
