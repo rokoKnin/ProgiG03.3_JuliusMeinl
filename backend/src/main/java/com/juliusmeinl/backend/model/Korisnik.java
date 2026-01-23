@@ -44,9 +44,5 @@ public class Korisnik {
 
     @JsonIgnore
     @OneToMany(mappedBy = "korisnik")
-    private List<Upit> upiti;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "korisnik")
     private List<Recenzija> recenzije;
 }
